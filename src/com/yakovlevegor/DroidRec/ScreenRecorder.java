@@ -156,18 +156,22 @@ public class ScreenRecorder extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction() == ACTION_START) {
-            actionStart();
-        } else if (intent.getAction() == ACTION_STOP) {
-            screenRecordingStop();
-        } else if (intent.getAction() == ACTION_PAUSE) {
-            screenRecordingPause();
-        } else if (intent.getAction() == ACTION_CONTINUE) {
-            screenRecordingResume();
-        } else if (intent.getAction() == ACTION_ACTIVITY_FINISHED_FILE) {
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setDataAndType(recordFileFullPath, "video/mp4");
-            startActivity(i);
+        if (intent != null) {
+            if (intent.getAction() == ACTION_START) {
+                actionStart();
+            } else if (intent.getAction() == ACTION_STOP) {
+                screenRecordingStop();
+            } else if (intent.getAction() == ACTION_PAUSE) {
+                screenRecordingPause();
+            } else if (intent.getAction() == ACTION_CONTINUE) {
+                screenRecordingResume();
+            } else if (intent.getAction() == ACTION_ACTIVITY_FINISHED_FILE) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setDataAndType(recordFileFullPath, "video/mp4");
+                startActivity(i);
+            }
+        } else {
+            stopSelf();
         }
 
         return START_STICKY;
