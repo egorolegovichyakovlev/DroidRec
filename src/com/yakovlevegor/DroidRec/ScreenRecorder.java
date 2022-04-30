@@ -171,6 +171,7 @@ public class ScreenRecorder extends Service {
                 startActivity(i);
             }
         } else {
+            Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show();
             stopSelf();
         }
 
