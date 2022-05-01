@@ -9,7 +9,11 @@ DroidRec is an open-source Android screen recorder.
 
 It can **not** record your system sounds, because Android doesn't have such functionality. However, it can record your microphone.
 
-[Download app build](https://github.com/yakovlevegor/DroidRec/releases)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.yakovlevegor.DroidRec/)
+
+Or download the apk from [the release section](https://github.com/yakovlevegor/DroidRec/releases).
 
 ## Building
 Generate your keystore with `keytool -genkeypair -keystore mykey.keystore -validity 365000 -keysize 4096 -keyalg RSA` and place it in this folder under `signature.keystore` name.
