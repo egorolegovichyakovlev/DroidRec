@@ -327,7 +327,15 @@ public class ScreenRecorder extends Service {
 
         Notification.Action.Builder pauseRecordAction = new Notification.Action.Builder(pauseIcon, getString(R.string.notifications_pause), pauseRecordActionIntent);
 
-        Notification.Builder notification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL)
+        Notification.Builder notification;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL);
+        } else {
+            notification = new Notification.Builder(this);
+        }
+
+        notification = notification
             .setContentTitle(getString(R.string.recording_started_title))
             .setContentText(getString(R.string.recording_started_text))
             .setTicker(getString(R.string.recording_started_text))
@@ -371,7 +379,15 @@ public class ScreenRecorder extends Service {
         
         Icon finishedIconLarge = Icon.createWithResource(this, R.drawable.icon_record_finished_color_action_large);
 
-        Notification.Builder finishedNotification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL)
+        Notification.Builder finishedNotification;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            finishedNotification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL);
+        } else {
+            finishedNotification = new Notification.Builder(this);
+        }
+
+        finishedNotification = finishedNotification
             .setContentTitle(getString(R.string.recording_finished_title))
             .setContentText(getString(R.string.recording_finished_text))
             .setContentIntent(openFolderActionIntent)
@@ -429,7 +445,15 @@ public class ScreenRecorder extends Service {
 
         Notification.Action.Builder continueRecordAction = new Notification.Action.Builder(continueIcon, getString(R.string.notifications_resume), continueRecordActionIntent);
 
-        Notification.Builder notification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL)
+        Notification.Builder notification;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL);
+        } else {
+            notification = new Notification.Builder(this);
+        }
+
+        notification = notification
             .setContentTitle(getString(R.string.recording_paused_title))    
             .setContentText(getString(R.string.recording_paused_text))
             .setSmallIcon(pausedIcon)
@@ -477,7 +501,15 @@ public class ScreenRecorder extends Service {
 
         Notification.Action.Builder pauseRecordAction = new Notification.Action.Builder(pauseIcon, getString(R.string.notifications_pause), pauseRecordActionIntent);
 
-        Notification.Builder notification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL)
+        Notification.Builder notification;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(this, NOTIFICATIONS_RECORDING_CHANNEL);
+        } else {
+            notification = new Notification.Builder(this);
+        }
+
+        notification = notification
             .setContentTitle(getString(R.string.recording_started_title))
             .setContentText(getString(R.string.recording_started_text))
             .setTicker(getString(R.string.recording_started_text))
