@@ -5,8 +5,8 @@
 [English](https://github.com/yakovlevegor/DroidRec/blob/main/README.md) | עברית
 
 ## סביב
-זכר אנדרואיד.
-לא זכר קולים אבל זכר בטוי.
+רשום אנדרואיד מסך.
+לרשום מצליל אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
 
 [רכש היישום](https://github.com/yakovlevegor/DroidRec/releases)
 
@@ -33,7 +33,7 @@
 
 למשל:
 
-`./build.bash path/to/android/sdk/platforms/android-28 path/to/android/sdk/build-tools/28.0.0`
+`./build.bash path/to/android/sdk/platforms/android-33 path/to/android/sdk/build-tools/33.0.0`
 
 ## התעודה
 

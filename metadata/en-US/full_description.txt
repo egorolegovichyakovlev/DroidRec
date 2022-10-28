@@ -1,1 +1,1 @@
-It can not record your system sounds, because Android does not have such functionality. However, it can record your microphone.
+Audio Playback recording requires Android 10 or later. No Root needed.

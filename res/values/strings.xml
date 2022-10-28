@@ -11,6 +11,9 @@
     <string name="recording_paused_text">Screen recording paused</string>
     <string name="recording_finished_title">Recording finished</string>
     <string name="recording_finished_text">Screen recording complete</string>
+    <string name="recording_rotated_title">Screen rotated</string>
+    <string name="recording_rotated_text">New recording started</string>
+    <string name="audio_playback_unavailable">Audio Playback recording requires Android 10 or later</string>
     <string name="notifications_channel">Recording notifications</string>
     <string name="notifications_stop">Stop</string>
     <string name="notifications_pause">Pause</string>

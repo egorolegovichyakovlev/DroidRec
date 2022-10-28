@@ -11,6 +11,9 @@
     <string name="recording_paused_text">Екран не записується</string>
     <string name="recording_finished_title">Запис завершено</string>
     <string name="recording_finished_text">Відео збережено</string>
+    <string name="recording_rotated_title">Екран повернуто</string>
+    <string name="recording_rotated_text">Нова запис екрана</string>
+    <string name="audio_playback_unavailable">Запис аудіо вимагає Android 10 і више</string>
     <string name="notifications_channel">Сповіщення про запис</string>
     <string name="notifications_stop">Завершити</string>
     <string name="notifications_pause">Призупинити</string>

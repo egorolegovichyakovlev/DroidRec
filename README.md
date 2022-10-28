@@ -7,7 +7,7 @@ English | [עברית](https://github.com/yakovlevegor/DroidRec/blob/main/README
 ## About
 DroidRec is an open-source Android screen recorder.
 
-It can **not** record your system sounds, because Android doesn't have such functionality. However, it can record your microphone.
+Audio Playback recording requires Android 10 or later. No Root needed.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -23,7 +23,7 @@ To build this app, run **build.bash** with arguments:
 1. Path to your Android SDK "platforms/android-*version*"
 2. (*Optional*) If you don't have Android SDK build tools installed on your system, specify path to your Android SDK "build-tools/*version*"
 
-Example: `./build.bash path/to/android/sdk/platforms/android-28 path/to/android/sdk/build-tools/28.0.0`
+Example: `./build.bash path/to/android/sdk/platforms/android-33 path/to/android/sdk/build-tools/33.0.0`
 
 ## License
 

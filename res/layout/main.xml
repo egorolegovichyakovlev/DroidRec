@@ -49,10 +49,19 @@
         android:layout_width="wrap_content"
         android:drawableLeft="@drawable/icon_stop_color_action_large"
         android:text="@string/record_stop" />
- 
+
+    <TextView
+        android:id="@+id/audioplaybackunavailable"
+        android:layout_below="@id/recordstopbutton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="6pt"
+        android:layout_centerHorizontal="true"
+        android:text="@string/audio_playback_unavailable" />
+
     <Button
         android:id="@+id/recordfolder"
-        android:layout_below="@id/recordstopbutton"
+        android:layout_below="@id/audioplaybackunavailable"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -75,4 +84,5 @@
             android:text="@string/setting_audio_record_microphone_sound" />
 
     </LinearLayout>
+
 </RelativeLayout>

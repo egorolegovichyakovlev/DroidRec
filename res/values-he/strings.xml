@@ -5,12 +5,15 @@
     <string name="record_stop">עמד הלכידה</string>
     <string name="record_pause">שבת הלכידה</string>
     <string name="record_resume">משך הלכידה</string>
-    <string name="recording_started_title">בזכר מהסרט</string>
+    <string name="recording_started_title">ברשום מהסרטון</string>
     <string name="recording_started_text">בהיה הלכידה</string>
     <string name="recording_paused_title">הלכידה בהפוגה</string>
     <string name="recording_paused_text">בהפוגה</string>
     <string name="recording_finished_title">הלכידה המוכן</string>
     <string name="recording_finished_text">מוכן</string>
+    <string name="recording_rotated_title">מסך הפך</string>
+    <string name="recording_rotated_text">הסרטון החדש</string>
+    <string name="audio_playback_unavailable">לרשום מצליל אתה/את צריך/צריכה אנדרואיד 10 או יותר מאוחר</string>
     <string name="notifications_channel">חרדות מלכידות</string>
     <string name="notifications_stop">עמד</string>
     <string name="notifications_pause">שבת</string>

@@ -11,7 +11,10 @@
     <string name="recording_paused_text">Gravação da tela foi pausada</string>
     <string name="recording_finished_title">Gravação finalizada</string>
     <string name="recording_finished_text">Gravação da tela terminou</string>
-    <string name="notifications_channel">Notificações de  gravação</string>
+    <string name="recording_rotated_title">Tela girada</string>
+    <string name="recording_rotated_text">Novo gravação executada</string>
+    <string name="audio_playback_unavailable">Áudio gravação requer Android 10 e posterior</string>
+    <string name="notifications_channel">Notificações de gravação</string>
     <string name="notifications_stop">Parar</string>
     <string name="notifications_pause">Pausar</string>
     <string name="notifications_resume">Retomar</string>
