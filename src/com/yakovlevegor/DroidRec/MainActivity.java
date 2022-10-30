@@ -61,6 +61,8 @@ public class MainActivity extends Activity {
 
     private static final int REQUEST_MICROPHONE = 56808;
 
+    private static final int REQUEST_MICROPHONE_RECORD = 58467;
+
     private ScreenRecorder.RecordingBinder recordingBinder;
 
     boolean screenRecorderStarted = false; 
@@ -87,9 +89,15 @@ public class MainActivity extends Activity {
 
     TextView audioPlaybackUnavailable;
 
-    boolean screenRecorderBound;
-
     Intent serviceIntent;
+
+    public static String appName = "com.yakovlevegor.DroidRec";
+
+    public static String ACTION_ACTIVITY_START_RECORDING = appName+".ACTIVITY_START_RECORDING";
+
+    private boolean stateActivated = false;
+
+    private boolean serviceToRecording = false;
 
     public class ActivityBinder extends Binder {
         void recordingStart(long time) {
@@ -159,6 +167,11 @@ public class MainActivity extends Activity {
             screenRecorderStarted = recordingBinder.isStarted();
 
             recordingBinder.setConnect(new ActivityBinder());
+
+            if (serviceToRecording == true) {
+                serviceToRecording = false;
+                recordingStart();
+            }
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -176,14 +189,11 @@ public class MainActivity extends Activity {
     void doBindService() {
         serviceIntent = new Intent(MainActivity.this, ScreenRecorder.class);
         bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
-
-        screenRecorderBound = true;
     }
 
     void doUnbindService() {
-        if (screenRecorderBound) {
+        if (recordingBinder != null) {
             unbindService(mConnection);
-            screenRecorderBound = false;
         }
     }
 
@@ -201,7 +211,6 @@ public class MainActivity extends Activity {
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
 
-        doBindService();
         setContentView(R.layout.main);
 
         startRecording = (Button) findViewById(R.id.recordbutton);
@@ -244,17 +253,7 @@ public class MainActivity extends Activity {
 
         startRecording.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && recMicrophone.isChecked()) {
-                    recMicrophone.setChecked(false);
-                    appSettingsEditor.remove("checksoundmic");
-                    appSettingsEditor.commit();
-                }
-
-                if (appSettings.getString("folderpath", "NULL") == "NULL") {
-                    chooseDir(true);
-                } else {
-                    proceedRecording();
-                }
+                recordingStart();
             }
         });
 
@@ -284,6 +283,42 @@ public class MainActivity extends Activity {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        doBindService();
+        Intent created_intent = getIntent();
+        if (created_intent.getAction() == ACTION_ACTIVITY_START_RECORDING && stateActivated == false) {
+            stateActivated = true;
+            recordingStart();
+        }
+    }
+
+    public void checkDirRecord() {
+        if (appSettings.getString("folderpath", "NULL") == "NULL") {
+            chooseDir(true);
+        } else {
+            proceedRecording();
+        }
+    }
+
+    public void recordingStart() {
+        if (recordingBinder == null) {
+            serviceToRecording = true;
+            doBindService();
+        } else {
+            if (recordingBinder.isStarted() == false) {
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
+                    requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
+                } else {
+                    checkDirRecord();
+                }
+
+            }
+        }
+    }
+
     void proceedRecording() {
         startActivityForResult(activityProjectionManager.createScreenCaptureIntent(), REQUEST_RECORD);
     }
@@ -309,7 +344,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_RECORD) {
-            if (resultCode == RESULT_OK && screenRecorderBound == true) {
+            if (resultCode == RESULT_OK && recordingBinder != null) {
                 doStartService(resultCode, data);
             }
         } else if (requestCode == REQUEST_READ || requestCode == REQUEST_READ_RECORD) {
@@ -344,9 +379,16 @@ public class MainActivity extends Activity {
                 appSettingsEditor.commit();
                 recMicrophone.setChecked(true);
             } else {
-                Toast.makeText(this, R.string.error_microphone_required, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_MICROPHONE_RECORD) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkDirRecord();
+            } else {
+                Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
 }

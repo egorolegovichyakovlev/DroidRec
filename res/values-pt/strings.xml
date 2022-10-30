@@ -5,8 +5,9 @@
     <string name="record_stop">Parar gravação</string>
     <string name="record_pause">Pausar gravação</string>
     <string name="record_resume">Retomar gravação</string>
+    <string name="recording_tile">Gravação da tela</string>
     <string name="recording_started_title">Gravação executada</string>
-    <string name="recording_started_text">Gravação da tale em andamento</string>
+    <string name="recording_started_text">Gravação da tela em andamento</string>
     <string name="recording_paused_title">Gravação pausada</string>
     <string name="recording_paused_text">Gravação da tela foi pausada</string>
     <string name="recording_finished_title">Gravação finalizada</string>
@@ -19,7 +20,7 @@
     <string name="notifications_pause">Pausar</string>
     <string name="notifications_resume">Retomar</string>
     <string name="error_storage_select_folder">Erro: Selecione a pasta de gravações</string>
-    <string name="error_microphone_required">Erro: Permitir a gravação via microfone</string>
+    <string name="error_audio_required">Erro: Permitir a gravação de áudio</string>
     <string name="error_invalid_folder">Erro: Pasta de gravações inválida</string>
     <string name="error_recorder_failed">Erro: A gravação falhou</string>
     <string name="setting_recordings_folder">Alterar a pasta de gravações</string>

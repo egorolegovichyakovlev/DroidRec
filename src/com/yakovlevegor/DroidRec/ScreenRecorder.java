@@ -49,7 +49,6 @@ import android.os.Build;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.view.OrientationEventListener;
@@ -63,7 +62,6 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
-
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -272,7 +270,9 @@ public class ScreenRecorder extends Service {
 
             if (outdocpath == null) {
                 recordingError();
-                activityBinder.resetDir();
+                if (activityBinder != null) {
+                    activityBinder.resetDir();
+                }
                 stopSelf();
                 return;
             } else {

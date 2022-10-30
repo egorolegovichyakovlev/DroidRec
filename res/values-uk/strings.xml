@@ -5,6 +5,7 @@
     <string name="record_stop">Завершити запис</string>
     <string name="record_pause">Призупинити запис</string>
     <string name="record_resume">Продовжити запис</string>
+    <string name="recording_tile">Запис екрана</string>
     <string name="recording_started_title">Запис екрана</string>
     <string name="recording_started_text">Екран записується</string>
     <string name="recording_paused_title">Запис призупинено</string>
@@ -19,7 +20,7 @@
     <string name="notifications_pause">Призупинити</string>
     <string name="notifications_resume">Продовжити</string>
     <string name="error_storage_select_folder">Помилка: оберіть каталог записів</string>
-    <string name="error_microphone_required">Помилка: дозвольте записувати мікрофон</string>
+    <string name="error_audio_required">Помилка: дозвольте записувати аудіо</string>
     <string name="error_invalid_folder">Помилка: хибний каталог записів</string>
     <string name="error_recorder_failed">Помилка: не вдалося записати</string>
     <string name="setting_recordings_folder">Змінити каталог записів</string>

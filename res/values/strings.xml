@@ -5,6 +5,7 @@
     <string name="record_stop">Stop recording</string>
     <string name="record_pause">Pause recording</string>
     <string name="record_resume">Continue recording</string>
+    <string name="recording_tile">Record screen</string>
     <string name="recording_started_title">Recording screen</string>
     <string name="recording_started_text">Screen recording in process</string>
     <string name="recording_paused_title">Recording paused</string>
@@ -19,7 +20,7 @@
     <string name="notifications_pause">Pause</string>
     <string name="notifications_resume">Continue</string>
     <string name="error_storage_select_folder">Error: Select recordings folder</string>
-    <string name="error_microphone_required">Error: Allow recording microphone</string>
+    <string name="error_audio_required">Error: Allow recording audio</string>
     <string name="error_invalid_folder">Error: Invalid recordings folder</string>
     <string name="error_recorder_failed">Error: Recording failed</string>
     <string name="setting_recordings_folder">Change recordings folder</string>
