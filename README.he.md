@@ -5,8 +5,8 @@
 [English](https://github.com/yakovlevegor/DroidRec/blob/main/README.md) | עברית
 
 ## סביב
-רשום אנדרואיד מסך.
-לרשום משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
+זכר אנדרואיד מסך.
+לזכר משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
 
 [רכש היישום](https://github.com/yakovlevegor/DroidRec/releases)
 
