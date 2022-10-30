@@ -61,6 +61,8 @@ public class MainActivity extends Activity {
 
     private static final int REQUEST_MICROPHONE = 56808;
 
+    private static final int REQUEST_MICROPHONE_PLAYBACK = 59465;
+
     private static final int REQUEST_MICROPHONE_RECORD = 58467;
 
     private ScreenRecorder.RecordingBinder recordingBinder;
@@ -84,6 +86,8 @@ public class MainActivity extends Activity {
     Button chooseFolder;
 
     CheckBox recMicrophone;
+
+    CheckBox recPlayback;
 
     Chronometer timeCounter;
 
@@ -219,6 +223,7 @@ public class MainActivity extends Activity {
         stopRecording = (Button) findViewById(R.id.recordstopbutton);
         chooseFolder = (Button) findViewById(R.id.recordfolder);
         recMicrophone = (CheckBox) findViewById(R.id.checksoundmic);
+        recPlayback = (CheckBox) findViewById(R.id.checksoundplayback);
         timeCounter = (Chronometer) findViewById(R.id.timerrecord);
         audioPlaybackUnavailable = (TextView) findViewById(R.id.audioplaybackunavailable);
 
@@ -230,10 +235,15 @@ public class MainActivity extends Activity {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             audioPlaybackUnavailable.setVisibility(View.VISIBLE);
+            recPlayback.setVisibility(View.GONE);
         }
 
         if (appSettings.getBoolean("checksoundmic", false)) {
             recMicrophone.setChecked(true);
+        }
+
+        if (appSettings.getBoolean("checksoundplayback", false)) {
+            recPlayback.setChecked(true);
         }
 
         activityProjectionManager = (MediaProjectionManager)getSystemService(MEDIA_PROJECTION_SERVICE);
@@ -246,6 +256,19 @@ public class MainActivity extends Activity {
                     requestPermissions(accesspermission, REQUEST_MICROPHONE);
                 } else {
                     appSettingsEditor.putBoolean("checksoundmic", ((CheckBox) v).isChecked());
+                    appSettingsEditor.commit();
+                }
+            }
+        });
+
+        recPlayback.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && ((CheckBox) v).isChecked()) {
+                    recPlayback.setChecked(false);
+                    String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
+                    requestPermissions(accesspermission, REQUEST_MICROPHONE);
+                } else {
+                    appSettingsEditor.putBoolean("checksoundplayback", ((CheckBox) v).isChecked());
                     appSettingsEditor.commit();
                 }
             }
@@ -308,7 +331,7 @@ public class MainActivity extends Activity {
             doBindService();
         } else {
             if (recordingBinder.isStarted() == false) {
-                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && (appSettings.getBoolean("checksoundmic", false) == true || appSettings.getBoolean("checksoundplayback", false) == true)) {
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
                 } else {
@@ -378,6 +401,14 @@ public class MainActivity extends Activity {
                 appSettingsEditor.putBoolean("checksoundmic", true);
                 appSettingsEditor.commit();
                 recMicrophone.setChecked(true);
+            } else {
+                Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_MICROPHONE_PLAYBACK) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                appSettingsEditor.putBoolean("checksoundplayback", true);
+                appSettingsEditor.commit();
+                recPlayback.setChecked(true);
             } else {
                 Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
             }

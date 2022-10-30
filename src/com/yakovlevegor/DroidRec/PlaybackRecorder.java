@@ -69,11 +69,15 @@ public class PlaybackRecorder {
     private LinkedList<MediaCodec.BufferInfo> mPendingAudioEncoderBufferInfos = new LinkedList<>();
     private LinkedList<MediaCodec.BufferInfo> mPendingVideoEncoderBufferInfos = new LinkedList<>();
 
-    public PlaybackRecorder(VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, boolean microphone) {
+    public PlaybackRecorder(VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, boolean microphone, boolean audio) {
         mVirtualDisplay = display;
         mDstDesc = dstDesc;
         mVideoEncoder = new VideoEncoder(width, height);
-        mAudioEncoder = new AudioPlaybackRecorder(projection, microphone);
+        if (microphone == false && audio == false) {
+            mAudioEncoder = null;
+        } else {
+            mAudioEncoder = new AudioPlaybackRecorder(projection, microphone, audio);
+        }
     }
 
     public final void pause() {

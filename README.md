@@ -1,13 +1,13 @@
-![DroidRec Icon](https://raw.githubusercontent.com/yakovlevegor/DroidRec/main/app_icon_big.png "App Icon")
+<img src="icons_vector/app_icon.svg" alt="DroidRec Icon" width="200"/>
 
-![DroidRec Screenshot](metadata/en-US/images/phoneScreenshots/1.jpg "App Screenshot")
-
-English | [עברית](https://github.com/yakovlevegor/DroidRec/blob/main/README.he.md)
+English | [עברית](README.he.md)
 
 ## About
 DroidRec is an open-source Android screen recorder.
 
 Audio Playback recording requires Android 10 or later. No Root needed.
+
+<img src="metadata/en-US/images/phoneScreenshots/1.jpg" alt="DroidRec Screenshot" width="400"/>
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"

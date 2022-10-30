@@ -25,4 +25,5 @@
     <string name="error_recorder_failed">Error: Recording failed</string>
     <string name="setting_recordings_folder">Change recordings folder</string>
     <string name="setting_audio_record_microphone_sound">Record microphone</string>
+    <string name="setting_audio_record_playback_sound">Record audio</string>
 </resources>

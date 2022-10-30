@@ -96,6 +96,7 @@ public class ScreenRecorder extends Service {
     private long timeStart = 0;
     private long timeRecorded = 0;
     private boolean recordMicrophone = false;
+    private boolean recordPlayback = false;
     private boolean isPaused = false;
 
     private FileDescriptor recordingFileDescriptor;
@@ -245,6 +246,8 @@ public class ScreenRecorder extends Service {
         appSettings = getSharedPreferences(prefsident, 0);
 
         recordMicrophone = appSettings.getBoolean("checksoundmic", false);
+
+        recordPlayback = appSettings.getBoolean("checksoundplayback", false);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
@@ -424,7 +427,7 @@ public class ScreenRecorder extends Service {
             }
             recordingVirtualDisplay.setSurface(recordingMediaRecorder.getSurface());
         } else {
-            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, metrics.widthPixels, metrics.heightPixels, recordMicrophone);
+            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, metrics.widthPixels, metrics.heightPixels, recordMicrophone, recordPlayback);
 
             recorderPlayback.start();
         }

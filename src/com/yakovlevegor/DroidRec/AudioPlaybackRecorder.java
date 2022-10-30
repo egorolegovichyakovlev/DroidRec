@@ -62,19 +62,21 @@ class AudioPlaybackRecorder implements Encoder {
     private int mFormat = AudioFormat.ENCODING_PCM_16BIT;
     private static MediaProjection captureProjection;
     private static boolean recordMicrophone;
+    private static boolean recordAudio;
 
     private AtomicBoolean mForceStop = new AtomicBoolean(false);
     private AudioEncoder.Callback mCallback;
     private CallbackDelegate mCallbackDelegate;
     private int mChannelsSampleRate;
 
-    AudioPlaybackRecorder(MediaProjection projection, boolean microphone) {
+    AudioPlaybackRecorder(MediaProjection projection, boolean microphone, boolean audio) {
         mEncoder = new AudioEncoder();
         mSampleRate = 44100;
         mChannelsSampleRate = mSampleRate * 2;
         mChannelConfig = AudioFormat.CHANNEL_IN_STEREO;
         captureProjection = projection;
         recordMicrophone = microphone;
+        recordAudio = audio;
         mRecordThread = new HandlerThread(TAG);
     }
 
@@ -175,22 +177,30 @@ class AudioPlaybackRecorder implements Encoder {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MSG_PREPARE) {
-                AudioRecord r = createAudioRecord(mSampleRate, mChannelConfig, mFormat);
+                AudioRecord r;
                 AudioRecord m;
+                if (recordAudio == true) {
+                    r = createAudioRecord(mSampleRate, mChannelConfig, mFormat);
+                    if (r == null) {
+                        mCallbackDelegate.onError(AudioPlaybackRecorder.this, new IllegalArgumentException());
+                    } else {
+                        r.startRecording();
+                        mPlayback = r;
+                    }
+                }
                 if (recordMicrophone == true) {
                     m = createMicRecord(mSampleRate, mChannelConfig, mFormat);
                     if (m == null) {
                         mCallbackDelegate.onError(AudioPlaybackRecorder.this, new IllegalArgumentException());
                     } else {
                         m.startRecording();
-                        mMic = m;
+                        if (recordAudio == true) {
+                            mMic = m;
+                        } else {
+                            recordMicrophone = false;
+                            mPlayback = m;
+                        }
                     }
-                }
-                if (r == null) {
-                    mCallbackDelegate.onError(AudioPlaybackRecorder.this, new IllegalArgumentException());
-                } else {
-                    r.startRecording();
-                    mPlayback = r;
                 }
                 try {
                     mEncoder.prepare();

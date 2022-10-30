@@ -1,12 +1,17 @@
-![DroidRec תמונה](https://raw.githubusercontent.com/yakovlevegor/DroidRec/main/app_icon_big.png "תמונה מיישום")
+<img src="icons_vector/app_icon.svg" alt="DroidRec תמונה" width="200"/>
 
-![DroidRec צילם](metadata/he/images/phoneScreenshots/1.jpg "צילם מיישום")
-
-[English](https://github.com/yakovlevegor/DroidRec/blob/main/README.md) | עברית
+[English](README.md) | עברית
 
 ## סביב
 זכר אנדרואיד מסך.
+
 לזכר משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
+
+<img src="metadata/he/images/phoneScreenshots/1.jpg" alt="DroidRec צילם" width="400"/>
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.yakovlevegor.DroidRec/)
 
 [רכש היישום](https://github.com/yakovlevegor/DroidRec/releases)
 

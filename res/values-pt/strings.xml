@@ -25,4 +25,5 @@
     <string name="error_recorder_failed">Erro: A gravação falhou</string>
     <string name="setting_recordings_folder">Alterar a pasta de gravações</string>
     <string name="setting_audio_record_microphone_sound">Também gravar via microfone</string>
+    <string name="setting_audio_record_playback_sound">Também gravar de áudio</string>
 </resources>

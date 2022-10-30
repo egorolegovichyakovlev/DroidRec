@@ -25,4 +25,5 @@
     <string name="error_recorder_failed">טעות: הסרון מלזכר</string>
     <string name="setting_recordings_folder">שקע נתיב</string>
     <string name="setting_audio_record_microphone_sound">גרה רשיון מבטוי</string>
+    <string name="setting_audio_record_playback_sound">גרה רשיון משמע</string>
 </resources>

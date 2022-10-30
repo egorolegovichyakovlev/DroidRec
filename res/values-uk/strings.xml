@@ -25,4 +25,5 @@
     <string name="error_recorder_failed">Помилка: не вдалося записати</string>
     <string name="setting_recordings_folder">Змінити каталог записів</string>
     <string name="setting_audio_record_microphone_sound">Записати мікрофон</string>
+    <string name="setting_audio_record_playback_sound">Записати аудіо</string>
 </resources>
