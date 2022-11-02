@@ -303,7 +303,7 @@ public class ScreenRecorder extends Service {
 
         stopRecordIntent.setAction(ACTION_STOP);
 
-        PendingIntent stopRecordActionIntent = PendingIntent.getService(this, 0, stopRecordIntent, 0);
+        PendingIntent stopRecordActionIntent = PendingIntent.getService(this, 0, stopRecordIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action.Builder stopRecordAction = new Notification.Action.Builder(stopIcon, getString(R.string.notifications_stop), stopRecordActionIntent);
 
@@ -314,7 +314,7 @@ public class ScreenRecorder extends Service {
 
         pauseRecordIntent.setAction(ACTION_PAUSE);
 
-        PendingIntent pauseRecordActionIntent = PendingIntent.getService(this, 0, pauseRecordIntent, 0);
+        PendingIntent pauseRecordActionIntent = PendingIntent.getService(this, 0, pauseRecordIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action.Builder pauseRecordAction = new Notification.Action.Builder(pauseIcon, getString(R.string.notifications_pause), pauseRecordActionIntent);
 
@@ -481,7 +481,7 @@ public class ScreenRecorder extends Service {
 
         openFolderIntent.setAction(ACTION_ACTIVITY_FINISHED_FILE);
 
-        PendingIntent openFolderActionIntent = PendingIntent.getService(this, 0, openFolderIntent, 0);
+        PendingIntent openFolderActionIntent = PendingIntent.getService(this, 0, openFolderIntent, PendingIntent.FLAG_IMMUTABLE);
 
         if (isRestarting == false) {
             Icon finishedIcon = Icon.createWithResource(this, R.drawable.icon_record_finished_status);
@@ -562,7 +562,7 @@ public class ScreenRecorder extends Service {
 
         stopRecordIntent.setAction(ACTION_STOP);
 
-        PendingIntent stopRecordActionIntent = PendingIntent.getService(this, 0, stopRecordIntent, 0);
+        PendingIntent stopRecordActionIntent = PendingIntent.getService(this, 0, stopRecordIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action.Builder stopRecordAction = new Notification.Action.Builder(stopIcon, getString(R.string.notifications_stop), stopRecordActionIntent);
 
@@ -572,7 +572,7 @@ public class ScreenRecorder extends Service {
 
         continueRecordIntent.setAction(ACTION_CONTINUE);
 
-        PendingIntent continueRecordActionIntent = PendingIntent.getService(this, 0, continueRecordIntent, 0);
+        PendingIntent continueRecordActionIntent = PendingIntent.getService(this, 0, continueRecordIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action.Builder continueRecordAction = new Notification.Action.Builder(continueIcon, getString(R.string.notifications_resume), continueRecordActionIntent);
 
@@ -621,7 +621,7 @@ public class ScreenRecorder extends Service {
 
         stopRecordIntent.setAction(ACTION_STOP);
 
-        PendingIntent stopRecordActionIntent = PendingIntent.getService(this, 0, stopRecordIntent, 0);
+        PendingIntent stopRecordActionIntent = PendingIntent.getService(this, 0, stopRecordIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action.Builder stopRecordAction = new Notification.Action.Builder(stopIcon, getString(R.string.notifications_stop), stopRecordActionIntent);
 
@@ -632,7 +632,7 @@ public class ScreenRecorder extends Service {
 
         pauseRecordIntent.setAction(ACTION_PAUSE);
 
-        PendingIntent pauseRecordActionIntent = PendingIntent.getService(this, 0, pauseRecordIntent, 0);
+        PendingIntent pauseRecordActionIntent = PendingIntent.getService(this, 0, pauseRecordIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification.Action.Builder pauseRecordAction = new Notification.Action.Builder(pauseIcon, getString(R.string.notifications_pause), pauseRecordActionIntent);
 
