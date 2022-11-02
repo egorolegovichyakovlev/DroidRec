@@ -331,7 +331,7 @@ public class MainActivity extends Activity {
             doBindService();
         } else {
             if (recordingBinder.isStarted() == false) {
-                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && (appSettings.getBoolean("checksoundmic", false) == true || appSettings.getBoolean("checksoundplayback", false) == true)) {
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && (appSettings.getBoolean("checksoundmic", false) == true || (appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q))) {
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
                 } else {
