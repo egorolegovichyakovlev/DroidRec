@@ -241,6 +241,70 @@ public class ScreenRecorder extends Service {
         screenRecordingStop();
     }
 
+    /* Old devices don't support many resolutions */
+    private int[] getScreenResolution() {
+        int[] resolution = new int[2];
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealMetrics(metrics);
+
+        boolean landscape = false;
+
+        if (metrics.widthPixels > metrics.heightPixels) {
+            landscape = true;
+        }
+
+        if (landscape == true) {
+            resolution[0] = 1920;
+            resolution[1] = 1080;
+
+            if (metrics.widthPixels == 3840) {
+                resolution[0] = 3840;
+                resolution[1] = 2160;
+            } else if (metrics.widthPixels < 3840 && metrics.widthPixels >= 1920) {
+                resolution[0] = 1920;
+                resolution[1] = 1080;
+            } else if (metrics.widthPixels < 1920 && metrics.widthPixels >= 1280) {
+                resolution[0] = 1280;
+                resolution[1] = 720;
+            } else if (metrics.widthPixels < 1280 && metrics.widthPixels >= 720) {
+                resolution[0] = 720;
+                resolution[1] = 480;
+            } else if (metrics.widthPixels < 720 && metrics.widthPixels >= 480) {
+                resolution[0] = 480;
+                resolution[1] = 360;
+            } else if (metrics.widthPixels < 480 && metrics.widthPixels >= 320) {
+                resolution[0] = 360;
+                resolution[1] = 240;
+            }
+        } else {
+            resolution[0] = 1080;
+            resolution[1] = 1920;
+
+            if (metrics.heightPixels == 3840) {
+                resolution[0] = 2160;
+                resolution[1] = 3840;
+            } else if (metrics.heightPixels < 3840 && metrics.heightPixels >= 1920) {
+                resolution[0] = 1080;
+                resolution[1] = 1920;
+            } else if (metrics.heightPixels < 1920 && metrics.heightPixels >= 1280) {
+                resolution[0] = 720;
+                resolution[1] = 1280;
+            } else if (metrics.heightPixels < 1280 && metrics.heightPixels >= 720) {
+                resolution[0] = 480;
+                resolution[1] = 720;
+            } else if (metrics.heightPixels < 720 && metrics.heightPixels >= 480) {
+                resolution[0] = 360;
+                resolution[1] = 480;
+            } else if (metrics.heightPixels < 480 && metrics.heightPixels >= 320) {
+                resolution[0] = 240;
+                resolution[1] = 360;
+            }
+        }
+
+        return resolution;
+    }
+
     private void screenRecordingStart() {
 
         appSettings = getSharedPreferences(prefsident, 0);
@@ -359,6 +423,15 @@ public class ScreenRecorder extends Service {
 
         ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealMetrics(metrics);
 
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
+            int[] resolutions = getScreenResolution();
+            width = resolutions[0];
+            height = resolutions[1];
+        }
+
         try {
             recordingFileDescriptor = getContentResolver().openFileDescriptor(recordFilePath, "rw").getFileDescriptor();
         } catch (Exception e) {
@@ -369,7 +442,7 @@ public class ScreenRecorder extends Service {
 
         recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
 
-        recordingVirtualDisplay = recordingMediaProjection.createVirtualDisplay("DroidRec", metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null);
+        recordingVirtualDisplay = recordingMediaProjection.createVirtualDisplay("DroidRec", width, height, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null);
 
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -403,7 +476,7 @@ public class ScreenRecorder extends Service {
 
                 recordingMediaRecorder.setOutputFile(recordingFileDescriptor);
 
-                recordingMediaRecorder.setVideoSize(metrics.widthPixels, metrics.heightPixels);
+                recordingMediaRecorder.setVideoSize(width, height);
 
                 recordingMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 
@@ -427,7 +500,7 @@ public class ScreenRecorder extends Service {
             }
             recordingVirtualDisplay.setSurface(recordingMediaRecorder.getSurface());
         } else {
-            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, metrics.widthPixels, metrics.heightPixels, recordMicrophone, recordPlayback);
+            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, recordMicrophone, recordPlayback);
 
             recorderPlayback.start();
         }
