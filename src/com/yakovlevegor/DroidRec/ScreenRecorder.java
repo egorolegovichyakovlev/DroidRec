@@ -471,7 +471,7 @@ public class ScreenRecorder extends Service {
                 recordingMediaRecorder.reset();
                 recordingMediaRecorder.release();
             } catch (RuntimeException e) {
-                recordingError();
+                Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show();
             }
         } else {
             recorderPlayback.quit();
