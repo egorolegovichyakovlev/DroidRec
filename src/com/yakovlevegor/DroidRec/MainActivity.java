@@ -41,6 +41,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.CheckBox;
@@ -219,6 +220,8 @@ public class MainActivity extends Activity {
 
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.main);
 
