@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -211,6 +212,10 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+            setTheme(android.R.style.Theme_Material);
+        }
 
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
