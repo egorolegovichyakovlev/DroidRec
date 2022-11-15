@@ -79,14 +79,13 @@ public class ScreenRecorder extends Service {
     public static final int RECORDING_PAUSE = 102;
     public static final int RECORDING_RESUME = 103;
 
-    private static String appName = "com.yakovlevegor.DroidRec";
-    public static String ACTION_START = appName+".START_RECORDING";
-    public static String ACTION_PAUSE = appName+".PAUSE_RECORDING";
-    public static String ACTION_CONTINUE = appName+".CONTINUE_RECORDING";
-    public static String ACTION_STOP = appName+".STOP_RECORDING";
-    public static String ACTION_ACTIVITY_CONNECT = appName+".ACTIVITY_CONNECT";
-    public static String ACTION_ACTIVITY_DISCONNECT = appName+".ACTIVITY_DISCONNECT";
-    public static String ACTION_ACTIVITY_FINISHED_FILE = appName+".ACTIVITY_FINISHED_FILE";
+    public static String ACTION_START = MainActivity.appName+".START_RECORDING";
+    public static String ACTION_PAUSE = MainActivity.appName+".PAUSE_RECORDING";
+    public static String ACTION_CONTINUE = MainActivity.appName+".CONTINUE_RECORDING";
+    public static String ACTION_STOP = MainActivity.appName+".STOP_RECORDING";
+    public static String ACTION_ACTIVITY_CONNECT = MainActivity.appName+".ACTIVITY_CONNECT";
+    public static String ACTION_ACTIVITY_DISCONNECT = MainActivity.appName+".ACTIVITY_DISCONNECT";
+    public static String ACTION_ACTIVITY_FINISHED_FILE = MainActivity.appName+".ACTIVITY_FINISHED_FILE";
 
     private static String NOTIFICATIONS_RECORDING_CHANNEL = "notifications";
 
@@ -107,6 +106,8 @@ public class ScreenRecorder extends Service {
     private MediaRecorder recordingMediaRecorder;
 
     private MainActivity.ActivityBinder activityBinder = null;
+
+    private QuickTile.TileBinder tileBinder = null;
 
     private PlaybackRecorder recorderPlayback;
 
@@ -159,6 +160,26 @@ public class ScreenRecorder extends Service {
 
     private final IBinder recordingBinder = new RecordingBinder();
 
+    public class RecordingTileBinder extends Binder {
+        void setConnectTile(QuickTile.TileBinder lbinder) {
+            ScreenRecorder.this.actionConnectTile(lbinder);
+        }
+
+        void setDisconnectTile() {
+            ScreenRecorder.this.actionDisconnectTile();
+        }
+
+        boolean isStarted() {
+            return ScreenRecorder.this.runningService;
+        }
+
+        void stopService() {
+            ScreenRecorder.this.screenRecordingStop();
+        }
+    }
+
+    private final IBinder recordingTileBinder = new RecordingTileBinder();
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -166,6 +187,9 @@ public class ScreenRecorder extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        if (intent.getAction() == QuickTile.ACTION_CONNECT_TILE) {
+            return recordingTileBinder;
+        }
         return recordingBinder;
     }
 
@@ -212,6 +236,10 @@ public class ScreenRecorder extends Service {
 
         runningService = true;
 
+        if (tileBinder != null) {
+            tileBinder.recordingState(true);
+        }
+
         screenRecordingStart();
     }
 
@@ -231,8 +259,16 @@ public class ScreenRecorder extends Service {
         }
     }
 
+    public void actionConnectTile(QuickTile.TileBinder service) {
+        tileBinder = service;
+    }
+
     public void actionDisconnect() {
         activityBinder = null;
+    }
+
+    public void actionDisconnectTile() {
+        tileBinder = null;
     }
 
     private void recordingError() {
@@ -532,6 +568,10 @@ public class ScreenRecorder extends Service {
 
         if (isRestarting == false) {
             runningService = false;
+
+            if (tileBinder != null) {
+                tileBinder.recordingState(false);
+            }
         }
 
         if (activityBinder != null) {

@@ -27,15 +27,81 @@
 
 package com.yakovlevegor.DroidRec;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.ComponentName;
+import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
+import android.os.Binder;
+import android.os.IBinder;
 
 public class QuickTile extends TileService {
+
+    private ScreenRecorder.RecordingTileBinder recordingTileBinder;
+
+    public static String ACTION_CONNECT_TILE = MainActivity.appName+".ACTION_CONNECT_TILE";
+
+    public Tile mainTile;
+
+    public class TileBinder extends Binder {
+        void recordingState(boolean active) {
+            setTileState(active);
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            recordingTileBinder = (ScreenRecorder.RecordingTileBinder)service;
+            recordingTileBinder.setConnectTile(new TileBinder());
+            setTileState(recordingTileBinder.isStarted());
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            recordingTileBinder.setDisconnectTile();
+            setTileState(false);
+        }
+    };
+
+    public void setTileState(boolean active) {
+        if (active == true) {
+            mainTile.setState(Tile.STATE_ACTIVE);
+        } else {
+            mainTile.setState(Tile.STATE_INACTIVE);
+        }
+
+        mainTile.updateTile();
+    }
+
+    @Override
+    public void onStartListening() {
+        super.onStartListening();
+        mainTile = getQsTile();
+        setTileState(false);
+        Intent serviceIntent = new Intent(QuickTile.this, ScreenRecorder.class);
+        serviceIntent.setAction(ACTION_CONNECT_TILE);
+        bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void onStopListening() {
+        super.onStopListening();
+
+        if (recordingTileBinder != null) {
+            unbindService(mConnection);
+        }
+    }
 
     @Override
     public void onClick() {
         super.onClick();
 
+        if (recordingTileBinder != null) {
+            if (recordingTileBinder.isStarted() == true) {
+                recordingTileBinder.stopService();
+                return;
+            }
+        }
         Intent recordingstart = new Intent(getApplicationContext(), MainActivity.class);
         recordingstart.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         recordingstart.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
