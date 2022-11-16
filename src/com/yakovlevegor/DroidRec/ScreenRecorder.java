@@ -437,6 +437,10 @@ public class ScreenRecorder extends Service {
             .setOngoing(true)
             .addAction(stopRecordAction.build());
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            notification.setPriority(Notification.PRIORITY_LOW);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             notification.addAction(pauseRecordAction.build());
         }
@@ -617,6 +621,10 @@ public class ScreenRecorder extends Service {
                 .setLargeIcon(finishedIconLarge)
                 .setAutoCancel(true);
 
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                finishedNotification.setPriority(Notification.PRIORITY_LOW);
+            }
+
             recordingNotificationManager.notify(NOTIFICATION_RECORDING_FINISHED_ID, finishedNotification.build());
         } else {
             Icon restartIcon = Icon.createWithResource(this, R.drawable.icon_rotate_status);
@@ -638,6 +646,10 @@ public class ScreenRecorder extends Service {
                 .setSmallIcon(restartIcon)
                 .setLargeIcon(restartIconLarge)
                 .setAutoCancel(true);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                restartNotification.setPriority(Notification.PRIORITY_LOW);
+            }
 
             recordingNotificationManager.notify(NOTIFICATION_RECORDING_FINISHED_ID, restartNotification.build());
 
@@ -706,6 +718,10 @@ public class ScreenRecorder extends Service {
             .addAction(stopRecordAction.build())
             .addAction(continueRecordAction.build());
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            notification.setPriority(Notification.PRIORITY_LOW);
+        }
+
         recordingNotificationManager.notify(NOTIFICATION_RECORDING_ID, notification.build());
     }
 
@@ -768,6 +784,10 @@ public class ScreenRecorder extends Service {
             .setOngoing(true)
             .addAction(stopRecordAction.build())
             .addAction(pauseRecordAction.build());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            notification.setPriority(Notification.PRIORITY_LOW);
+        }
 
         recordingNotificationManager.notify(NOTIFICATION_RECORDING_ID, notification.build());
     }
