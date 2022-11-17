@@ -39,6 +39,10 @@ import android.graphics.drawable.Icon;
 import android.graphics.Color;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
@@ -118,6 +122,27 @@ public class ScreenRecorder extends Service {
     private SharedPreferences appSettings;
 
     public static final String prefsident = "DroidRecPreferences";
+
+    private SensorManager sensor;
+
+    private SensorEventListener sensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent e) {
+            if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                if (orientationOnStart != display.getRotation()) {
+                    sensor.unregisterListener(sensorListener);
+                    isRestarting = true;
+                    screenRecordingStop();
+                    screenRecordingStart();
+                }
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    };
+
+    private Display display;
 
     public class RecordingBinder extends Binder {
         boolean isStarted() {
@@ -545,23 +570,13 @@ public class ScreenRecorder extends Service {
             recorderPlayback.start();
         }
 
-        final Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+        display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 
         orientationOnStart = display.getRotation();
 
-        OrientationEventListener restartRecordingOrientationListener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                if (orientationOnStart != display.getRotation()) {
-                    this.disable();
-                    isRestarting = true;
-                    screenRecordingStop();
-                    screenRecordingStart();
-                }
-            }
-        };
+        sensor = (SensorManager)getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
 
-        restartRecordingOrientationListener.enable();
+        sensor.registerListener(sensorListener, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI);
 
     }
 
