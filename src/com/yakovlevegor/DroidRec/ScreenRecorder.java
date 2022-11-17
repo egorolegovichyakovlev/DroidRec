@@ -55,7 +55,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-import android.view.OrientationEventListener;
 import android.view.Display;
 import android.widget.Toast;
 import android.provider.DocumentsContract;
@@ -587,6 +586,8 @@ public class ScreenRecorder extends Service {
 
         if (isRestarting == false) {
             runningService = false;
+
+            sensor.unregisterListener(sensorListener);
 
             if (tileBinder != null) {
                 tileBinder.recordingState(false);
