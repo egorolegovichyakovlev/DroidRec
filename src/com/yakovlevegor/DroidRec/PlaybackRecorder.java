@@ -395,6 +395,7 @@ public class PlaybackRecorder {
     private void release() {
         if (mVirtualDisplay != null) {
             mVirtualDisplay.setSurface(null);
+            mVirtualDisplay.release();
             mVirtualDisplay = null;
         }
 

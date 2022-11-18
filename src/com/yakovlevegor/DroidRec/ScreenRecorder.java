@@ -500,11 +500,12 @@ public class ScreenRecorder extends Service {
             recordingError();
         }
 
-        if (isRestarting == false) {
-            MediaProjectionManager recordingMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        MediaProjectionManager recordingMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
-            recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
+        if (recordingMediaProjection != null) {
+            recordingMediaProjection.stop();
         }
+        recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
 
         recordingVirtualDisplay = recordingMediaProjection.createVirtualDisplay("DroidRec", width, height, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null);
 
@@ -604,6 +605,7 @@ public class ScreenRecorder extends Service {
                 recordingMediaRecorder.stop();
                 recordingMediaRecorder.reset();
                 recordingMediaRecorder.release();
+                recordingVirtualDisplay.release();
             } catch (RuntimeException e) {
                 Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show();
             }
