@@ -477,8 +477,6 @@ public class ScreenRecorder extends Service {
 
 
 
-        isRestarting = false;
-
         if (activityBinder != null) {
             activityBinder.recordingStart(timeStart);
         }
@@ -502,12 +500,15 @@ public class ScreenRecorder extends Service {
             recordingError();
         }
 
-        MediaProjectionManager recordingMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        if (isRestarting == false) {
+            MediaProjectionManager recordingMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
-        recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
+            recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
+        }
 
         recordingVirtualDisplay = recordingMediaProjection.createVirtualDisplay("DroidRec", width, height, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null);
 
+        isRestarting = false;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             recordingMediaRecorder = new MediaRecorder();
