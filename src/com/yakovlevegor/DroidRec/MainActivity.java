@@ -274,7 +274,7 @@ public class MainActivity extends Activity {
                 if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && ((CheckBox) v).isChecked()) {
                     recPlayback.setChecked(false);
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
-                    requestPermissions(accesspermission, REQUEST_MICROPHONE);
+                    requestPermissions(accesspermission, REQUEST_MICROPHONE_PLAYBACK);
                 } else {
                     appSettingsEditor.putBoolean("checksoundplayback", ((CheckBox) v).isChecked());
                     appSettingsEditor.commit();
