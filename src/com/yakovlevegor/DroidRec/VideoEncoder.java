@@ -31,7 +31,6 @@ import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.media.MediaCodecList;
 import android.media.MediaCodecInfo;
-import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.os.Looper;
 
@@ -48,47 +47,35 @@ class VideoEncoder implements Encoder {
     private MediaCodec mEncoder;
     private Callback mCallback;
 
-    VideoEncoder(int inWidth, int inHeight) {
+    private String codecName;
+
+    private MediaCodecInfo.CodecProfileLevel codecProfileLevel;
+
+    private int screenFramerate;
+
+    VideoEncoder(int inWidth, int inHeight, int inFramerate, String inCodec, MediaCodecInfo.CodecProfileLevel inProfileLevel) {
         width = inWidth;
         height = inHeight;
+        screenFramerate = inFramerate;
+        codecName = inCodec;
+        codecProfileLevel = inProfileLevel;
     }
 
     protected void onEncoderConfigured(MediaCodec encoder) {
         mSurface = encoder.createInputSurface();
-    }
-
-    private static MediaCodecInfo selectCodec(String mimeType) {
-        int numCodecs = MediaCodecList.getCodecCount();
-        for (int i = 0; i < numCodecs; i++) {
-            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
-
-            if (!codecInfo.isEncoder()) {
-                continue;
-            }
-
-            String[] types = codecInfo.getSupportedTypes();
-            for (int j = 0; j < types.length; j++) {
-                if (types[j].equalsIgnoreCase(mimeType)) {
-                    return codecInfo;
-                }
-            }
-        }
-        return null;
+        mSurface.setFrameRate((float)(screenFramerate), Surface.FRAME_RATE_COMPATIBILITY_DEFAULT);
     }
 
     protected MediaFormat createMediaFormat() {
-        DisplayMetrics metrics = new DisplayMetrics();
-
         MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-        format.setInteger(MediaFormat.KEY_BIT_RATE, (int)(BPP*30*width*height));
-        format.setInteger(MediaFormat.KEY_FRAME_RATE, 30);
-        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 10);
-        MediaCodecInfo.CodecProfileLevel profileLevel = selectCodec(MediaFormat.MIMETYPE_VIDEO_AVC).getCapabilitiesForType(MediaFormat.MIMETYPE_VIDEO_AVC).profileLevels[0];
+        format.setInteger(MediaFormat.KEY_BIT_RATE, (int)(BPP*screenFramerate*width*height));
+        format.setInteger(MediaFormat.KEY_FRAME_RATE, screenFramerate);
+        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
 
-        if (profileLevel != null && profileLevel.profile != 0 && profileLevel.level != 0) {
-            format.setInteger(MediaFormat.KEY_PROFILE, profileLevel.profile);
-            format.setInteger("level", profileLevel.level);
+        if (codecProfileLevel != null && codecProfileLevel.profile != 0 && codecProfileLevel.level != 0) {
+            format.setInteger(MediaFormat.KEY_PROFILE, codecProfileLevel.profile);
+            format.setInteger("level", codecProfileLevel.level);
         }
         return format;
     }
@@ -138,10 +125,10 @@ class VideoEncoder implements Encoder {
         if (mEncoder != null) {
             throw new IllegalStateException();
         }
+
         MediaFormat format = createMediaFormat();
 
-        String mimeType = format.getString(MediaFormat.KEY_MIME);
-        final MediaCodec encoder = createEncoder(mimeType);
+        final MediaCodec encoder = MediaCodec.createByCodecName(codecName);
         try {
             if (this.mCallback != null) {
                 encoder.setCallback(mCodecCallback);
@@ -153,10 +140,6 @@ class VideoEncoder implements Encoder {
             throw e;
         }
         mEncoder = encoder;
-    }
-
-    private MediaCodec createEncoder(String type) throws IOException {
-        return MediaCodec.createEncoderByType(type);
     }
 
     public final ByteBuffer getOutputBuffer(int index) {

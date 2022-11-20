@@ -122,6 +122,8 @@ public class ScreenRecorder extends Service {
 
     public static final String prefsident = "DroidRecPreferences";
 
+    private static final float BPP = 0.25f;
+
     private SensorManager sensor;
 
     private SensorEventListener sensorListener = new SensorEventListener() {
@@ -511,6 +513,8 @@ public class ScreenRecorder extends Service {
 
         isRestarting = false;
 
+        int frameRate = (int)(((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRefreshRate());
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             recordingMediaRecorder = new MediaRecorder();
 
@@ -551,9 +555,9 @@ public class ScreenRecorder extends Service {
                 }
 
 
-                recordingMediaRecorder.setVideoEncodingBitRate(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH).videoBitRate);
+                recordingMediaRecorder.setVideoEncodingBitRate((int)(BPP*frameRate*width*height));
 
-                recordingMediaRecorder.setVideoFrameRate(30);
+                recordingMediaRecorder.setVideoFrameRate(frameRate);
                 recordingMediaRecorder.prepare();
             } catch (IOException e) {
                 recordingError();
@@ -566,7 +570,7 @@ public class ScreenRecorder extends Service {
             }
             recordingVirtualDisplay.setSurface(recordingMediaRecorder.getSurface());
         } else {
-            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, recordMicrophone, recordPlayback);
+            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback);
 
             recorderPlayback.start();
         }

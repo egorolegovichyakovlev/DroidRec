@@ -32,9 +32,6 @@ import android.media.AudioRecord;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
-import android.media.projection.MediaProjection;
-import android.media.AudioPlaybackCaptureConfiguration;
-import android.media.AudioAttributes;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -54,13 +51,14 @@ class AudioPlaybackRecorder implements Encoder {
     private final HandlerThread mRecordThread;
     private RecordHandler mRecordHandler;
 
+    private AudioRecord mPlaybackPreset;
+
     private AudioRecord mPlayback;
     private AudioRecord mMic;
 
     private int mSampleRate;
     private int mChannelConfig;
     private int mFormat = AudioFormat.ENCODING_PCM_16BIT;
-    private static MediaProjection captureProjection;
     private static boolean recordMicrophone;
     private static boolean recordAudio;
 
@@ -69,14 +67,14 @@ class AudioPlaybackRecorder implements Encoder {
     private CallbackDelegate mCallbackDelegate;
     private int mChannelsSampleRate;
 
-    AudioPlaybackRecorder(MediaProjection projection, boolean microphone, boolean audio) {
+    AudioPlaybackRecorder(boolean microphone, boolean audio, AudioRecord playbackPreset) {
         mEncoder = new AudioEncoder();
         mSampleRate = 44100;
         mChannelsSampleRate = mSampleRate * 2;
         mChannelConfig = AudioFormat.CHANNEL_IN_STEREO;
-        captureProjection = projection;
         recordMicrophone = microphone;
         recordAudio = audio;
+        mPlaybackPreset = playbackPreset;
         mRecordThread = new HandlerThread(TAG);
     }
 
@@ -180,7 +178,7 @@ class AudioPlaybackRecorder implements Encoder {
                 AudioRecord r;
                 AudioRecord m;
                 if (recordAudio == true) {
-                    r = createAudioRecord(mSampleRate, mChannelConfig, mFormat);
+                    r = mPlaybackPreset;
                     if (r == null) {
                         mCallbackDelegate.onError(AudioPlaybackRecorder.this, new IllegalArgumentException());
                     } else {
@@ -194,12 +192,7 @@ class AudioPlaybackRecorder implements Encoder {
                         mCallbackDelegate.onError(AudioPlaybackRecorder.this, new IllegalArgumentException());
                     } else {
                         m.startRecording();
-                        if (recordAudio == true) {
-                            mMic = m;
-                        } else {
-                            recordMicrophone = false;
-                            mPlayback = m;
-                        }
+                        mMic = m;
                     }
                 }
                 try {
@@ -215,16 +208,15 @@ class AudioPlaybackRecorder implements Encoder {
                 mMuxingOutputBufferIndices.poll();
                 pollInputIfNeed();
             } else if (msg.what == MSG_STOP) {
-                if (mPlayback != null) {
-                    mPlayback.stop();
-                }
-                if (recordMicrophone == true) {
+                if (recordMicrophone == true && mMic != null) {
                     mMic.stop();
                 }
                 mEncoder.stop();
             } else if (msg.what == MSG_RELEASE) {
                 if (mPlayback != null) {
-                    mPlayback.release();
+                    if (mPlaybackPreset == null) {
+                        mPlayback.release();
+                    }
                     mPlayback = null;
                 }
                 if (recordMicrophone == true) {
@@ -283,7 +275,10 @@ class AudioPlaybackRecorder implements Encoder {
 
     private void feedAudioEncoder(int index) {
         if (index < 0 || mForceStop.get()) return;
-        final AudioRecord r = mPlayback;
+        AudioRecord r = mPlayback;
+        if (recordAudio == false && recordMicrophone == true) {
+            r = mMic;
+        }
         final boolean eos = r.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED;
         final ByteBuffer frame = mEncoder.getInputBuffer(index);
         int offset = frame.position();
@@ -294,7 +289,7 @@ class AudioPlaybackRecorder implements Encoder {
         if (!eos) {
             final byte[] frameplayback = new byte[limit];
             read = r.read(frameplayback, 0, limit);
-            if (recordMicrophone == true) {
+            if (recordMicrophone == true && recordAudio == true) {
                 final byte[] framemic = new byte[limit];
                 final AudioRecord m = mMic;
                 readmic = m.read(framemic, 0, limit);
@@ -347,34 +342,6 @@ class AudioPlaybackRecorder implements Encoder {
         }
         mFramesUsCache.put(LAST_FRAME_ID, currentUs + frameUs);
         return currentUs;
-    }
-
-    private static AudioRecord createAudioRecord(int sampleRateInHz, int channelConfig, int audioFormat) {
-        int minBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat);
-        if (minBytes <= 0) {
-            return null;
-        }
-
-        AudioFormat captureAudioFormat = new AudioFormat.Builder()
-            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-            .setSampleRate(sampleRateInHz)
-            .setChannelMask(channelConfig)
-            .build();
-
-        AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(captureProjection)
-            .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
-            .build();
-
-        AudioRecord record = new AudioRecord.Builder()
-            .setAudioFormat(captureAudioFormat)
-            .setBufferSizeInBytes(minBytes * 2)
-            .setAudioPlaybackCaptureConfig(config)
-            .build();
-
-        if (record.getState() == AudioRecord.STATE_UNINITIALIZED) {
-            return null;
-        }
-        return record;
     }
 
     private static AudioRecord createMicRecord(int sampleRateInHz, int channelConfig, int audioFormat) {
