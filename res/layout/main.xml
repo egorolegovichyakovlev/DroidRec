@@ -20,6 +20,7 @@
             android:countDown="false"
             android:textSize="16pt"
             android:layout_centerHorizontal="true" />
+
         <Button
             android:id="@+id/recordbutton"
             android:layout_below="@id/timerrecord"
@@ -28,6 +29,7 @@
             android:layout_centerHorizontal="true"
             android:drawableLeft="@drawable/icon_record_color_action_large"
             android:text="@string/record_start" />
+
         <Button
             android:id="@+id/recordpausebutton"
             android:layout_below="@id/recordbutton"
@@ -36,6 +38,7 @@
             android:layout_centerHorizontal="true"
             android:drawableLeft="@drawable/icon_pause_color_action_large"
             android:text="@string/record_pause" />
+
         <Button
             android:id="@+id/recordresumebutton"
             android:layout_below="@id/recordpausebutton"
@@ -44,6 +47,7 @@
             android:layout_centerHorizontal="true"
             android:drawableLeft="@drawable/icon_record_continue_color_action_large"
             android:text="@string/record_resume" />
+
         <Button
             android:id="@+id/recordstopbutton"
             android:layout_below="@id/recordresumebutton"
@@ -52,6 +56,7 @@
             android:layout_width="wrap_content"
             android:drawableLeft="@drawable/icon_stop_color_action_large"
             android:text="@string/record_stop" />
+
         <Button
             android:id="@+id/recordfolder"
             android:layout_below="@id/recordstopbutton"
@@ -62,28 +67,34 @@
             android:textSize="6pt"
             android:drawableLeft="@drawable/icon_save_folder"
             android:text="@string/setting_recordings_folder" />
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_below="@id/recordfolder"
             android:gravity="center_horizontal">
+
             <TextView
                 android:id="@+id/audioplaybackunavailable"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textSize="6pt"
+                android:gravity="center"
                 android:text="@string/audio_playback_unavailable" />
+
             <CheckBox
                 android:id="@+id/checksoundplayback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_audio_record_playback_sound" />
+
             <CheckBox
                 android:id="@+id/checksoundmic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_audio_record_microphone_sound" />
+
         </LinearLayout>
 
     </LinearLayout>
