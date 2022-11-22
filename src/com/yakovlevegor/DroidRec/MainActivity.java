@@ -87,6 +87,8 @@ public class MainActivity extends Activity {
 
     Button chooseFolder;
 
+    Button showSettings;
+
     CheckBox recMicrophone;
 
     CheckBox recPlayback;
@@ -214,12 +216,14 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-            setTheme(android.R.style.Theme_Material);
-        }
-
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
+
+        String darkTheme = appSettings.getString("darktheme", "Automatic");
+
+        if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals("Automatic")) || darkTheme.contentEquals("Dark")) {
+            setTheme(android.R.style.Theme_Material);
+        }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -230,6 +234,7 @@ public class MainActivity extends Activity {
         resumeRecording = (Button) findViewById(R.id.recordresumebutton);
         stopRecording = (Button) findViewById(R.id.recordstopbutton);
         chooseFolder = (Button) findViewById(R.id.recordfolder);
+        showSettings = (Button) findViewById(R.id.recordsettings);
         recMicrophone = (CheckBox) findViewById(R.id.checksoundmic);
         recPlayback = (CheckBox) findViewById(R.id.checksoundplayback);
         timeCounter = (Chronometer) findViewById(R.id.timerrecord);
@@ -309,6 +314,13 @@ public class MainActivity extends Activity {
         chooseFolder.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 chooseDir(false);
+            }
+        });
+
+        showSettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent showsettings = new Intent(MainActivity.this, Settings.class);
+                startActivity(showsettings);
             }
         });
 

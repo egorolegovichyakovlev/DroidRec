@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
@@ -68,11 +68,22 @@
             android:drawableLeft="@drawable/icon_save_folder"
             android:text="@string/setting_recordings_folder" />
 
+        <Button
+            android:id="@+id/recordsettings"
+            android:layout_below="@id/recordfolder"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="#00000000"
+            android:textSize="6pt"
+            android:drawableLeft="@drawable/icon_settings"
+            android:text="@string/settings_title" />
+
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_below="@id/recordfolder"
+            android:layout_below="@id/recordsettings"
             android:gravity="center_horizontal">
 
             <TextView

@@ -42,6 +42,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.content.Context;
+import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -49,6 +51,8 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.ArrayList;
+
+import com.yakovlevegor.DroidRec.R;
 
 public class PlaybackRecorder {
     private static final String TAG = PlaybackRecorder.class.getSimpleName();
@@ -106,6 +110,18 @@ public class PlaybackRecorder {
 
     private boolean doRestart = false;
 
+    private float recordQualityScale = 1.0f;
+
+    private boolean useCustomBitrate = false;
+
+    private int recordCustomBitrate;
+
+    private boolean useCustomCodec = false;
+
+    private String customCodec;
+
+    private Context mainContext;
+
     private void getAllCodecs() {
         int numCodecs = MediaCodecList.getCodecCount();
         for (int i = 0; i < numCodecs; i++) {
@@ -139,8 +155,6 @@ public class PlaybackRecorder {
                 tryNativeFPS = false;
             } else if (try60FPS == true) {
                 try60FPS = false;
-            } else if (tryNormalFPS == true) {
-                throw new IllegalStateException();
             }
             codecsTryIndex = 0;
         }
@@ -179,10 +193,8 @@ public class PlaybackRecorder {
         return record;
     }
 
-    public PlaybackRecorder(VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio) {
-        if (framerate <= 60) {
-            try60FPS = false;
-        }
+    public PlaybackRecorder(Context appContext, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName) {
+        mainContext = appContext;
         nativeFramerate = framerate;
         getAllCodecs();
         mVirtualDisplay = display;
@@ -191,9 +203,33 @@ public class PlaybackRecorder {
         videoHeight = height;
         recordMicrophone = microphone;
         recordAudio = audio;
+
         if (recordAudio == true) {
             audioPlaybackRecord = createAudioRecord(44100, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, projection);
         }
+
+        if (customQuality == true) {
+            recordQualityScale = qualityScale;
+        }
+
+        if (customFramerate == true) {
+            nativeFramerate = framerateValue;
+        }
+
+        if (customBitrate == true) {
+            useCustomBitrate = true;
+            recordCustomBitrate = bitrateValue;
+        }
+
+        if (setCustomCodec == true && codecsList.contains(codecName)) {
+            useCustomCodec = setCustomCodec;
+            customCodec = codecName;
+        }
+
+        if (nativeFramerate <= 60) {
+            try60FPS = false;
+        }
+
     }
 
     public final void pause() {
@@ -214,17 +250,27 @@ public class PlaybackRecorder {
     }
 
     public final void restart() {
-        doRestart = true;
+        if (codecsTryIndex >= codecsList.size() && tryNormalFPS == true) {
+            Toast.makeText(mainContext, R.string.error_recorder_codec_error, Toast.LENGTH_SHORT).show();
+            quit();
+        } else {
+            doRestart = true;
 
-        release();
+            release();
 
-        start();
+            start();
 
-        doRestart = false;
+            doRestart = false;
+        }
     }
 
     public void start() {
-        mVideoEncoder = new VideoEncoder(videoWidth, videoHeight, nativeFramerate, getCodec(), currentProfileLevel);
+        String codecInName = getCodec();
+        if (useCustomCodec == true) {
+            codecInName = customCodec;
+            currentProfileLevel = codecProfileLevels.get(codecsList.lastIndexOf(customCodec));
+        }
+        mVideoEncoder = new VideoEncoder(videoWidth, videoHeight, nativeFramerate, recordQualityScale, useCustomBitrate, recordCustomBitrate, codecInName, currentProfileLevel);
 
         if (recordMicrophone == false && recordAudio == false) {
             mAudioEncoder = null;
@@ -281,7 +327,7 @@ public class PlaybackRecorder {
                 if (mCallback != null) {
                     mCallback.onStop((Throwable) msg.obj);
                 }
-                if (mForceQuit.get() == true) {
+                if (mForceQuit.get() == true || useCustomCodec) {
                     release();
                 } else {
                     restart();

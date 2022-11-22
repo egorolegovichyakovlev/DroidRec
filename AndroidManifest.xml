@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.yakovlevegor.DroidRec.Settings"
+            android:exported="true"
+            android:label="@string/settings_title"
+            android:parentActivityName="com.yakovlevegor.DroidRec.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.yakovlevegor.DroidRec.MainActivity" />
+        </activity>
         <service
             android:name="com.yakovlevegor.DroidRec.ScreenRecorder"
             android:exported="true"

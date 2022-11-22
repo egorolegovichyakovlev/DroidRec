@@ -515,6 +515,25 @@ public class ScreenRecorder extends Service {
 
         int frameRate = (int)(((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRefreshRate());
 
+
+        boolean customQuality = appSettings.getBoolean("customquality", false);
+
+        float qualityScale = 0.1f * (appSettings.getInt("qualityscale", 9)+1);
+
+
+        boolean customFPS = appSettings.getBoolean("customfps", false);
+
+        int fpsValue = Integer.parseInt(appSettings.getString("fpsvalue", "30"));
+
+
+        boolean customBitrate = appSettings.getBoolean("custombitrate", false);
+
+        int bitrateValue = Integer.parseInt(appSettings.getString("bitratevalue", "0"));
+
+
+        String customCodec = appSettings.getString("customcodec", getResources().getString(R.string.codec_option_auto_value));
+
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             recordingMediaRecorder = new MediaRecorder();
 
@@ -555,7 +574,21 @@ public class ScreenRecorder extends Service {
                 }
 
 
-                recordingMediaRecorder.setVideoEncodingBitRate((int)(BPP*frameRate*width*height));
+                if (customFPS == true) {
+                    frameRate = fpsValue;
+                }
+
+                int recordingBitrate = (int)(BPP*frameRate*width*height);
+
+                if (customQuality == true) {
+                    recordingBitrate = (int)(recordingBitrate*qualityScale);
+                }
+
+                if (customBitrate == true) {
+                    recordingBitrate = bitrateValue;
+                }
+
+                recordingMediaRecorder.setVideoEncodingBitRate(recordingBitrate);
 
                 recordingMediaRecorder.setVideoFrameRate(frameRate);
                 recordingMediaRecorder.prepare();
@@ -570,7 +603,7 @@ public class ScreenRecorder extends Service {
             }
             recordingVirtualDisplay.setSurface(recordingMediaRecorder.getSurface());
         } else {
-            recorderPlayback = new PlaybackRecorder(recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback);
+            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec);
 
             recorderPlayback.start();
         }

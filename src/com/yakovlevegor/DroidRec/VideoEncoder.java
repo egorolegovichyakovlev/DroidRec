@@ -53,12 +53,18 @@ class VideoEncoder implements Encoder {
 
     private int screenFramerate;
 
-    VideoEncoder(int inWidth, int inHeight, int inFramerate, String inCodec, MediaCodecInfo.CodecProfileLevel inProfileLevel) {
+    private int usedBitrate;
+
+    VideoEncoder(int inWidth, int inHeight, int inFramerate, float inQuality, boolean customBitrate, int inBitrate, String inCodec, MediaCodecInfo.CodecProfileLevel inProfileLevel) {
         width = inWidth;
         height = inHeight;
         screenFramerate = inFramerate;
         codecName = inCodec;
         codecProfileLevel = inProfileLevel;
+        usedBitrate = (int)(BPP*screenFramerate*width*height*inQuality);
+        if (customBitrate == true) {
+            usedBitrate = inBitrate;
+        }
     }
 
     protected void onEncoderConfigured(MediaCodec encoder) {
@@ -69,7 +75,7 @@ class VideoEncoder implements Encoder {
     protected MediaFormat createMediaFormat() {
         MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-        format.setInteger(MediaFormat.KEY_BIT_RATE, (int)(BPP*screenFramerate*width*height));
+        format.setInteger(MediaFormat.KEY_BIT_RATE, usedBitrate);
         format.setInteger(MediaFormat.KEY_FRAME_RATE, screenFramerate);
         format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
 

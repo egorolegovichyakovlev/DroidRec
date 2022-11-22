@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/capture_settings"
+        android:key="capturesettings">
+
+        <CheckBoxPreference
+            android:key="customquality"
+            android:summary="@string/quality_indicator_custom_description"
+            android:title="@string/quality_indicator_custom"
+            android:defaultValue="false" />
+
+        <com.yakovlevegor.DroidRec.QualityDialog
+            android:key="qualityscale"
+            android:dependency="customquality"
+            android:summary="@string/quality_indicator_description"
+            android:title="@string/quality_indicator"
+            android:dialogLayout="@layout/dialog_quality" />
+
+        <CheckBoxPreference
+            android:key="customfps"
+            android:summary="@string/fps_indicator_custom_description"
+            android:title="@string/fps_indicator_custom"
+            android:defaultValue="false" />
+
+        <EditTextPreference
+            android:key="fpsvalue"
+            android:dependency="customfps"
+            android:summary="@string/fps_indicator_description"
+            android:title="@string/fps_indicator"
+            android:gravity="center"
+            android:inputType="number"
+            android:defaultValue="30" />
+
+        <CheckBoxPreference
+            android:key="custombitrate"
+            android:summary="@string/bitrate_indicator_custom_description"
+            android:title="@string/bitrate_indicator_custom"
+            android:defaultValue="false" />
+
+        <EditTextPreference
+            android:key="bitratevalue"
+            android:dependency="custombitrate"
+            android:summary="@string/bitrate_indicator_description"
+            android:title="@string/bitrate_indicator"
+            android:gravity="center"
+            android:inputType="number" />
+
+        <com.yakovlevegor.DroidRec.CodecList
+            android:key="codecvalue"
+            android:summary="@string/codec_option_description"
+            android:title="@string/codec_option"
+            android:dialogTitle="@string/codec_option"
+            android:defaultValue="@string/codec_option_auto_value" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/controls_settings"
+        android:key="controlssettings">
+
+        <CheckBoxPreference
+            android:key="floatingcontrols"
+            android:summary="@string/floating_controls_option_description"
+            android:title="@string/floating_controls_option"
+            android:defaultValue="false" />
+
+        <com.yakovlevegor.DroidRec.ThemePreference
+            android:key="darktheme"
+            android:summary="@string/dark_theme_option_description"
+            android:title="@string/dark_theme_option"
+            android:dialogTitle="@string/dark_theme_option"
+            android:entries="@array/dark_theme_option_preferences"
+            android:entryValues="@array/dark_theme_option_preferences_values"
+            android:defaultValue="@string/dark_theme_option_auto" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
