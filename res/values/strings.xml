@@ -36,6 +36,9 @@
         <item name="dark_theme_option_auto_item">Automatic</item>
     </array>
     <string name="dark_theme_change_notice">Reopen the application to apply theme</string>
+    <string name="overlay_notice_title">Display over other apps</string>
+    <string name="overlay_notice_description">To show floating controls, enable Drawing over other apps permission</string>
+    <string name="overlay_notice_button">Open settings</string>
     <string name="recording_tile">Record screen</string>
     <string name="recording_started_title">Recording screen</string>
     <string name="recording_started_text">Screen recording in process</string>

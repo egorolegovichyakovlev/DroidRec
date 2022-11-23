@@ -28,7 +28,7 @@
 package com.yakovlevegor.DroidRec;
 
 import android.preference.Preference;
-import android.preference.PreferenceGroup;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.EditTextPreference;
@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 import android.os.Bundle;
 import android.os.Build;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
@@ -47,7 +48,7 @@ import android.content.SharedPreferences;
 
 import com.yakovlevegor.DroidRec.R;
 
-public class Settings extends PreferenceActivity {
+public class SettingsPanel extends PreferenceActivity {
 
     private SharedPreferences appSettings;
 
@@ -63,18 +64,24 @@ public class Settings extends PreferenceActivity {
             setTheme(android.R.style.Theme_Material);
             setDarkColoringForViewGroup((ViewGroup) getWindow().getDecorView(), getResources().getColor(R.color.colorDarkBackground), getResources().getColor(R.color.colorDarkText), true);
             getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorDarkBackground)));
+            getWindow().setNavigationBarColor(Color.BLACK);
         }
-
 
         PreferenceManager manager = getPreferenceManager();
         manager.setSharedPreferencesName(ScreenRecorder.prefsident);
 
         addPreferencesFromResource(R.xml.settings);
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Preference overlayPreference = (Preference) findPreference("floatingcontrols");
+            PreferenceCategory overlayPreferenceCategory = (PreferenceCategory) findPreference("controlssettings");
+            overlayPreferenceCategory.removePreference(overlayPreference);
+        }
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             Preference codecPreference = (Preference) findPreference("codecvalue");
-            PreferenceGroup codecPreferenceGroup = codecPreference.getParent();
-            codecPreferenceGroup.removePreference(codecPreference);
+            PreferenceCategory codecPreferenceCategory = (PreferenceCategory) findPreference("capturesettings");
+            codecPreferenceCategory.removePreference(codecPreference);
         }
 
     }

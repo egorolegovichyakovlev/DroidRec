@@ -28,9 +28,11 @@
 package com.yakovlevegor.DroidRec;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.Manifest;
 import android.content.Context;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -50,6 +52,8 @@ import android.widget.TextView;
 import android.content.Intent;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.provider.Settings;
+import android.graphics.Color;
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -107,8 +111,10 @@ public class MainActivity extends Activity {
 
     private boolean serviceToRecording = false;
 
+    private AlertDialog dialog;
+
     public class ActivityBinder extends Binder {
-        void recordingStart(long time) {
+        void recordingStart() {
             timeCounter.stop();
             timeCounter.setBase(recordingBinder.getTimeStart());
             timeCounter.start();
@@ -223,6 +229,7 @@ public class MainActivity extends Activity {
 
         if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals("Automatic")) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);
+            getWindow().setNavigationBarColor(Color.BLACK);
         }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -319,7 +326,7 @@ public class MainActivity extends Activity {
 
         showSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent showsettings = new Intent(MainActivity.this, Settings.class);
+                Intent showsettings = new Intent(MainActivity.this, SettingsPanel.class);
                 startActivity(showsettings);
             }
         });
@@ -354,6 +361,8 @@ public class MainActivity extends Activity {
                 if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && (appSettings.getBoolean("checksoundmic", false) == true || (appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q))) {
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
+                } else if ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == false)) {
+                    requestOverlayDisplayPermission();
                 } else {
                     checkDirRecord();
                 }
@@ -412,6 +421,22 @@ public class MainActivity extends Activity {
                 }
             }
         }
+    }
+
+    private void requestOverlayDisplayPermission() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(R.string.overlay_notice_title);
+        builder.setMessage(R.string.overlay_notice_description);
+        builder.setPositiveButton(R.string.overlay_notice_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + appName));
+                startActivityForResult(intent, RESULT_OK);
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
     }
 
     @Override

@@ -59,6 +59,9 @@ import android.view.Display;
 import android.widget.Toast;
 import android.provider.DocumentsContract;
 import android.content.SharedPreferences;
+import android.content.ServiceConnection;
+import android.content.ComponentName;
+import android.provider.Settings;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -112,6 +115,8 @@ public class ScreenRecorder extends Service {
 
     private QuickTile.TileBinder tileBinder = null;
 
+    private FloatingControls.PanelBinder panelBinder = null;
+
     private PlaybackRecorder recorderPlayback;
 
     private boolean isRestarting = false;
@@ -125,6 +130,8 @@ public class ScreenRecorder extends Service {
     private static final float BPP = 0.25f;
 
     private SensorManager sensor;
+
+    private boolean showFloatingControls = false;
 
     private SensorEventListener sensorListener = new SensorEventListener() {
         @Override
@@ -184,6 +191,17 @@ public class ScreenRecorder extends Service {
         }
     }
 
+    private ServiceConnection mPanelConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            panelBinder = (FloatingControls.PanelBinder)service;
+            panelBinder.setConnectPanel(new RecordingPanelBinder());
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            panelBinder.setDisconnectPanel();
+        }
+    };
+
     private final IBinder recordingBinder = new RecordingBinder();
 
     public class RecordingTileBinder extends Binder {
@@ -206,6 +224,29 @@ public class ScreenRecorder extends Service {
 
     private final IBinder recordingTileBinder = new RecordingTileBinder();
 
+    public class RecordingPanelBinder extends Binder {
+
+        long getTimeStart() {
+            return ScreenRecorder.this.timeStart;
+        }
+
+        boolean isStarted() {
+            return ScreenRecorder.this.runningService;
+        }
+
+        void recordingPause() {
+            ScreenRecorder.this.screenRecordingPause();
+        }
+
+        void recordingResume() {
+            ScreenRecorder.this.screenRecordingResume();
+        }
+
+        void stopService() {
+            ScreenRecorder.this.screenRecordingStop();
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -216,7 +257,15 @@ public class ScreenRecorder extends Service {
         if (intent.getAction() == QuickTile.ACTION_CONNECT_TILE) {
             return recordingTileBinder;
         }
+
         return recordingBinder;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Intent serviceIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
+        bindService(serviceIntent, mPanelConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -246,6 +295,9 @@ public class ScreenRecorder extends Service {
     } 
 
     public void actionStart() {
+
+        appSettings = getSharedPreferences(prefsident, 0);
+
         recordingNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -266,6 +318,15 @@ public class ScreenRecorder extends Service {
             tileBinder.recordingState(true);
         }
 
+        showFloatingControls = ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == true));
+
+        if (showFloatingControls == true) {
+            Intent panelIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
+
+            panelIntent.setAction(FloatingControls.ACTION_CONNECT_PANEL);
+            startService(panelIntent);
+        }
+
         screenRecordingStart();
     }
 
@@ -275,7 +336,7 @@ public class ScreenRecorder extends Service {
         if (runningService == true) {
             if (isPaused == false) {
                 if (activityBinder != null) {
-                    activityBinder.recordingStart(timeStart);
+                    activityBinder.recordingStart();
                 }
             } else if (isPaused == true) {
                 if (activityBinder != null) {
@@ -368,8 +429,6 @@ public class ScreenRecorder extends Service {
     }
 
     private void screenRecordingStart() {
-
-        appSettings = getSharedPreferences(prefsident, 0);
 
         recordMicrophone = appSettings.getBoolean("checksoundmic", false);
 
@@ -480,7 +539,11 @@ public class ScreenRecorder extends Service {
 
 
         if (activityBinder != null) {
-            activityBinder.recordingStart(timeStart);
+            activityBinder.recordingStart();
+        }
+
+        if (panelBinder != null && showFloatingControls == true) {
+            panelBinder.setInit(timeStart);
         }
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -631,6 +694,10 @@ public class ScreenRecorder extends Service {
             if (tileBinder != null) {
                 tileBinder.recordingState(false);
             }
+
+            if (panelBinder != null && showFloatingControls == true) {
+                panelBinder.setStop();
+            }
         }
 
         if (activityBinder != null) {
@@ -727,6 +794,10 @@ public class ScreenRecorder extends Service {
             activityBinder.recordingPause(timeRecorded);
         }
 
+        if (panelBinder != null && showFloatingControls == true) {
+            panelBinder.setPause(timeRecorded);
+        }
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             recordingMediaRecorder.pause();
         } else {
@@ -788,6 +859,10 @@ public class ScreenRecorder extends Service {
 
         if (activityBinder != null) {
             activityBinder.recordingResume(timeStart);
+        }
+
+        if (panelBinder != null && showFloatingControls == true) {
+            panelBinder.setResume(timeStart);
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {

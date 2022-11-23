@@ -10,6 +10,8 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <!-- for miui -->
     <uses-permission android:name="permission:android.permission.START_ACTIVITIES_FROM_BACKGROUND" />
 
@@ -22,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yakovlevegor.DroidRec.Settings"
+        <activity android:name="com.yakovlevegor.DroidRec.SettingsPanel"
             android:exported="true"
             android:label="@string/settings_title"
             android:parentActivityName="com.yakovlevegor.DroidRec.MainActivity">
@@ -34,6 +36,9 @@
             android:name="com.yakovlevegor.DroidRec.ScreenRecorder"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
+        <service
+            android:name="com.yakovlevegor.DroidRec.FloatingControls"
+            android:exported="true" />
         <service
             android:name="com.yakovlevegor.DroidRec.QuickTile"
             android:exported="true"
