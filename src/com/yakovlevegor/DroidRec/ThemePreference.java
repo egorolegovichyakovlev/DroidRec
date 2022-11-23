@@ -50,6 +50,8 @@ public class ThemePreference extends ListPreference {
         super.onSetInitialValue(restorePersistedValue, defaultValue);
         if (restorePersistedValue) {
             initialValue = this.getPersistedString("Automatic");
+        } else {
+            initialValue = "Automatic";
         }
     }
 
