@@ -36,6 +36,9 @@
             <item name="dark_theme_option_auto_item">自动</item>
         </array>
     <string name="dark_theme_change_notice">要让主题设置生效，请重新打开本应用</string>
+    <string name="overlay_notice_title">显示在其他应用上方</string>
+    <string name="overlay_notice_description">要显示浮窗操控，请启用“显示在其他应用上方”权限</string>
+    <string name="overlay_notice_button">打开设置</string>
     <string name="recording_tile">录屏</string>
     <string name="recording_started_title">录屏中</string>
     <string name="recording_started_text">正在进行录屏</string>
