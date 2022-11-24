@@ -43,6 +43,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.hardware.Sensor;
@@ -93,6 +94,14 @@ public class FloatingControls extends Service {
     private boolean recordingPaused = false;
 
     private boolean panelHidden = false;
+
+    private int panelWidthNormal;
+
+    private int panelWidth;
+
+    private int panelWidthHidden;
+
+    private int panelHeight;
 
     public class PanelBinder extends Binder {
         void setConnectPanel(ScreenRecorder.RecordingPanelBinder lbinder) {
@@ -164,7 +173,13 @@ public class FloatingControls extends Service {
                     updateMetrics();
                     final WindowManager.LayoutParams floatWindowLayoutUpdateParam = floatWindowLayoutParam;
                     floatWindowLayoutUpdateParam.gravity = Gravity.CENTER;
-                    floatWindowLayoutUpdateParam.x = 0;
+                    int panelWidthSize = panelWidth;
+
+                    if (panelHidden == true) {
+                        panelWidthSize = panelWidthHidden;
+                    }
+
+                    floatWindowLayoutUpdateParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
                     floatWindowLayoutUpdateParam.y = 0;
 
                     windowManager.updateViewLayout(floatingPanel, floatWindowLayoutUpdateParam);
@@ -180,11 +195,12 @@ public class FloatingControls extends Service {
 
         display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getRealMetrics(metrics);
+        Point screenSize = new Point();
 
-        displayWidth = metrics.widthPixels;
-        displayHeight = metrics.heightPixels;
+        display.getSize(screenSize);
+
+        displayWidth = screenSize.x;
+        displayHeight = screenSize.y;
 
     }
 
@@ -226,20 +242,26 @@ public class FloatingControls extends Service {
         DisplayMetrics metricsPanel = new DisplayMetrics();
         display.getRealMetrics(metricsPanel);
 
-        int panelWidthHidden = (int)((40*metricsPanel.density)+0.5f);
+        panelWidthHidden = (int)((40*metricsPanel.density)+0.5f);
 
         viewBackground.measure(0, 0);
 
-        int panelWidthNormal = viewBackground.getMeasuredWidth();
-        int panelHeight = viewBackground.getMeasuredHeight();
+        panelWidthNormal = viewBackground.getMeasuredWidth();
+        panelHeight = viewBackground.getMeasuredHeight();
 
-        int panelWidth = panelWidthNormal;
+        panelWidth = panelWidthNormal;
 
         floatWindowLayoutParam = new WindowManager.LayoutParams(panelWidth, panelHeight, layoutType, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
 
         floatWindowLayoutParam.gravity = Gravity.CENTER;
 
-        floatWindowLayoutParam.x = 0;
+        int panelWidthSize = panelWidth;
+
+        if (panelHidden == true) {
+            panelWidthSize = panelWidthHidden;
+        }
+
+        floatWindowLayoutParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
         floatWindowLayoutParam.y = 0;
 
         pauseButton = (ImageButton) floatingPanel.findViewById(R.id.recordpausebuttonfloating);
