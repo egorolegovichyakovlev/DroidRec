@@ -67,6 +67,7 @@ public class QualityDialog extends DialogPreference {
 
     @Override
     public void onBindDialogView(View view) {
+        qualityScale = this.getPersistedInt(9);
         TextView qualityHint = (TextView) view.findViewById(R.id.quality_title);
         SeekBar qualityBar = (SeekBar) view.findViewById(R.id.quality_seek);
 
