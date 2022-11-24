@@ -163,6 +163,21 @@ public class FloatingControls extends Service {
         }
     }
 
+    private void resetPosition() {
+        updateMetrics();
+        final WindowManager.LayoutParams floatWindowLayoutUpdateParam = floatWindowLayoutParam;
+        floatWindowLayoutUpdateParam.gravity = Gravity.CENTER;
+        int panelWidthSize = panelWidth;
+
+        if (panelHidden == true) {
+            panelWidthSize = panelWidthHidden;
+        }
+
+        floatWindowLayoutUpdateParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
+        floatWindowLayoutUpdateParam.y = 0;
+
+        windowManager.updateViewLayout(floatingPanel, floatWindowLayoutUpdateParam);
+    }
 
     private SensorEventListener sensorListener = new SensorEventListener() {
         @Override
@@ -170,19 +185,7 @@ public class FloatingControls extends Service {
             if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 if (currentOrientation != display.getRotation()) {
                     currentOrientation = display.getRotation();
-                    updateMetrics();
-                    final WindowManager.LayoutParams floatWindowLayoutUpdateParam = floatWindowLayoutParam;
-                    floatWindowLayoutUpdateParam.gravity = Gravity.CENTER;
-                    int panelWidthSize = panelWidth;
-
-                    if (panelHidden == true) {
-                        panelWidthSize = panelWidthHidden;
-                    }
-
-                    floatWindowLayoutUpdateParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
-                    floatWindowLayoutUpdateParam.y = 0;
-
-                    windowManager.updateViewLayout(floatingPanel, floatWindowLayoutUpdateParam);
+                    resetPosition();
                 }
             }
         }
@@ -311,6 +314,19 @@ public class FloatingControls extends Service {
 
             int panelWidthSize = panelWidth;
 
+            private void checkBoundaries() {
+                if ((int)(x-(panelWidthSize/2)) < -(displayWidth/2)) {
+                    x = (float)(-(displayWidth/2)+(panelWidthSize/2));
+                } else if ((int)(x+(panelWidthSize/2)) > (displayWidth/2)) {
+                    x = (float)((displayWidth/2)-(panelWidthSize/2));
+                }
+                if ((int)(y-(panelHeight/2)) < -(displayHeight/2)) {
+                    y = (float)(-(displayHeight/2)+(panelHeight/2));
+                } else if ((int)(y+(panelHeight/2)) > (displayHeight/2)) {
+                    y = (float)((displayHeight/2)-(panelHeight/2));
+                }
+            }
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -326,6 +342,8 @@ public class FloatingControls extends Service {
 
                         touchX = x;
                         touchY = y;
+
+                        checkBoundaries();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         floatWindowLayoutUpdateParam.x = (int) ((x + event.getRawX()) - px);
@@ -367,16 +385,7 @@ public class FloatingControls extends Service {
                             }
                         }
 
-                        if ((int)(x-(panelWidthSize/2)) < -(displayWidth/2)) {
-                            x = (float)(-(displayWidth/2)+(panelWidthSize/2));
-                        } else if ((int)(x+(panelWidthSize/2)) > (displayWidth/2)) {
-                            x = (float)((displayWidth/2)-(panelWidthSize/2));
-                        }
-                        if ((int)(y-(panelHeight/2)) < -(displayHeight/2)) {
-                            y = (float)(-(displayHeight/2)+(panelHeight/2));
-                        } else if ((int)(y+(panelHeight/2)) > (displayHeight/2)) {
-                            y = (float)((displayHeight/2)-(panelHeight/2));
-                        }
+                        checkBoundaries();
 
                         floatWindowLayoutUpdateParam.x = (int)x;
                         floatWindowLayoutUpdateParam.y = (int)y;
@@ -397,7 +406,7 @@ public class FloatingControls extends Service {
 
     public void startRecord() {
         windowManager.addView(floatingPanel, floatWindowLayoutParam);
-
+        resetPosition();
     }
 
     @Override
