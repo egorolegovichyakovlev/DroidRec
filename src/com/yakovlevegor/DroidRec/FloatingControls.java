@@ -95,6 +95,8 @@ public class FloatingControls extends Service {
 
     private boolean panelHidden = false;
 
+    private boolean isRecording = false;
+
     private int panelWidthNormal;
 
     private int panelWidth;
@@ -113,6 +115,7 @@ public class FloatingControls extends Service {
         }
 
         void setInit(long time) {
+            isRecording = true;
             recordingProgress.setBase(recordingPanelBinder.getTimeStart());
             recordingProgress.start();
             setControlState(false);
@@ -135,6 +138,7 @@ public class FloatingControls extends Service {
         }
 
         void setStop() {
+            isRecording = false;
             closePanel();
         }
     }
@@ -185,7 +189,9 @@ public class FloatingControls extends Service {
             if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 if (currentOrientation != display.getRotation()) {
                     currentOrientation = display.getRotation();
-                    resetPosition();
+                    if (isRecording == true) {
+                        resetPosition();
+                    }
                 }
             }
         }
