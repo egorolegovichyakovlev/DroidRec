@@ -391,8 +391,6 @@ public class FloatingControls extends Service {
                             }
                         }
 
-                        checkBoundaries();
-
                         floatWindowLayoutUpdateParam.x = (int)x;
                         floatWindowLayoutUpdateParam.y = (int)y;
 
