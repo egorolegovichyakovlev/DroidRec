@@ -54,6 +54,7 @@ import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.graphics.Color;
+import android.view.WindowManager;
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -229,7 +230,11 @@ public class MainActivity extends Activity {
 
         if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals("Automatic")) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);
-            getWindow().setNavigationBarColor(Color.BLACK);
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.BLACK);
+            window.setNavigationBarColor(Color.BLACK);
         }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

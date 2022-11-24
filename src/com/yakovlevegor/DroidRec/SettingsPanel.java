@@ -45,6 +45,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
 import android.view.Window;
 import android.content.SharedPreferences;
+import android.view.WindowManager;
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -64,7 +65,11 @@ public class SettingsPanel extends PreferenceActivity {
             setTheme(android.R.style.Theme_Material);
             setDarkColoringForViewGroup((ViewGroup) getWindow().getDecorView(), getResources().getColor(R.color.colorDarkBackground), getResources().getColor(R.color.colorDarkText), true);
             getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorDarkBackground)));
-            getWindow().setNavigationBarColor(Color.BLACK);
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Color.BLACK);
+            window.setNavigationBarColor(Color.BLACK);
         }
 
         PreferenceManager manager = getPreferenceManager();
