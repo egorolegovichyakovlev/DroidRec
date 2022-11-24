@@ -24,7 +24,7 @@
             android:title="@string/fps_indicator_custom"
             android:defaultValue="false" />
 
-        <EditTextPreference
+        <com.yakovlevegor.DroidRec.NonNullText
             android:key="fpsvalue"
             android:dependency="customfps"
             android:summary="@string/fps_indicator_description"
@@ -39,7 +39,7 @@
             android:title="@string/bitrate_indicator_custom"
             android:defaultValue="false" />
 
-        <EditTextPreference
+        <com.yakovlevegor.DroidRec.NonNullText
             android:key="bitratevalue"
             android:dependency="custombitrate"
             android:summary="@string/bitrate_indicator_description"
