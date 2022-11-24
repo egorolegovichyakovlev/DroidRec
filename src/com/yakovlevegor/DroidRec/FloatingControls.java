@@ -316,6 +316,8 @@ public class FloatingControls extends Service {
 
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        updateMetrics();
+                        panelWidthSize = panelWidth;
                         x = floatWindowLayoutUpdateParam.x;
                         y = floatWindowLayoutUpdateParam.y;
 
