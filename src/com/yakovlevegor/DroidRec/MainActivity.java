@@ -367,6 +367,8 @@ public class MainActivity extends Activity {
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
                 } else if ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == false)) {
+                    appSettingsEditor.putBoolean("floatingcontrols", false);
+                    appSettingsEditor.commit();
                     requestOverlayDisplayPermission();
                 } else {
                     checkDirRecord();

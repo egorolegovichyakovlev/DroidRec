@@ -28,6 +28,7 @@
 package com.yakovlevegor.DroidRec;
 
 import android.preference.Preference;
+import android.preference.TwoStatePreference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -46,10 +47,17 @@ import android.graphics.PorterDuff;
 import android.view.Window;
 import android.content.SharedPreferences;
 import android.view.WindowManager;
+import android.provider.Settings;
+import android.app.AlertDialog;
+import android.net.Uri;
+import android.content.DialogInterface;
+import android.content.Intent;
 
 import com.yakovlevegor.DroidRec.R;
 
 public class SettingsPanel extends PreferenceActivity {
+
+    private AlertDialog dialog;
 
     private SharedPreferences appSettings;
 
@@ -77,10 +85,29 @@ public class SettingsPanel extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.settings);
 
+        Preference overlayPreference = (Preference) findPreference("floatingcontrols");
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            Preference overlayPreference = (Preference) findPreference("floatingcontrols");
             PreferenceCategory overlayPreferenceCategory = (PreferenceCategory) findPreference("controlssettings");
             overlayPreferenceCategory.removePreference(overlayPreference);
+        } else {
+            Preference.OnPreferenceChangeListener listenerPanel = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (Settings.canDrawOverlays(SettingsPanel.this) == true) {
+                        return true;
+                    } else {
+                        requestOverlayDisplayPermission();
+
+                        TwoStatePreference preferenceValue = (TwoStatePreference) preference;
+                        preferenceValue.setChecked(false);
+                    }
+
+                    return false;
+                }
+            };
+
+            overlayPreference.setOnPreferenceChangeListener(listenerPanel);
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -89,6 +116,22 @@ public class SettingsPanel extends PreferenceActivity {
             codecPreferenceCategory.removePreference(codecPreference);
         }
 
+    }
+
+    private void requestOverlayDisplayPermission() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(R.string.overlay_notice_title);
+        builder.setMessage(R.string.overlay_notice_description);
+        builder.setPositiveButton(R.string.overlay_notice_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + MainActivity.appName));
+                startActivityForResult(intent, RESULT_OK);
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
     }
 
     private static void setDarkColoringForViewGroup(ViewGroup viewGroup, int color, int colorLight, boolean parent) {
