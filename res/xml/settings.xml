@@ -45,7 +45,8 @@
             android:summary="@string/bitrate_indicator_description"
             android:title="@string/bitrate_indicator"
             android:gravity="center"
-            android:inputType="number" />
+            android:inputType="number"
+            android:defaultValue="1" />
 
         <com.yakovlevegor.DroidRec.CodecList
             android:key="codecvalue"

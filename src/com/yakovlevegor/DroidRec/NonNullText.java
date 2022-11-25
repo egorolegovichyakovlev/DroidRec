@@ -42,6 +42,12 @@ public class NonNullText extends EditTextPreference {
 
     private EditText textEdit;
 
+    private String inputData;
+
+    private String persistedString;
+
+    private String defaultString;
+
     public NonNullText(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -53,24 +59,43 @@ public class NonNullText extends EditTextPreference {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String inputData = s.toString();
-            String persistedString = NonNullText.this.getPersistedString("1");
-
-            if (persistedString.startsWith("0") || persistedString.contentEquals("")) {
-                persistString("1");
-            }
-
-            if (inputData.startsWith("0") || inputData.contentEquals("")) {
-                textEdit.setText(persistedString);
-            }
+            inputData = s.toString();
         }
     }
+
+    @Override
+    public void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        super.onSetInitialValue(restoreValue, defaultValue);
+        if (defaultValue != null) {
+            String valueString = (String) defaultValue;
+            defaultString = valueString;
+        }
+    }
+
 
     @Override
     public void onAddEditTextToDialogView(View dialogView, EditText editText) {
         super.onAddEditTextToDialogView(dialogView, editText);
         textEdit = editText;
+
+        persistedString = NonNullText.this.getPersistedString(defaultString);
         editText.addTextChangedListener(new InputValidator());
+
+        if (persistedString.startsWith("0") || persistedString.contentEquals("")) {
+             persistString(defaultString);
+             persistedString = defaultString;
+        }
+
+        inputData = persistedString;
+    }
+
+    @Override
+    public void onDialogClosed(boolean positiveResult) {
+        if (inputData.startsWith("0") || inputData.contentEquals("")) {
+            textEdit.setText(persistedString);
+        } else {
+            super.onDialogClosed(positiveResult);
+        }
     }
 
 }

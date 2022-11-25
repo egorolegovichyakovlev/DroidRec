@@ -28,7 +28,6 @@
 package com.yakovlevegor.DroidRec;
 
 import android.preference.Preference;
-import android.preference.TwoStatePreference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -52,6 +51,8 @@ import android.app.AlertDialog;
 import android.net.Uri;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.DisplayMetrics;
+import android.content.Context;
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -60,6 +61,8 @@ public class SettingsPanel extends PreferenceActivity {
     private AlertDialog dialog;
 
     private SharedPreferences appSettings;
+
+    private static final float BPP = 0.25f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,13 +97,15 @@ public class SettingsPanel extends PreferenceActivity {
             Preference.OnPreferenceChangeListener listenerPanel = new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean newState = (boolean) newValue;
+
                     if (Settings.canDrawOverlays(SettingsPanel.this) == true) {
                         return true;
                     } else {
                         requestOverlayDisplayPermission();
-
-                        TwoStatePreference preferenceValue = (TwoStatePreference) preference;
-                        preferenceValue.setChecked(false);
+                        if (newState == false) {
+                            return true;
+                        }
                     }
 
                     return false;
@@ -116,6 +121,51 @@ public class SettingsPanel extends PreferenceActivity {
             codecPreferenceCategory.removePreference(codecPreference);
         }
 
+        Preference bitrateCheckPreference = (Preference) findPreference("custombitrate");
+
+        EditTextPreference bitrateValuePreference = (EditTextPreference) findPreference("bitratevalue");
+
+        Preference.OnPreferenceChangeListener listenerBitrate = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean newState = (boolean) newValue;
+
+                if (newState == true) {
+                    bitrateValuePreference.setDefaultValue(getBitrateDefault());
+
+                    int bitrateValue = Integer.parseInt(appSettings.getString("bitratevalue", "0"));
+
+                    bitrateValuePreference.setText(getBitrateDefault());
+                }
+
+                return true;
+            }
+        };
+
+        bitrateCheckPreference.setOnPreferenceChangeListener(listenerBitrate);
+    }
+
+    private String getBitrateDefault() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealMetrics(metrics);
+
+        boolean customQuality = appSettings.getBoolean("customquality", false);
+
+        float qualityScale = 0.1f * (appSettings.getInt("qualityscale", 9)+1);
+
+
+        boolean customFPS = appSettings.getBoolean("customfps", false);
+
+        int fpsValue = Integer.parseInt(appSettings.getString("fpsvalue", "30"));
+
+
+        Integer recordingBitrate = (int)(BPP*fpsValue*metrics.widthPixels*metrics.heightPixels);
+
+        if (customQuality == true) {
+            recordingBitrate = (int)(recordingBitrate*qualityScale);
+        }
+
+        return recordingBitrate.toString();
     }
 
     private void requestOverlayDisplayPermission() {
