@@ -318,15 +318,6 @@ public class ScreenRecorder extends Service {
             tileBinder.recordingState(true);
         }
 
-        showFloatingControls = ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == true));
-
-        if (showFloatingControls == true) {
-            Intent panelIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
-
-            panelIntent.setAction(FloatingControls.ACTION_CONNECT_PANEL);
-            startService(panelIntent);
-        }
-
         screenRecordingStart();
     }
 
@@ -429,6 +420,15 @@ public class ScreenRecorder extends Service {
     }
 
     private void screenRecordingStart() {
+
+        showFloatingControls = ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == true));
+
+        if (showFloatingControls == true) {
+            Intent panelIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
+
+            panelIntent.setAction(FloatingControls.ACTION_CONNECT_PANEL);
+            startService(panelIntent);
+        }
 
         recordMicrophone = appSettings.getBoolean("checksoundmic", false);
 
@@ -540,10 +540,6 @@ public class ScreenRecorder extends Service {
 
         if (activityBinder != null) {
             activityBinder.recordingStart();
-        }
-
-        if (panelBinder != null && showFloatingControls == true) {
-            panelBinder.setInit(timeStart);
         }
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -695,13 +691,14 @@ public class ScreenRecorder extends Service {
                 tileBinder.recordingState(false);
             }
 
-            if (panelBinder != null && showFloatingControls == true) {
-                panelBinder.setStop();
-            }
         }
 
         if (activityBinder != null) {
             activityBinder.recordingStop();
+        }
+
+        if (panelBinder != null && showFloatingControls == true) {
+            panelBinder.setStop();
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {

@@ -2,24 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@drawable/floatingpanel_shape"
-    android:gravity="left"
+    android:gravity="top"
     android:id="@+id/panelwithbackground">
+
+    <ImageView
+        android:id="@+id/floatingpanelhandle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:src="@drawable/floatingpanel_shape" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
+        android:gravity="top"
         android:id="@+id/panelwrapped">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal"
-            android:paddingLeft="8dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
             android:gravity="center">
 
             <ImageButton
@@ -39,7 +44,6 @@
                 android:id="@+id/recordstopbuttonfloating"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_marginRight="8dp"
                 android:src="@drawable/icon_stop_color_action_large" />
 
         </LinearLayout>
@@ -47,18 +51,13 @@
         <Chronometer
             android:id="@+id/timerrecordfloating"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:countDown="false"
             android:textSize="6pt"
-            android:gravity="center"
-            android:layout_centerHorizontal="true" />
+            android:paddingBottom="8dp"
+            android:gravity="center" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/floatingpanelhandle"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/floatingpanel_shape" />
 
 </LinearLayout>

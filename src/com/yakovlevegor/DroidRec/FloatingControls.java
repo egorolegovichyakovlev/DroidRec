@@ -67,9 +67,7 @@ public class FloatingControls extends Service {
 
     private WindowManager.LayoutParams floatWindowLayoutParam;
 
-    private int currentOrientation = 0;
-
-    private SensorManager sensor;
+    private boolean isHorizontal = true;
 
     private Display display;
 
@@ -95,8 +93,6 @@ public class FloatingControls extends Service {
 
     private boolean panelHidden = false;
 
-    private boolean isRecording = false;
-
     private int panelWidthNormal;
 
     private int panelWidth;
@@ -112,13 +108,6 @@ public class FloatingControls extends Service {
 
         void setDisconnectPanel() {
             FloatingControls.this.actionDisconnectPanel();
-        }
-
-        void setInit(long time) {
-            isRecording = true;
-            recordingProgress.setBase(recordingPanelBinder.getTimeStart());
-            recordingProgress.start();
-            setControlState(false);
         }
 
         void setPause(long time) {
@@ -138,7 +127,6 @@ public class FloatingControls extends Service {
         }
 
         void setStop() {
-            isRecording = false;
             closePanel();
         }
     }
@@ -167,39 +155,6 @@ public class FloatingControls extends Service {
         }
     }
 
-    private void resetPosition() {
-        updateMetrics();
-        final WindowManager.LayoutParams floatWindowLayoutUpdateParam = floatWindowLayoutParam;
-        floatWindowLayoutUpdateParam.gravity = Gravity.CENTER;
-        int panelWidthSize = panelWidth;
-
-        if (panelHidden == true) {
-            panelWidthSize = panelWidthHidden;
-        }
-
-        floatWindowLayoutUpdateParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
-        floatWindowLayoutUpdateParam.y = 0;
-
-        windowManager.updateViewLayout(floatingPanel, floatWindowLayoutUpdateParam);
-    }
-
-    private SensorEventListener sensorListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent e) {
-            if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                if (currentOrientation != display.getRotation()) {
-                    currentOrientation = display.getRotation();
-                    if (isRecording == true) {
-                        resetPosition();
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-    };
-
     private void updateMetrics() {
 
         display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -213,11 +168,14 @@ public class FloatingControls extends Service {
 
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
+    public void startRecord() {
         updateMetrics();
+
+        if (displayWidth > displayHeight) {
+            isHorizontal = true;
+        } else {
+            isHorizontal = false;
+        }
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -234,13 +192,19 @@ public class FloatingControls extends Service {
         }
 
         LayoutInflater inflater = (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float, null);
+
+        if (isHorizontal == true) {
+            floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float, null);
+        } else {
+            floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_vertical, null);
+        }
 
         layoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
 
         ImageView viewHandle = (ImageView) floatingPanel.findViewById(R.id.floatingpanelhandle);
 
-            LinearLayout viewBackground = (LinearLayout) floatingPanel.findViewById(R.id.panelwithbackground);
+        LinearLayout viewBackground = (LinearLayout) floatingPanel.findViewById(R.id.panelwithbackground);
+
         if (applyDarkTheme == true) {
             viewBackground.setBackgroundDrawable(getResources().getDrawable(R.drawable.floatingpanel_shape_dark));
             viewHandle.setImageResource(R.drawable.floatingpanel_shape_dark);
@@ -270,8 +234,15 @@ public class FloatingControls extends Service {
             panelWidthSize = panelWidthHidden;
         }
 
-        floatWindowLayoutParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
-        floatWindowLayoutParam.y = 0;
+        if (isHorizontal == true) {
+            floatWindowLayoutParam.x = (int)((displayWidth/2)-(panelWidthSize/2));
+            floatWindowLayoutParam.y = 0;
+        } else {
+            floatWindowLayoutParam.x = 0;
+            floatWindowLayoutParam.y = (int)((displayHeight/2)-(panelWidthSize/2));
+        }
+
+        windowManager.addView(floatingPanel, floatWindowLayoutParam);
 
         pauseButton = (ImageButton) floatingPanel.findViewById(R.id.recordpausebuttonfloating);
         stopButton = (ImageButton) floatingPanel.findViewById(R.id.recordstopbuttonfloating);
@@ -321,15 +292,54 @@ public class FloatingControls extends Service {
             int panelWidthSize = panelWidth;
 
             private void checkBoundaries() {
-                if ((int)(x-(panelWidthSize/2)) < -(displayWidth/2)) {
-                    x = (float)(-(displayWidth/2)+(panelWidthSize/2));
-                } else if ((int)(x+(panelWidthSize/2)) > (displayWidth/2)) {
-                    x = (float)((displayWidth/2)-(panelWidthSize/2));
-                }
-                if ((int)(y-(panelHeight/2)) < -(displayHeight/2)) {
-                    y = (float)(-(displayHeight/2)+(panelHeight/2));
-                } else if ((int)(y+(panelHeight/2)) > (displayHeight/2)) {
-                    y = (float)((displayHeight/2)-(panelHeight/2));
+                if (panelHidden == false) {
+                    if (isHorizontal == true) {
+                        if ((int)(x-(panelWidth/2)) < -(displayWidth/2)) {
+                            x = (float)(-(displayWidth/2)+(panelWidth/2));
+                        } else if ((int)(x+(panelWidth/2)) > (displayWidth/2)) {
+                            x = (float)((displayWidth/2)-(panelWidth/2));
+                        }
+                        if ((int)(y-(panelHeight/2)) < -(displayHeight/2)) {
+                            y = (float)(-(displayHeight/2)+(panelHeight/2));
+                        } else if ((int)(y+(panelHeight/2)) > (displayHeight/2)) {
+                            y = (float)((displayHeight/2)-(panelHeight/2));
+                        }
+                    } else {
+                        if ((int)(x-(panelWidth/2)) < -(displayWidth/2)) {
+                            x = (float)(-(displayWidth/2)+(panelWidth/2));
+                        } else if ((int)(x+(panelWidth/2)) > (displayWidth/2)) {
+                            x = (float)((displayWidth/2)-(panelWidth/2));
+                        }
+                        if ((int)(y-(panelHeight/2)) < -(displayHeight/2)) {
+                            y = (float)(-(displayHeight/2)+(panelHeight/2));
+                        } else if ((int)(y+(panelHeight/2)) > (displayHeight/2)) {
+                            y = (float)((displayHeight/2)-(panelHeight/2));
+                        }
+                    }
+                } else {
+                    if (isHorizontal == true) {
+                        if ((int)(x-(panelWidthHidden/2)) < -(displayWidth/2)) {
+                            x = (float)(-(displayWidth/2)+(panelWidthHidden/2));
+                        } else if ((int)(x+(panelWidthHidden/2)) > (displayWidth/2)) {
+                            x = (float)((displayWidth/2)-(panelWidthHidden/2));
+                        }
+                        if ((int)(y-(panelHeight/2)) < -(displayHeight/2)) {
+                            y = (float)(-(displayHeight/2)+(panelHeight/2));
+                        } else if ((int)(y+(panelHeight/2)) > (displayHeight/2)) {
+                            y = (float)((displayHeight/2)-(panelHeight/2));
+                        }
+                    } else {
+                        if ((int)(x-(panelWidth/2)) < -(displayWidth/2)) {
+                            x = (float)(-(displayWidth/2)+(panelWidth/2));
+                        } else if ((int)(x+(panelWidth/2)) > (displayWidth/2)) {
+                            x = (float)((displayWidth/2)-(panelWidth/2));
+                        }
+                        if ((int)(y-(panelWidthHidden/2)) < -(displayHeight/2)) {
+                            y = (float)(-(displayHeight/2)+(panelWidthHidden/2));
+                        } else if ((int)(y+(panelWidthHidden/2)) > (displayHeight/2)) {
+                            y = (float)((displayHeight/2)-(panelWidthHidden/2));
+                        }
+                    }
                 }
             }
 
@@ -350,6 +360,7 @@ public class FloatingControls extends Service {
                         touchY = y;
 
                         checkBoundaries();
+
                         break;
                     case MotionEvent.ACTION_MOVE:
                         floatWindowLayoutUpdateParam.x = (int) ((x + event.getRawX()) - px);
@@ -373,9 +384,14 @@ public class FloatingControls extends Service {
                                 recordingProgress.setVisibility(View.GONE);
                                 panelWidthSize = panelWidthHidden;
 
-                                x = x+((panelWidthNormal/2)-(panelWidthHidden/2));
+                                if (isHorizontal == true) {
+                                    x = x+((panelWidthNormal/2)-(panelWidthHidden/2));
+                                    floatWindowLayoutUpdateParam.width = (int)panelWidthSize;
+                                } else {
+                                    y = y+((panelHeight/2)-(panelWidthHidden/2));
+                                    floatWindowLayoutUpdateParam.height = (int)panelWidthSize;
+                                }
 
-                                floatWindowLayoutUpdateParam.width = (int)panelWidthSize;
                             } else {
                                 panelHidden = false;
                                 stopButton.setVisibility(View.VISIBLE);
@@ -385,11 +401,18 @@ public class FloatingControls extends Service {
 
                                 panelWidthSize = panelWidthNormal;
 
-                                x = x-((panelWidthNormal/2)-(panelWidthHidden/2));
+                                if (isHorizontal == true) {
+                                    x = x-((panelWidthNormal/2)-(panelWidthHidden/2));
+                                    floatWindowLayoutUpdateParam.width = (int)panelWidthSize;
+                                } else {
+                                    y = y-((panelHeight/2)-(panelWidthHidden/2));
+                                    floatWindowLayoutUpdateParam.height = (int)panelHeight;
+                                }
 
-                                floatWindowLayoutUpdateParam.width = (int)panelWidthSize;
                             }
                         }
+
+                        checkBoundaries();
 
                         floatWindowLayoutUpdateParam.x = (int)x;
                         floatWindowLayoutUpdateParam.y = (int)y;
@@ -403,14 +426,9 @@ public class FloatingControls extends Service {
             }
         });
 
-        sensor = (SensorManager)getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+        recordingProgress.setBase(recordingPanelBinder.getTimeStart());
+        recordingProgress.start();
 
-        sensor.registerListener(sensorListener, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI);
-    }
-
-    public void startRecord() {
-        windowManager.addView(floatingPanel, floatWindowLayoutParam);
-        resetPosition();
     }
 
     @Override
@@ -430,10 +448,7 @@ public class FloatingControls extends Service {
     }
 
     public void closePanel() {
-        sensor.unregisterListener(sensorListener);
-
         windowManager.removeView(floatingPanel);
-        stopSelf();
     }
 
     @Override
