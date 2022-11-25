@@ -359,6 +359,8 @@ public class FloatingControls extends Service {
             int touchmotionX = 0;
             int touchmotionY = 0;
 
+            int threshold = 10;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -399,8 +401,13 @@ public class FloatingControls extends Service {
                             motionNewY = -motionNewY;
                         }
 
-                        touchmotionX += motionNewX;
-                        touchmotionY += motionNewY;
+                        if (touchmotionX < threshold) {
+                            touchmotionX += motionNewX;
+                        }
+
+                        if (touchmotionY < threshold) {
+                            touchmotionY += motionNewY;
+                        }
 
                         motionPrevX = floatWindowLayoutParam.x;
                         motionPrevY = floatWindowLayoutParam.y;
@@ -412,8 +419,6 @@ public class FloatingControls extends Service {
 
                         x = floatWindowLayoutParam.x;
                         y = floatWindowLayoutParam.y;
-
-                        int threshold = 10;
 
                         if (touchmotionX < threshold && touchmotionY < threshold) {
 
