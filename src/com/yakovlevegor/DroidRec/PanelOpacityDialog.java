@@ -34,15 +34,22 @@ import android.widget.ImageView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.content.res.Configuration;
+import android.content.SharedPreferences;
 
 import com.yakovlevegor.DroidRec.R;
 
 public class PanelOpacityDialog extends DialogPreference {
 
+    private SharedPreferences appSettings;
+
+    private Context innerContext;
+
     private int opacityScale = 9;
 
     public PanelOpacityDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
+        innerContext = context.getApplicationContext();
     }
 
     @Override
@@ -63,6 +70,14 @@ public class PanelOpacityDialog extends DialogPreference {
     public void onBindDialogView(View view) {
         opacityScale = this.getPersistedInt(9);
         ImageView opacityHint = (ImageView) view.findViewById(R.id.opacity_handle);
+        appSettings = innerContext.getSharedPreferences(ScreenRecorder.prefsident, 0);
+
+        String darkTheme = appSettings.getString("darktheme", innerContext.getResources().getString(R.string.dark_theme_option_auto));
+
+        if (((innerContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(innerContext.getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
+            opacityHint.setImageDrawable(innerContext.getResources().getDrawable(R.drawable.floatingpanel_shape_dark));
+        }
+
         SeekBar opacityBar = (SeekBar) view.findViewById(R.id.opacity_seek);
 
         updateHint(opacityScale, opacityHint);
