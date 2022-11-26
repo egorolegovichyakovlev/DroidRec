@@ -28,6 +28,16 @@
     <string name="controls_settings">操控设置</string>
     <string name="floating_controls_option">开启浮窗操控</string>
     <string name="floating_controls_option_description">显示浮窗操控面板</string>
+    <string name="floating_controls_position">浮窗控件位置</string>
+    <string name="floating_controls_position_description">设置浮窗控件位置</string>
+    <string name="floating_controls_position_notice">完成时轻按屏幕</string>
+    <string name="floating_controls_size">浮窗空间尺寸</string>
+    <string name="floating_controls_size_description">设置浮窗控件尺寸</string>
+        <array name="floating_controls_size_preferences">
+            <item name="floating_controls_size_option_large">大</item>
+            <item name="floating_controls_size_option_normal">一般</item>
+            <item name="floating_controls_size_option_small">小</item>
+        </array>
     <string name="dark_theme_option">使用深色主题</string>
     <string name="dark_theme_option_description">设置深色主题选项</string>
         <array name="dark_theme_option_preferences">
