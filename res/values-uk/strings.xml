@@ -28,6 +28,16 @@
     <string name="controls_settings">Параметри інтерфейсу</string>
     <string name="floating_controls_option">Активувати плаваючу панель управління</string>
     <string name="floating_controls_option_description">Показувати плаваючу панель</string>
+    <string name="floating_controls_position">Позиція плавучої панелі</string>
+    <string name="floating_controls_position_description">Визначати позицію плавучої панелі</string>
+    <string name="floating_controls_position_notice">Доторкніться до екрана щоб завершити</string>
+    <string name="floating_controls_size">Розмір плавучої панелі</string>
+    <string name="floating_controls_size_description">Визначати розмір плавучої панелі</string>
+    <array name="floating_controls_size_preferences">
+        <item name="floating_controls_size_option_large">Великий</item>
+        <item name="floating_controls_size_option_normal">Нормальний</item>
+        <item name="floating_controls_size_option_small">Маленький</item>
+    </array>
     <string name="dark_theme_option">Використати темну тему</string>
     <string name="dark_theme_option_description">Активувати темну тему</string>
     <array name="dark_theme_option_preferences">

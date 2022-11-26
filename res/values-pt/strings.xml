@@ -28,6 +28,16 @@
     <string name="controls_settings">Parâmetros da interface</string>
     <string name="floating_controls_option">Habilitar flutuante interface</string>
     <string name="floating_controls_option_description">Apresentar flutuante painel</string>
+    <string name="floating_controls_position">Posição da flutuante painel</string>
+    <string name="floating_controls_position_description">Ajustar posição</string>
+    <string name="floating_controls_position_notice">Tocar a tela no caso de completação</string>
+    <string name="floating_controls_size">Tamanho da flutuante painel</string>
+    <string name="floating_controls_size_description">Ajustar tamanho</string>
+    <array name="floating_controls_size_preferences">
+        <item name="floating_controls_size_option_large">Grande</item>
+        <item name="floating_controls_size_option_normal">Normal</item>
+        <item name="floating_controls_size_option_small">Pequeno</item>
+    </array>
     <string name="dark_theme_option">Uso escura tema</string>
     <string name="dark_theme_option_description">Ajustar escura tema</string>
     <array name="dark_theme_option_preferences">

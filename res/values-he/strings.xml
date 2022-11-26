@@ -28,6 +28,16 @@
     <string name="controls_settings">הגדרות מממשקים</string>
     <string name="floating_controls_option">הפעיל עליון ממשק</string>
     <string name="floating_controls_option_description">הציג ממשק למעלה מסך</string>
+    <string name="floating_controls_position">מקום מעליון ממשק</string>
+    <string name="floating_controls_position_description">הגדיר מקום מממשק</string>
+    <string name="floating_controls_position_notice">דחף במסך להמשיך</string>
+    <string name="floating_controls_size">גודל מעליון ממשק</string>
+    <string name="floating_controls_size_description">הגדיר גודל מממשק</string>
+    <array name="floating_controls_size_preferences">
+        <item name="floating_controls_size_option_large">גדול</item>
+        <item name="floating_controls_size_option_normal">רגיל</item>
+        <item name="floating_controls_size_option_small">קטן</item>
+    </array>
     <string name="dark_theme_option">השתמש חשוך צבה</string>
     <string name="dark_theme_option_description">הגדיר הגדרה מחשוך צבה</string>
     <array name="dark_theme_option_preferences">
