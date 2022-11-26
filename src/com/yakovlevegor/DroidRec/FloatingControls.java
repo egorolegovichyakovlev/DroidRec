@@ -481,6 +481,8 @@ public class FloatingControls extends Service {
             }
         }
 
+        checkBoundaries();
+
         windowManager.addView(floatingPanel, floatWindowLayoutParam);
 
         pauseButton = (ImageButton) floatingPanel.findViewById(R.id.recordpausebuttonfloating);
@@ -539,98 +541,97 @@ public class FloatingControls extends Service {
 
         }
 
-            floatingPanel.setOnTouchListener(new View.OnTouchListener() {
+        floatingPanel.setOnTouchListener(new View.OnTouchListener() {
 
-                double x;
-                double y;
-                double px;
-                double py;
+            double x;
+            double y;
+            double px;
+            double py;
 
-                double touchX;
-                double touchY;
+            double touchX;
+            double touchY;
 
-                int motionPrevX = 0;
-                int motionPrevY = 0;
+            int motionPrevX = 0;
+            int motionPrevY = 0;
 
-                int touchmotionX = 0;
-                int touchmotionY = 0;
+            int touchmotionX = 0;
+            int touchmotionY = 0;
 
-                int threshold = 10;
+            int threshold = 10;
 
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            updateMetrics();
-                            checkBoundaries();
-                            windowManager.updateViewLayout(floatingPanel, floatWindowLayoutParam);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        updateMetrics();
+                        checkBoundaries();
+                        windowManager.updateViewLayout(floatingPanel, floatWindowLayoutParam);
 
-                            x = floatWindowLayoutParam.x;
-                            y = floatWindowLayoutParam.y;
+                        x = floatWindowLayoutParam.x;
+                        y = floatWindowLayoutParam.y;
 
-                            px = event.getRawX();
-                            py = event.getRawY();
+                        px = event.getRawX();
+                        py = event.getRawY();
 
-                            touchX = x;
-                            touchY = y;
+                        touchX = x;
+                        touchY = y;
 
-                            motionPrevX = (int)(x);
-                            motionPrevY = (int)(y);
+                        motionPrevX = (int)(x);
+                        motionPrevY = (int)(y);
 
-                            touchmotionX = 0;
-                            touchmotionY = 0;
+                        touchmotionX = 0;
+                        touchmotionY = 0;
 
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            floatWindowLayoutParam.x = (int) ((x + event.getRawX()) - px);
-                            floatWindowLayoutParam.y = (int) ((y + event.getRawY()) - py);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        floatWindowLayoutParam.x = (int) ((x + event.getRawX()) - px);
+                        floatWindowLayoutParam.y = (int) ((y + event.getRawY()) - py);
 
-                            int motionNewX = floatWindowLayoutParam.x - motionPrevX;
-                            int motionNewY = floatWindowLayoutParam.y - motionPrevY;
+                        int motionNewX = floatWindowLayoutParam.x - motionPrevX;
+                        int motionNewY = floatWindowLayoutParam.y - motionPrevY;
 
-                            if (motionNewX < 0) {
-                                motionNewX = -motionNewX;
-                            }
-                            if (motionNewY < 0) {
-                                motionNewY = -motionNewY;
-                            }
+                        if (motionNewX < 0) {
+                            motionNewX = -motionNewX;
+                        }
+                        if (motionNewY < 0) {
+                            motionNewY = -motionNewY;
+                        }
 
-                            if (touchmotionX < threshold) {
-                                touchmotionX += motionNewX;
-                            }
+                        if (touchmotionX < threshold) {
+                            touchmotionX += motionNewX;
+                        }
 
-                            if (touchmotionY < threshold) {
-                                touchmotionY += motionNewY;
-                            }
+                        if (touchmotionY < threshold) {
+                            touchmotionY += motionNewY;
+                        }
 
-                            motionPrevX = floatWindowLayoutParam.x;
-                            motionPrevY = floatWindowLayoutParam.y;
+                        motionPrevX = floatWindowLayoutParam.x;
+                        motionPrevY = floatWindowLayoutParam.y;
 
-                            windowManager.updateViewLayout(floatingPanel, floatWindowLayoutParam);
+                        windowManager.updateViewLayout(floatingPanel, floatWindowLayoutParam);
 
-                            break;
-                        case MotionEvent.ACTION_UP:
+                        break;
+                    case MotionEvent.ACTION_UP:
 
-                            if (touchmotionX < threshold && touchmotionY < threshold) {
+                        if (touchmotionX < threshold && touchmotionY < threshold) {
 
-                                floatWindowLayoutParam.x = (int)(touchX);
-                                floatWindowLayoutParam.y = (int)(touchY);
+                            floatWindowLayoutParam.x = (int)(touchX);
+                            floatWindowLayoutParam.y = (int)(touchY);
 
-                                togglePanel();
+                            togglePanel();
 
-                            }
+                        }
 
-                            checkBoundaries();
-                            windowManager.updateViewLayout(floatingPanel, floatWindowLayoutParam);
+                        checkBoundaries();
+                        windowManager.updateViewLayout(floatingPanel, floatWindowLayoutParam);
 
-                            break;
-                    }
-
-                    return false;
+                        break;
                 }
-            });
 
+                return false;
+            }
+        });
 
     }
 
