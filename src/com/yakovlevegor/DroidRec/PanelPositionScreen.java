@@ -86,10 +86,6 @@ public class PanelPositionScreen extends Activity {
 
         View positionScreen = (View) findViewById(R.id.mainposition);
 
-        Intent serviceIntent = new Intent(PanelPositionScreen.this, FloatingControls.class);
-        serviceIntent.setAction(FloatingControls.ACTION_POSITION_PANEL);
-        bindService(serviceIntent, mPanelPositionConnection, Context.BIND_AUTO_CREATE);
-
         View.OnClickListener listenerView = new View.OnClickListener() {
             public void onClick(View v) {
                 onBackPressed();
@@ -112,6 +108,10 @@ public class PanelPositionScreen extends Activity {
     @Override
     public void onStart() {
         super.onStart();
+
+        Intent serviceIntent = new Intent(PanelPositionScreen.this, FloatingControls.class);
+        serviceIntent.setAction(FloatingControls.ACTION_POSITION_PANEL);
+        bindService(serviceIntent, mPanelPositionConnection, Context.BIND_AUTO_CREATE);
 
         Intent panelIntent = new Intent(PanelPositionScreen.this, FloatingControls.class);
         panelIntent.setAction(FloatingControls.ACTION_POSITION_PANEL);
