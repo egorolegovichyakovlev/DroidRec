@@ -62,6 +62,7 @@ import android.content.SharedPreferences;
 import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.provider.Settings;
+import android.media.MediaScannerConnection;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -720,6 +721,8 @@ public class ScreenRecorder extends Service {
         openFolderIntent.setAction(ACTION_ACTIVITY_FINISHED_FILE);
 
         PendingIntent openFolderActionIntent = PendingIntent.getService(this, 0, openFolderIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        MediaScannerConnection.scanFile(ScreenRecorder.this, new String[] { recordFileFullPath.toString() }, null, null);
 
         if (isRestarting == false) {
             Icon finishedIcon = Icon.createWithResource(this, R.drawable.icon_record_finished_status);
