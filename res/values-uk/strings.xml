@@ -14,9 +14,9 @@
     <string name="quality_normal">Нормальна</string>
     <string name="quality_low">Низька</string>
     <string name="quality_lowest">Дуже низька</string>
-    <string name="fps_indicator_custom">Модифікувати fps</string>
-    <string name="fps_indicator_custom_description">Ігнорувати автоматичний fps</string>
-    <string name="fps_indicator">Fps запису</string>
+    <string name="fps_indicator_custom">Модифікувати FPS</string>
+    <string name="fps_indicator_custom_description">Ігнорувати автоматичний FPS</string>
+    <string name="fps_indicator">FPS запису</string>
     <string name="fps_indicator_description">Визначати кадри на секунду</string>
     <string name="bitrate_indicator_custom">Модифікувати бітрейт</string>
     <string name="bitrate_indicator_custom_description">Ігнорувати автоматичний бітрейт запису</string>

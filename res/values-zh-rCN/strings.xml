@@ -14,9 +14,9 @@
     <string name="quality_normal">正常</string>
     <string name="quality_low">低</string>
     <string name="quality_lowest">最低</string>
-    <string name="fps_indicator_custom">自定义每秒帧数（fps）</string>
-    <string name="fps_indicator_custom_description">忽略自动 fps 设置</string>
-    <string name="fps_indicator">录制 fps</string>
+    <string name="fps_indicator_custom">自定义每秒帧数（FPS）</string>
+    <string name="fps_indicator_custom_description">忽略自动 FPS 设置</string>
+    <string name="fps_indicator">录制 FPS</string>
     <string name="fps_indicator_description">设置自定义的每秒帧数</string>
     <string name="bitrate_indicator_custom">自定义比特率</string>
     <string name="bitrate_indicator_custom_description">忽略自动比特率设置</string>

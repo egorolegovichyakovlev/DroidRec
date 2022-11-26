@@ -14,9 +14,9 @@
     <string name="quality_normal">Normal</string>
     <string name="quality_low">Baixo</string>
     <string name="quality_lowest">Maior baixo</string>
-    <string name="fps_indicator_custom">Personalizar fps</string>
-    <string name="fps_indicator_custom_description">Ignorar automaticas fps parâmetros</string>
-    <string name="fps_indicator">Fps da gravação</string>
+    <string name="fps_indicator_custom">Personalizar FPS</string>
+    <string name="fps_indicator_custom_description">Ignorar automaticas FPS parâmetros</string>
+    <string name="fps_indicator">FPS da gravação</string>
     <string name="fps_indicator_description">Ajustar frames por segundo</string>
     <string name="bitrate_indicator_custom">Personalizar taxa de bits</string>
     <string name="bitrate_indicator_custom_description">Ignorar automaticas taxa de bits parâmetros</string>
