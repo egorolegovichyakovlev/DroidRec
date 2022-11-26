@@ -31,7 +31,7 @@
     <string name="floating_controls_position">浮窗控件位置</string>
     <string name="floating_controls_position_description">设置浮窗控件位置</string>
     <string name="floating_controls_position_notice">完成时轻按屏幕</string>
-    <string name="floating_controls_size">浮窗空间尺寸</string>
+    <string name="floating_controls_size">浮窗控件尺寸</string>
     <string name="floating_controls_size_description">设置浮窗控件尺寸</string>
         <array name="floating_controls_size_preferences">
             <item name="floating_controls_size_option_large">大</item>
