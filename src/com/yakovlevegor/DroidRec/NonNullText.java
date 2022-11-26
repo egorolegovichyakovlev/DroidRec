@@ -48,8 +48,11 @@ public class NonNullText extends EditTextPreference {
 
     private String defaultString;
 
+    private String prefName;
+
     public NonNullText(Context context, AttributeSet attrs) {
         super(context, attrs);
+        prefName = getKey();
     }
 
     private class InputValidator implements TextWatcher {
@@ -59,7 +62,24 @@ public class NonNullText extends EditTextPreference {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            inputData = s.toString();
+
+            String newInputData = s.toString();
+
+            if (newInputData.length() < 10) {
+                if (newInputData.contentEquals("") == false) {
+                    int parsedValue = Integer.parseInt(newInputData);
+                    if (prefName.contentEquals("bitratevalue") == true && parsedValue > 250000000) {
+                        textEdit.setText(inputData);
+                    } else if (prefName.contentEquals("fpsvalue") == true && parsedValue > 300) {
+                        textEdit.setText(inputData);
+                    } else {
+                        inputData = newInputData;
+                    }
+                }
+            } else {
+                textEdit.setText(inputData);
+            }
+
         }
     }
 
@@ -91,7 +111,7 @@ public class NonNullText extends EditTextPreference {
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
-        if (inputData.startsWith("0") || inputData.contentEquals("")) {
+        if (inputData.startsWith("0") || inputData.contentEquals("") || inputData.length() >= 10 || (prefName.contentEquals("bitratevalue") == true && (Integer.parseInt(inputData) < 128000))) {
             textEdit.setText(persistedString);
         } else {
             super.onDialogClosed(positiveResult);
