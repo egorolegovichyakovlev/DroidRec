@@ -134,6 +134,8 @@ public class FloatingControls extends Service {
                 stopButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_stop_continue_color_action_normal));
             } else if (panelSize.contentEquals("Small") == true) {
                 stopButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_stop_continue_color_action_small));
+            } else if (panelSize.contentEquals("Little") == true) {
+                stopButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_stop_continue_color_action_little));
             }
             setControlState(true);
         }
@@ -148,6 +150,8 @@ public class FloatingControls extends Service {
                 stopButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_stop_color_action_normal));
             } else if (panelSize.contentEquals("Small") == true) {
                 stopButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_stop_color_action_small));
+            } else if (panelSize.contentEquals("Little") == true) {
+                stopButton.setImageDrawable(getResources().getDrawable(R.drawable.icon_stop_color_action_little));
             }
             setControlState(false);
         }
@@ -178,6 +182,11 @@ public class FloatingControls extends Service {
                     appSettingsEditor.putInt("panelpositionhorizontalysmall", floatWindowLayoutParam.y);
 
                     appSettingsEditor.putBoolean("panelpositionhorizontalhiddensmall", panelHidden);
+                } else if (panelSize.contentEquals("Little") == true) {
+                    appSettingsEditor.putInt("panelpositionhorizontalxlittle", floatWindowLayoutParam.x);
+                    appSettingsEditor.putInt("panelpositionhorizontalylittle", floatWindowLayoutParam.y);
+
+                    appSettingsEditor.putBoolean("panelpositionhorizontalhiddenlittle", panelHidden);
                 }
                 appSettingsEditor.commit();
             } else {
@@ -196,6 +205,11 @@ public class FloatingControls extends Service {
                     appSettingsEditor.putInt("panelpositionverticalysmall", floatWindowLayoutParam.y);
 
                     appSettingsEditor.putBoolean("panelpositionverticalhiddensmall", panelHidden);
+                } else if (panelSize.contentEquals("Little") == true) {
+                    appSettingsEditor.putInt("panelpositionverticalxlittle", floatWindowLayoutParam.x);
+                    appSettingsEditor.putInt("panelpositionverticalylittle", floatWindowLayoutParam.y);
+
+                    appSettingsEditor.putBoolean("panelpositionverticalhiddenlittle", panelHidden);
                 }
                 appSettingsEditor.commit();
             }
@@ -371,6 +385,8 @@ public class FloatingControls extends Service {
                 panelHidden = appSettings.getBoolean("panelpositionhorizontalhiddennormal", false);
             } else if (panelSize.contentEquals("Small") == true) {
                 panelHidden = appSettings.getBoolean("panelpositionhorizontalhiddensmall", false);
+            } else if (panelSize.contentEquals("Little") == true) {
+                panelHidden = appSettings.getBoolean("panelpositionhorizontalhiddenlittle", false);
             }
         } else {
             if (panelSize.contentEquals("Large") == true) {
@@ -379,6 +395,8 @@ public class FloatingControls extends Service {
                 panelHidden = appSettings.getBoolean("panelpositionverticalhiddennormal", false);
             } else if (panelSize.contentEquals("Small") == true) {
                 panelHidden = appSettings.getBoolean("panelpositionverticalhiddensmall", false);
+            } else if (panelSize.contentEquals("Little") == true) {
+                panelHidden = appSettings.getBoolean("panelpositionverticalhiddenlittle", false);
             }
         }
 
@@ -401,6 +419,8 @@ public class FloatingControls extends Service {
                 floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_normal, null);
             } else if (panelSize.contentEquals("Small") == true) {
                 floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_small, null);
+            } else if (panelSize.contentEquals("Little") == true) {
+                floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_little, null);
             }
         } else {
             if (panelSize.contentEquals("Large") == true) {
@@ -409,6 +429,8 @@ public class FloatingControls extends Service {
                 floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_vertical_normal, null);
             } else if (panelSize.contentEquals("Small") == true) {
                 floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_vertical_small, null);
+            } else if (panelSize.contentEquals("Little") == true) {
+                floatingPanel = (ViewGroup) inflater.inflate(R.layout.panel_float_vertical_little, null);
             }
         }
 
@@ -443,6 +465,8 @@ public class FloatingControls extends Service {
             panelWeightHidden = (int)((40*metricsPanel.density)+0.5f);
         } else if (panelSize.contentEquals("Small") == true) {
             panelWeightHidden = (int)((30*metricsPanel.density)+0.5f);
+        } else if (panelSize.contentEquals("Little") == true) {
+            panelWeightHidden = (int)((20*metricsPanel.density)+0.5f);
         }
 
         if (panelHidden == true) {
@@ -471,6 +495,9 @@ public class FloatingControls extends Service {
             } else if (panelSize.contentEquals("Small") == true) {
                 floatWindowLayoutParam.x = appSettings.getInt("panelpositionhorizontalxsmall", (int)((displayWidth/2)-(panelWidth/2)));
                 floatWindowLayoutParam.y = appSettings.getInt("panelpositionhorizontalysmall", 0);
+            } else if (panelSize.contentEquals("Little") == true) {
+                floatWindowLayoutParam.x = appSettings.getInt("panelpositionhorizontalxlittle", (int)((displayWidth/2)-(panelWidth/2)));
+                floatWindowLayoutParam.y = appSettings.getInt("panelpositionhorizontalylittle", 0);
             }
         } else {
             if (panelSize.contentEquals("Large") == true) {
@@ -482,6 +509,9 @@ public class FloatingControls extends Service {
             } else if (panelSize.contentEquals("Small") == true) {
                 floatWindowLayoutParam.x = appSettings.getInt("panelpositionverticalxsmall", (int)((displayWidth/2)-(panelWidth/2)));
                 floatWindowLayoutParam.y = appSettings.getInt("panelpositionverticalysmall", 0);
+            } else if (panelSize.contentEquals("Little") == true) {
+                floatWindowLayoutParam.x = appSettings.getInt("panelpositionverticalxlittle", (int)((displayWidth/2)-(panelWidth/2)));
+                floatWindowLayoutParam.y = appSettings.getInt("panelpositionverticalylittle", 0);
             }
         }
 

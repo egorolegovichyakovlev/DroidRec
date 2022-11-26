@@ -32,7 +32,6 @@ import android.preference.PreferenceManager;
 import android.widget.SeekBar;
 import android.widget.ImageView;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
 
