@@ -86,6 +86,13 @@
             android:entryValues="@array/floating_controls_size_preferences_values"
             android:defaultValue="@string/floating_controls_size_option_auto_value" />
 
+        <com.yakovlevegor.DroidRec.PanelOpacityDialog
+            android:key="floatingcontrolsopacity"
+            android:dependency="floatingcontrols"
+            android:summary="@string/floating_controls_opacity_description"
+            android:title="@string/floating_controls_opacity"
+            android:dialogLayout="@layout/dialog_opacity" />
+
         <com.yakovlevegor.DroidRec.ThemePreference
             android:key="darktheme"
             android:summary="@string/dark_theme_option_description"

@@ -38,6 +38,8 @@
         <item name="floating_controls_size_option_normal">Normal</item>
         <item name="floating_controls_size_option_small">Small</item>
     </array>
+    <string name="floating_controls_opacity">Floating controls opacity</string>
+    <string name="floating_controls_opacity_description">Set floating controls opacity</string>
     <string name="dark_theme_option">Use dark theme</string>
     <string name="dark_theme_option_description">Set dark theme preferences</string>
     <array name="dark_theme_option_preferences">

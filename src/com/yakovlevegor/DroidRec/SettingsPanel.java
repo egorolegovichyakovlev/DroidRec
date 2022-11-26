@@ -94,11 +94,14 @@ public class SettingsPanel extends PreferenceActivity {
 
         Preference overlayPreferenceSize = (Preference) findPreference("floatingcontrolssize");
 
+        Preference overlayPreferenceOpacity = (Preference) findPreference("floatingcontrolsopacity");
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             PreferenceCategory overlayPreferenceCategory = (PreferenceCategory) findPreference("controlssettings");
             overlayPreferenceCategory.removePreference(overlayPreference);
             overlayPreferenceCategory.removePreference(overlayPreferencePosition);
             overlayPreferenceCategory.removePreference(overlayPreferenceSize);
+            overlayPreferenceCategory.removePreference(overlayPreferenceOpacity);
         } else {
             Preference.OnPreferenceChangeListener listenerPanel = new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -137,6 +140,8 @@ public class SettingsPanel extends PreferenceActivity {
             overlayPreferencePosition.setOnPreferenceClickListener(listenerPanelClick);
 
             overlayPreferenceSize.setOnPreferenceClickListener(listenerPanelClick);
+
+            overlayPreferenceOpacity.setOnPreferenceClickListener(listenerPanelClick);
 
         }
 
@@ -210,8 +215,7 @@ public class SettingsPanel extends PreferenceActivity {
     }
 
     private static void setDarkColoringForViewGroup(ViewGroup viewGroup, int color, int colorLight, boolean parent) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++)
-        {
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
             View child = viewGroup.getChildAt(i);
             if (child instanceof ViewGroup && !(child instanceof Toolbar)) {
                 setDarkColoringForViewGroup((ViewGroup)child, color, colorLight, false);

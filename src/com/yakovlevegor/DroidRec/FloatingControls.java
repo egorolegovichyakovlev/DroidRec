@@ -423,6 +423,10 @@ public class FloatingControls extends Service {
             viewHandle.setImageResource(R.drawable.floatingpanel_shape_dark);
         }
 
+        int opacityLevel = appSettings.getInt("floatingcontrolsopacity", 9);
+        float opacityValue = (float)((opacityLevel+1)*0.1f);
+        viewBackground.setAlpha(opacityValue);
+
         LinearLayout viewSized = (LinearLayout) floatingPanel.findViewById(R.id.panelwrapped);
 
         DisplayMetrics metricsPanel = new DisplayMetrics();
