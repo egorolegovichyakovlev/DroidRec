@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/floatingpanelhandle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:src="@drawable/floatingpanel_shape" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,20 +31,20 @@
                 android:id="@+id/recordpausebuttonfloating"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:src="@drawable/icon_pause_color_action_large" />
+                android:src="@drawable/icon_pause_color_action_big" />
 
             <ImageButton
                 android:id="@+id/recordresumebuttonfloating"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:src="@drawable/icon_record_continue_color_action_large"
+                android:src="@drawable/icon_record_continue_color_action_big"
                 android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/recordstopbuttonfloating"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:src="@drawable/icon_stop_color_action_large" />
+                android:src="@drawable/icon_stop_color_action_big" />
 
         </LinearLayout>
 
@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:countDown="false"
-            android:textSize="6pt"
-            android:paddingBottom="8dp"
+            android:textSize="7pt"
+            android:paddingBottom="9dp"
             android:gravity="center" />
 
     </LinearLayout>

@@ -32,6 +32,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.yakovlevegor.DroidRec.MainActivity" />
         </activity>
+        <activity android:name="com.yakovlevegor.DroidRec.PanelPositionScreen"
+            android:exported="true"
+            android:label="@string/settings_title"
+            android:parentActivityName="com.yakovlevegor.DroidRec.SettingsPanel">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.yakovlevegor.DroidRec.SettingsPanel" />
+        </activity>
         <service
             android:name="com.yakovlevegor.DroidRec.ScreenRecorder"
             android:exported="true"

@@ -126,6 +126,7 @@ public class MainActivity extends Activity {
                 pauseRecording.setVisibility(View.VISIBLE);
             }
 
+            stopRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_stop_color_action_normal, 0, 0, 0);
             stopRecording.setVisibility(View.VISIBLE);
         }
 
@@ -154,7 +155,7 @@ public class MainActivity extends Activity {
 
             stopRecording.setVisibility(View.VISIBLE);
 
-            stopRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_stop_continue_color_action_large, 0, 0, 0);
+            stopRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_stop_continue_color_action_normal, 0, 0, 0);
         }
 
         void recordingResume(long time) {
@@ -168,7 +169,7 @@ public class MainActivity extends Activity {
             }
 
             stopRecording.setVisibility(View.VISIBLE);
-            stopRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_stop_color_action_large, 0, 0, 0);
+            stopRecording.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_stop_color_action_normal, 0, 0, 0);
         }
 
         void resetDir() {
@@ -226,9 +227,9 @@ public class MainActivity extends Activity {
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
 
-        String darkTheme = appSettings.getString("darktheme", "Automatic");
+        String darkTheme = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
 
-        if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals("Automatic")) || darkTheme.contentEquals("Dark")) {
+        if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);
             Window window = this.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);

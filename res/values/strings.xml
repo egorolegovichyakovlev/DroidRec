@@ -28,6 +28,16 @@
     <string name="controls_settings">Controls settings</string>
     <string name="floating_controls_option">Enable floating controls</string>
     <string name="floating_controls_option_description">Show floating controls panel</string>
+    <string name="floating_controls_position">Floating controls position</string>
+    <string name="floating_controls_position_description">Set floating controls position</string>
+    <string name="floating_controls_position_notice">Tap the screen when complete</string>
+    <string name="floating_controls_size">Floating controls size</string>
+    <string name="floating_controls_size_description">Set floating controls size</string>
+    <array name="floating_controls_size_preferences">
+        <item name="floating_controls_size_option_large">Large</item>
+        <item name="floating_controls_size_option_normal">Normal</item>
+        <item name="floating_controls_size_option_small">Small</item>
+    </array>
     <string name="dark_theme_option">Use dark theme</string>
     <string name="dark_theme_option_description">Set dark theme preferences</string>
     <array name="dark_theme_option_preferences">

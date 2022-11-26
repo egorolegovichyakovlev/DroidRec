@@ -70,9 +70,9 @@ public class SettingsPanel extends PreferenceActivity {
 
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
 
-        String darkTheme = appSettings.getString("darktheme", "Automatic");
+        String darkTheme = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
 
-        if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals("Automatic")) || darkTheme.contentEquals("Dark")) {
+        if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);
             setDarkColoringForViewGroup((ViewGroup) getWindow().getDecorView(), getResources().getColor(R.color.colorDarkBackground), getResources().getColor(R.color.colorDarkText), true);
             getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorDarkBackground)));
@@ -90,9 +90,15 @@ public class SettingsPanel extends PreferenceActivity {
 
         Preference overlayPreference = (Preference) findPreference("floatingcontrols");
 
+        Preference overlayPreferencePosition = (Preference) findPreference("floatingcontrolsposition");
+
+        Preference overlayPreferenceSize = (Preference) findPreference("floatingcontrolssize");
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             PreferenceCategory overlayPreferenceCategory = (PreferenceCategory) findPreference("controlssettings");
             overlayPreferenceCategory.removePreference(overlayPreference);
+            overlayPreferenceCategory.removePreference(overlayPreferencePosition);
+            overlayPreferenceCategory.removePreference(overlayPreferenceSize);
         } else {
             Preference.OnPreferenceChangeListener listenerPanel = new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -113,6 +119,25 @@ public class SettingsPanel extends PreferenceActivity {
             };
 
             overlayPreference.setOnPreferenceChangeListener(listenerPanel);
+
+            Preference.OnPreferenceClickListener listenerPanelClick = new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    if (Settings.canDrawOverlays(SettingsPanel.this) == true) {
+                        return false;
+                    } else {
+                        requestOverlayDisplayPermission();
+                    }
+
+                    return true;
+                }
+            };
+
+            overlayPreferencePosition.setOnPreferenceClickListener(listenerPanelClick);
+
+            overlayPreferenceSize.setOnPreferenceClickListener(listenerPanelClick);
+
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {

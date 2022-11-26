@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/icon_record_color_action_large"
+            android:drawableLeft="@drawable/icon_record_color_action_normal"
             android:text="@string/record_start" />
 
         <Button
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/icon_pause_color_action_large"
+            android:drawableLeft="@drawable/icon_pause_color_action_normal"
             android:text="@string/record_pause" />
 
         <Button
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/icon_record_continue_color_action_large"
+            android:drawableLeft="@drawable/icon_record_continue_color_action_normal"
             android:text="@string/record_resume" />
 
         <Button
@@ -54,7 +54,7 @@
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:drawableLeft="@drawable/icon_stop_color_action_large"
+            android:drawableLeft="@drawable/icon_stop_color_action_normal"
             android:text="@string/record_stop" />
 
         <Button

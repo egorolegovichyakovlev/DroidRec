@@ -265,6 +265,7 @@ public class ScreenRecorder extends Service {
     public void onCreate() {
         super.onCreate();
         Intent serviceIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
+        serviceIntent.setAction(FloatingControls.ACTION_RECORD_PANEL);
         bindService(serviceIntent, mPanelConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -426,7 +427,7 @@ public class ScreenRecorder extends Service {
         if (showFloatingControls == true) {
             Intent panelIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
 
-            panelIntent.setAction(FloatingControls.ACTION_CONNECT_PANEL);
+            panelIntent.setAction(FloatingControls.ACTION_RECORD_PANEL);
             startService(panelIntent);
         }
 
@@ -482,7 +483,7 @@ public class ScreenRecorder extends Service {
 
         Icon recordingIcon = Icon.createWithResource(this, R.drawable.icon_record_status);
 
-        Icon recordingIconLarge = Icon.createWithResource(this, R.drawable.icon_record_color_action_large);
+        Icon recordingIconLarge = Icon.createWithResource(this, R.drawable.icon_record_color_action_normal);
 
         Intent stopRecordIntent = new Intent(this, ScreenRecorder.class);
 
@@ -723,7 +724,7 @@ public class ScreenRecorder extends Service {
         if (isRestarting == false) {
             Icon finishedIcon = Icon.createWithResource(this, R.drawable.icon_record_finished_status);
 
-            Icon finishedIconLarge = Icon.createWithResource(this, R.drawable.icon_record_finished_color_action_large);
+            Icon finishedIconLarge = Icon.createWithResource(this, R.drawable.icon_record_finished_color_action_normal);
 
             Notification.Builder finishedNotification;
 
@@ -749,7 +750,7 @@ public class ScreenRecorder extends Service {
         } else {
             Icon restartIcon = Icon.createWithResource(this, R.drawable.icon_rotate_status);
 
-            Icon restartIconLarge = Icon.createWithResource(this, R.drawable.icon_rotate_color_action_large);
+            Icon restartIconLarge = Icon.createWithResource(this, R.drawable.icon_rotate_color_action_normal);
 
             Notification.Builder restartNotification;
 
@@ -805,7 +806,7 @@ public class ScreenRecorder extends Service {
 
         Icon pausedIcon = Icon.createWithResource(this, R.drawable.icon_pause_status);
 
-        Icon pausedIconLarge = Icon.createWithResource(this, R.drawable.icon_pause_color_action_large);
+        Icon pausedIconLarge = Icon.createWithResource(this, R.drawable.icon_pause_color_action_normal);
 
         Intent stopRecordIntent = new Intent(this, ScreenRecorder.class);
 
@@ -872,7 +873,7 @@ public class ScreenRecorder extends Service {
 
         Icon recordingIcon = Icon.createWithResource(this, R.drawable.icon_record_status);
 
-        Icon recordingIconLarge = Icon.createWithResource(this, R.drawable.icon_record_color_action_large);
+        Icon recordingIconLarge = Icon.createWithResource(this, R.drawable.icon_record_color_action_normal);
 
         Intent stopRecordIntent = new Intent(this, ScreenRecorder.class);
 
