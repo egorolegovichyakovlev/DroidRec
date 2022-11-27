@@ -7,107 +7,115 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
-        <Chronometer
-            android:id="@+id/timerrecord"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:countDown="false"
-            android:textSize="16pt"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:id="@+id/recordbutton"
-            android:layout_below="@id/timerrecord"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/icon_record_color_action_normal"
-            android:text="@string/record_start" />
-
-        <Button
-            android:id="@+id/recordpausebutton"
-            android:layout_below="@id/recordbutton"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/icon_pause_color_action_normal"
-            android:text="@string/record_pause" />
-
-        <Button
-            android:id="@+id/recordresumebutton"
-            android:layout_below="@id/recordpausebutton"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/icon_record_continue_color_action_normal"
-            android:text="@string/record_resume" />
-
-        <Button
-            android:id="@+id/recordstopbutton"
-            android:layout_below="@id/recordresumebutton"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:drawableLeft="@drawable/icon_stop_color_action_normal"
-            android:text="@string/record_stop" />
-
-        <Button
-            android:id="@+id/recordfolder"
-            android:layout_below="@id/recordstopbutton"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="#00000000"
-            android:textSize="6pt"
-            android:drawableLeft="@drawable/icon_save_folder"
-            android:text="@string/setting_recordings_folder" />
-
-        <Button
-            android:id="@+id/recordsettings"
-            android:layout_below="@id/recordfolder"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="#00000000"
-            android:textSize="6pt"
-            android:drawableLeft="@drawable/icon_settings"
-            android:text="@string/settings_title" />
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@id/recordsettings"
-            android:gravity="center_horizontal">
+            android:gravity="center">
 
-            <TextView
-                android:id="@+id/audioplaybackunavailable"
+            <Chronometer
+                android:id="@+id/timerrecord"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textSize="6pt"
-                android:gravity="center"
-                android:text="@string/audio_playback_unavailable" />
+                android:countDown="false"
+                android:textSize="32sp"
+                android:layout_centerHorizontal="true" />
 
-            <CheckBox
-                android:id="@+id/checksoundplayback"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/recordbutton"
+                android:layout_below="@id/timerrecord"
                 android:layout_height="wrap_content"
-                android:text="@string/setting_audio_record_playback_sound" />
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:drawableLeft="@drawable/icon_record_color_action_normal"
+                android:text="@string/record_start" />
 
-            <CheckBox
-                android:id="@+id/checksoundmic"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/recordpausebutton"
+                android:layout_below="@id/recordbutton"
                 android:layout_height="wrap_content"
-                android:text="@string/setting_audio_record_microphone_sound" />
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:drawableLeft="@drawable/icon_pause_color_action_normal"
+                android:text="@string/record_pause" />
+
+            <Button
+                android:id="@+id/recordresumebutton"
+                android:layout_below="@id/recordpausebutton"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:drawableLeft="@drawable/icon_record_continue_color_action_normal"
+                android:text="@string/record_resume" />
+
+            <Button
+                android:id="@+id/recordstopbutton"
+                android:layout_below="@id/recordresumebutton"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:drawableLeft="@drawable/icon_stop_color_action_normal"
+                android:text="@string/record_stop" />
+
+            <Button
+                android:id="@+id/recordfolder"
+                android:layout_below="@id/recordstopbutton"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="#00000000"
+                android:textSize="12sp"
+                android:drawableLeft="@drawable/icon_save_folder"
+                android:text="@string/setting_recordings_folder" />
+
+            <Button
+                android:id="@+id/recordsettings"
+                android:layout_below="@id/recordfolder"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="#00000000"
+                android:textSize="12sp"
+                android:drawableLeft="@drawable/icon_settings"
+                android:text="@string/settings_title" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_below="@id/recordsettings"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/audioplaybackunavailable"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:text="@string/audio_playback_unavailable" />
+
+                <CheckBox
+                    android:id="@+id/checksoundplayback"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_audio_record_playback_sound" />
+
+                <CheckBox
+                    android:id="@+id/checksoundmic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_audio_record_microphone_sound" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

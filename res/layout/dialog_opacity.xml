@@ -1,24 +1,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/opacity_handle"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/floatingpanel_shape" />
-
-    <SeekBar
-        android:id="@+id/opacity_seek"
-        android:layout_below="@+id/quality_title"
-        android:layout_height="wrap_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
-        android:max="9" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/opacity_handle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/floatingpanel_shape" />
+
+            <SeekBar
+                android:id="@+id/opacity_seek"
+                android:layout_below="@+id/opacity_handle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_centerHorizontal="true"
+                android:max="9" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

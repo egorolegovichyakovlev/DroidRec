@@ -6,19 +6,27 @@
     android:id="@+id/mainposition"
     android:gravity="center">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
-        <TextView
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:textSize="11pt"
-            android:gravity="center"
-            android:text="@string/floating_controls_position_notice" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
 
-    </LinearLayout>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:text="@string/floating_controls_position_notice" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
