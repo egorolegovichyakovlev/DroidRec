@@ -37,7 +37,10 @@
         <item name="floating_controls_size_option_large">גדול</item>
         <item name="floating_controls_size_option_normal">רגיל</item>
         <item name="floating_controls_size_option_small">קטן</item>
+        <item name="floating_controls_size_option_little">קטנטן</item>
     </array>
+    <string name="floating_controls_opacity">שקיפות מעליון ממשק</string>
+    <string name="floating_controls_opacity_description">הגדיר שקיפות מממשק</string>
     <string name="dark_theme_option">השתמש חשוך צבה</string>
     <string name="dark_theme_option_description">הגדיר הגדרה מחשוך צבה</string>
     <array name="dark_theme_option_preferences">
