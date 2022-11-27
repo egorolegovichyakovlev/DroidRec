@@ -227,7 +227,16 @@ public class MainActivity extends Activity {
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
 
-        String darkTheme = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
+        String darkThemeNew = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
+
+        if (appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto)).contentEquals(darkThemeNew) == false) {
+
+            appSettingsEditor.putString("darkthemeapplied", darkThemeNew);
+
+            appSettingsEditor.commit();
+        }
+
+        String darkTheme = appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto));
 
         if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);

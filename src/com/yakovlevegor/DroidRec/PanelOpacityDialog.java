@@ -72,7 +72,7 @@ public class PanelOpacityDialog extends DialogPreference {
         ImageView opacityHint = (ImageView) view.findViewById(R.id.opacity_handle);
         appSettings = innerContext.getSharedPreferences(ScreenRecorder.prefsident, 0);
 
-        String darkTheme = appSettings.getString("darktheme", innerContext.getResources().getString(R.string.dark_theme_option_auto));
+        String darkTheme = appSettings.getString("darkthemeapplied", innerContext.getResources().getString(R.string.dark_theme_option_auto));
 
         if (((innerContext.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(innerContext.getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
             opacityHint.setImageDrawable(innerContext.getResources().getDrawable(R.drawable.floatingpanel_shape_dark));

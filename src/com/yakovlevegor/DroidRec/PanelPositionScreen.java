@@ -69,7 +69,7 @@ public class PanelPositionScreen extends Activity {
 
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
 
-        String darkTheme = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
+        String darkTheme = appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto));
 
         if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);

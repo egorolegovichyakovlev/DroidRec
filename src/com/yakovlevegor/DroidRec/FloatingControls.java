@@ -400,7 +400,7 @@ public class FloatingControls extends Service {
             }
         }
 
-        String darkTheme = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
+        String darkTheme = appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto));
 
         boolean applyDarkTheme = (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark"));
 
