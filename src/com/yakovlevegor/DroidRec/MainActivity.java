@@ -260,6 +260,11 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.main);
 
+        if (appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            appSettingsEditor.putBoolean("checksoundplayback", false);
+            appSettingsEditor.commit();
+        }
+
         if ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == false)) {
             appSettingsEditor.putBoolean("floatingcontrols", false);
             appSettingsEditor.commit();
@@ -464,7 +469,7 @@ public class MainActivity extends Activity {
 
     void proceedRecording() {
 
-        if (appSettings.getBoolean("recordmode", false) == true && appSettings.getBoolean("checksoundplayback", false) == false && recordingBinder != null) {
+        if (appSettings.getBoolean("recordmode", false) == true && (appSettings.getBoolean("checksoundplayback", false) == false || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) && recordingBinder != null) {
             doStartService(0, null);
         } else {
             startActivityForResult(activityProjectionManager.createScreenCaptureIntent(), REQUEST_RECORD);

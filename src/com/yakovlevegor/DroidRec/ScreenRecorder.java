@@ -642,7 +642,7 @@ public class ScreenRecorder extends Service {
         if (recordingMediaProjection != null) {
             recordingMediaProjection.stop();
         }
-        if (recordOnlyAudio == true && recordPlayback == false) {
+        if (recordOnlyAudio == true && (recordPlayback == false || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
             recordingMediaProjection = null;
         } else {
             recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
