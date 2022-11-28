@@ -122,6 +122,8 @@ public class PlaybackRecorder {
 
     private Context mainContext;
 
+    private boolean audioOnly;
+
     private void getAllCodecs() {
         int numCodecs = MediaCodecList.getCodecCount();
         for (int i = 0; i < numCodecs; i++) {
@@ -193,8 +195,9 @@ public class PlaybackRecorder {
         return record;
     }
 
-    public PlaybackRecorder(Context appContext, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName) {
+    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName) {
         mainContext = appContext;
+        audioOnly = recordAudioOnly;
         nativeFramerate = framerate;
         getAllCodecs();
         mVirtualDisplay = display;
@@ -265,12 +268,16 @@ public class PlaybackRecorder {
     }
 
     public void start() {
-        String codecInName = getCodec();
-        if (useCustomCodec == true) {
-            codecInName = customCodec;
-            currentProfileLevel = codecProfileLevels.get(codecsList.lastIndexOf(customCodec));
+        if (audioOnly == false) {
+            String codecInName = getCodec();
+            if (useCustomCodec == true) {
+                codecInName = customCodec;
+                currentProfileLevel = codecProfileLevels.get(codecsList.lastIndexOf(customCodec));
+            }
+            mVideoEncoder = new VideoEncoder(videoWidth, videoHeight, nativeFramerate, recordQualityScale, useCustomBitrate, recordCustomBitrate, codecInName, currentProfileLevel);
+        } else {
+            mVideoEncoder = null;
         }
-        mVideoEncoder = new VideoEncoder(videoWidth, videoHeight, nativeFramerate, recordQualityScale, useCustomBitrate, recordCustomBitrate, codecInName, currentProfileLevel);
 
         if (recordMicrophone == false && recordAudio == false) {
             mAudioEncoder = null;
@@ -340,8 +347,10 @@ public class PlaybackRecorder {
         MediaCodec.BufferInfo eos = new MediaCodec.BufferInfo();
         ByteBuffer buffer = ByteBuffer.allocate(0);
         eos.set(0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
-        if (mVideoTrackIndex != INVALID_INDEX) {
-            writeSampleData(mVideoTrackIndex, eos, buffer);
+        if (audioOnly == false) {
+            if (mVideoTrackIndex != INVALID_INDEX) {
+                writeSampleData(mVideoTrackIndex, eos, buffer);
+            }
         }
         if (mAudioTrackIndex != INVALID_INDEX) {
             writeSampleData(mAudioTrackIndex, eos, buffer);
@@ -351,7 +360,7 @@ public class PlaybackRecorder {
     }
 
     private void record() {
-        if (mIsRunning.get() || mForceQuit.get() || mVirtualDisplay == null) {
+        if (mIsRunning.get() || mForceQuit.get() || (mVirtualDisplay == null && audioOnly == false)) {
             throw new IllegalStateException();
         }
 
@@ -359,13 +368,17 @@ public class PlaybackRecorder {
 
         try {
             mMuxer = new MediaMuxer(mDstDesc, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
-            prepareVideoEncoder();
+            if (audioOnly == false) {
+                prepareVideoEncoder();
+            }
             prepareAudioEncoder();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        mVirtualDisplay.setSurface(mVideoEncoder.getInputSurface());
+        if (audioOnly == false) {
+            mVirtualDisplay.setSurface(mVideoEncoder.getInputSurface());
+        }
     }
 
     private void muxVideo(int index, MediaCodec.BufferInfo buffer) {
@@ -468,11 +481,13 @@ public class PlaybackRecorder {
     }
 
     private void startMuxerIfReady() {
-        if (mMuxerStarted || mVideoOutputFormat == null || (mAudioEncoder != null && mAudioOutputFormat == null)) {
+        if (mMuxerStarted || (mVideoOutputFormat == null && audioOnly == false) || (mAudioEncoder != null && mAudioOutputFormat == null)) {
             return;
         }
 
-        mVideoTrackIndex = mMuxer.addTrack(mVideoOutputFormat);
+        if (audioOnly == false) {
+            mVideoTrackIndex = mMuxer.addTrack(mVideoOutputFormat);
+        }
         mAudioTrackIndex = mAudioEncoder == null ? INVALID_INDEX : mMuxer.addTrack(mAudioOutputFormat);
         mMuxer.start();
         mMuxerStarted = true;
@@ -480,9 +495,11 @@ public class PlaybackRecorder {
             return;
         }
         MediaCodec.BufferInfo info;
-        while ((info = mPendingVideoEncoderBufferInfos.poll()) != null) {
-            int index = mPendingVideoEncoderBufferIndices.poll();
-            muxVideo(index, info);
+        if (audioOnly == false) {
+            while ((info = mPendingVideoEncoderBufferInfos.poll()) != null) {
+                int index = mPendingVideoEncoderBufferIndices.poll();
+                muxVideo(index, info);
+            }
         }
         if (mAudioEncoder != null) {
             while ((info = mPendingAudioEncoderBufferInfos.poll()) != null) {
@@ -562,13 +579,15 @@ public class PlaybackRecorder {
         mPendingVideoEncoderBufferInfos.clear();
         mPendingVideoEncoderBufferIndices.clear();
         try {
-            if (mVideoEncoder != null) mVideoEncoder.stop();
-        } catch (IllegalStateException e) {
-        }
+            if (mVideoEncoder != null) {
+                mVideoEncoder.stop();
+            }
+        } catch (IllegalStateException e) {}
         try {
-            if (mAudioEncoder != null) mAudioEncoder.stop();
-        } catch (IllegalStateException e) {
-        }
+            if (mAudioEncoder != null) {
+                mAudioEncoder.stop();
+            }
+        } catch (IllegalStateException e) {}
 
     }
 

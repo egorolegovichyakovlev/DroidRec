@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.app.Service;
 import android.view.WindowManager;
 import android.view.Display;
+import android.view.Surface;
 import android.os.Build;
 import android.os.Binder;
 import android.os.IBinder;
@@ -115,6 +116,43 @@ public class FloatingControls extends Service {
 
     private String panelSize;
 
+    private int orientationOnStart;
+
+    private SensorManager sensor;
+
+    private long timerStart;
+
+    private boolean isStopped = true;
+
+    private int widthNormal;
+
+    private int heightNormal;
+
+    private float densityNormal;
+
+    private boolean isRestarting = false;
+
+    private SensorEventListener sensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent e) {
+
+            if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER && isStopped == false) {
+            int newRot = display.getRotation();
+                if (orientationOnStart != newRot) {
+                    orientationOnStart = newRot;
+                    timerStart = recordingProgress.getBase();
+                    if (isStopped == false) {
+                        closePanel();
+                        startRecord();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    };
+
     public class PanelBinder extends Binder {
         void setConnectPanel(ScreenRecorder.RecordingPanelBinder lbinder) {
             FloatingControls.this.actionConnectPanel(lbinder);
@@ -156,7 +194,16 @@ public class FloatingControls extends Service {
             setControlState(false);
         }
 
+        void setRestart(int orient) {
+            isRestarting = true;
+            orientationOnStart = orient;
+            timerStart = SystemClock.elapsedRealtime();
+            closePanel();
+            startRecord();
+        }
+
         void setStop() {
+            isStopped = true;
             closePanel();
         }
     }
@@ -245,14 +292,13 @@ public class FloatingControls extends Service {
 
     private void updateMetrics() {
 
-        display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
-        Point screenSize = new Point();
-
-        display.getSize(screenSize);
-
-        displayWidth = screenSize.x;
-        displayHeight = screenSize.y;
+        if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
+            displayWidth = heightNormal;
+            displayHeight = widthNormal;
+        } else {
+            displayWidth = widthNormal;
+            displayHeight = heightNormal;
+        }
 
     }
 
@@ -361,10 +407,21 @@ public class FloatingControls extends Service {
 
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        sensor = (SensorManager)getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+        sensor.registerListener(sensorListener, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI);
+    }
+
     public void startRecord() {
+
+        display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         updateMetrics();
 
-        if (displayWidth > displayHeight) {
+        if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
             isHorizontal = true;
         } else {
             isHorizontal = false;
@@ -451,31 +508,30 @@ public class FloatingControls extends Service {
 
         LinearLayout viewSized = (LinearLayout) floatingPanel.findViewById(R.id.panelwrapped);
 
-        DisplayMetrics metricsPanel = new DisplayMetrics();
-        display.getRealMetrics(metricsPanel);
-
         viewBackground.measure(0, 0);
 
         panelWidthNormal = viewBackground.getMeasuredWidth();
         panelHeight = viewBackground.getMeasuredHeight();
 
         if (panelSize.contentEquals("Large") == true) {
-            panelWeightHidden = (int)((50*metricsPanel.density)+0.5f);
+            panelWeightHidden = (int)((50*densityNormal)+0.5f);
         } else if (panelSize.contentEquals("Normal") == true) {
-            panelWeightHidden = (int)((40*metricsPanel.density)+0.5f);
+            panelWeightHidden = (int)((40*densityNormal)+0.5f);
         } else if (panelSize.contentEquals("Small") == true) {
-            panelWeightHidden = (int)((30*metricsPanel.density)+0.5f);
+            panelWeightHidden = (int)((30*densityNormal)+0.5f);
         } else if (panelSize.contentEquals("Little") == true) {
-            panelWeightHidden = (int)((20*metricsPanel.density)+0.5f);
+            panelWeightHidden = (int)((20*densityNormal)+0.5f);
         }
 
         if (panelHidden == true) {
+            panelWidth = panelWeightHidden;
             if (isHorizontal == true) {
                 floatWindowLayoutParam = new WindowManager.LayoutParams(panelWeightHidden, panelHeight, layoutType, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
             } else {
                 floatWindowLayoutParam = new WindowManager.LayoutParams(panelWidthNormal, panelWeightHidden, layoutType, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
             }
         } else {
+            panelWidth = panelWidthNormal;
             if (isHorizontal == true) {
                 floatWindowLayoutParam = new WindowManager.LayoutParams(panelWidthNormal, panelHeight, layoutType, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
             } else {
@@ -570,7 +626,9 @@ public class FloatingControls extends Service {
                     setControlState(false);
                 }
             });
-             recordingProgress.setBase(recordingPanelBinder.getTimeStart());
+            if (isRestarting == false) {
+                recordingProgress.setBase(timerStart);
+            }
             recordingProgress.start();
 
         }
@@ -672,10 +730,38 @@ public class FloatingControls extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
+            isRestarting = false;
             if (intent.getAction() == ACTION_RECORD_PANEL) {
+                isStopped = false;
                 startAction = ACTION_RECORD_PANEL;
             } else if (intent.getAction() == ACTION_POSITION_PANEL) {
+                isStopped = true;
                 startAction = ACTION_POSITION_PANEL;
+            }
+
+            Point screenSize = new Point();
+
+            display.getSize(screenSize);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getRealMetrics(metrics);
+
+            densityNormal = metrics.density;
+
+            orientationOnStart = display.getRotation();
+
+            if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
+                widthNormal = screenSize.y;
+                heightNormal = screenSize.x;
+            } else {
+                widthNormal = screenSize.x;
+                heightNormal = screenSize.y;
+            }
+
+            if (recordingPanelBinder != null) {
+                timerStart = recordingPanelBinder.getTimeStart();
+            } else {
+                timerStart = 0;
             }
             startRecord();
         }

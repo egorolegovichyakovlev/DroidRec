@@ -8,13 +8,13 @@
     android:gravity="center">
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center">
@@ -85,11 +85,36 @@
                 android:drawableLeft="@drawable/icon_settings"
                 android:text="@string/settings_title" />
 
+            <RadioGroup
+                android:id="@+id/recordtype"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recordsettings"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/record_video"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRecordingModeChecked"
+                    android:text="@string/setting_record_type_video"
+                    />
+
+                <RadioButton
+                    android:id="@+id/record_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onRecordingModeChecked"
+                    android:text="@string/setting_record_type_audio"/>
+
+            </RadioGroup>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_below="@id/recordsettings"
+                android:layout_below="@id/recordtype"
                 android:gravity="center_horizontal">
 
                 <TextView

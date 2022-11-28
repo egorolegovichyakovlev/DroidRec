@@ -49,6 +49,7 @@ import android.widget.Toast;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.TextView;
+import android.widget.RadioButton;
 import android.content.Intent;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
@@ -71,6 +72,8 @@ public class MainActivity extends Activity {
     private static final int REQUEST_MICROPHONE_PLAYBACK = 59465;
 
     private static final int REQUEST_MICROPHONE_RECORD = 58467;
+
+    private static final int REQUEST_MODE_CHANGE = 58857;
 
     private ScreenRecorder.RecordingBinder recordingBinder;
 
@@ -98,6 +101,10 @@ public class MainActivity extends Activity {
 
     CheckBox recPlayback;
 
+    RadioButton recordVideoOption;
+
+    RadioButton recordAudioOption;
+
     Chronometer timeCounter;
 
     TextView audioPlaybackUnavailable;
@@ -113,6 +120,8 @@ public class MainActivity extends Activity {
     private boolean serviceToRecording = false;
 
     private AlertDialog dialog;
+
+    private boolean recordModeChosen;
 
     public class ActivityBinder extends Binder {
         void recordingStart() {
@@ -198,7 +207,11 @@ public class MainActivity extends Activity {
 
     void doStartService(int result, Intent data) {
         recordingBinder.setPreStart(result, data);
-        serviceIntent.setAction(ScreenRecorder.ACTION_START);
+        if (appSettings.getBoolean("recordmode", false) == false) {
+            serviceIntent.setAction(ScreenRecorder.ACTION_START);
+        } else {
+            serviceIntent.setAction(ScreenRecorder.ACTION_START_NOVIDEO);
+        }
         startService(serviceIntent);
     }
 
@@ -227,16 +240,12 @@ public class MainActivity extends Activity {
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
 
-        String darkThemeNew = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
+        String darkTheme = appSettings.getString("darktheme", getResources().getString(R.string.dark_theme_option_auto));
 
-        if (appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto)).contentEquals(darkThemeNew) == false) {
-
-            appSettingsEditor.putString("darkthemeapplied", darkThemeNew);
-
+        if (appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto)).contentEquals(darkTheme) == false) {
+            appSettingsEditor.putString("darkthemeapplied", darkTheme);
             appSettingsEditor.commit();
         }
-
-        String darkTheme = appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto));
 
         if (((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES && darkTheme.contentEquals(getResources().getString(R.string.dark_theme_option_auto))) || darkTheme.contentEquals("Dark")) {
             setTheme(android.R.style.Theme_Material);
@@ -251,6 +260,11 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.main);
 
+        if ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == false)) {
+            appSettingsEditor.putBoolean("floatingcontrols", false);
+            appSettingsEditor.commit();
+        }
+
         startRecording = (Button) findViewById(R.id.recordbutton);
         pauseRecording = (Button) findViewById(R.id.recordpausebutton);
         resumeRecording = (Button) findViewById(R.id.recordresumebutton);
@@ -261,6 +275,8 @@ public class MainActivity extends Activity {
         recPlayback = (CheckBox) findViewById(R.id.checksoundplayback);
         timeCounter = (Chronometer) findViewById(R.id.timerrecord);
         audioPlaybackUnavailable = (TextView) findViewById(R.id.audioplaybackunavailable);
+        recordAudioOption = (RadioButton) findViewById(R.id.record_audio);
+        recordVideoOption = (RadioButton) findViewById(R.id.record_video);
 
         startRecording.setVisibility(View.VISIBLE);
         resumeRecording.setVisibility(View.GONE);
@@ -281,30 +297,50 @@ public class MainActivity extends Activity {
             recPlayback.setChecked(true);
         }
 
+        setRecordMode(appSettings.getBoolean("recordmode", false));
+
+        if (recordModeChosen == false) {
+            recordVideoOption.toggle();
+        } else {
+            recordAudioOption.toggle();
+        }
+
         activityProjectionManager = (MediaProjectionManager)getSystemService(MEDIA_PROJECTION_SERVICE);
 
         recMicrophone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && ((CheckBox) v).isChecked()) {
-                    recMicrophone.setChecked(false);
+                CheckBox innerBox = (CheckBox) v;
+                boolean checkedState = innerBox.isChecked();
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && checkedState == true) {
+                    innerBox.setChecked(false);
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE);
                 } else {
-                    appSettingsEditor.putBoolean("checksoundmic", ((CheckBox) v).isChecked());
-                    appSettingsEditor.commit();
+                    if (recordModeChosen == true && checkedState == false && ((recPlayback.isChecked() == false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
+                        innerBox.setChecked(true);
+                    } else {
+                        appSettingsEditor.putBoolean("checksoundmic", checkedState);
+                        appSettingsEditor.commit();
+                    }
                 }
             }
         });
 
         recPlayback.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && ((CheckBox) v).isChecked()) {
-                    recPlayback.setChecked(false);
+                CheckBox innerBox = (CheckBox) v;
+                boolean checkedState = innerBox.isChecked();
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED && checkedState) {
+                    innerBox.setChecked(false);
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_PLAYBACK);
                 } else {
-                    appSettingsEditor.putBoolean("checksoundplayback", ((CheckBox) v).isChecked());
-                    appSettingsEditor.commit();
+                    if (recordModeChosen == true && checkedState == false && recMicrophone.isChecked() == false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        innerBox.setChecked(true);
+                    } else {
+                        appSettingsEditor.putBoolean("checksoundplayback", ((CheckBox) v).isChecked());
+                        appSettingsEditor.commit();
+                    }
                 }
             }
         });
@@ -348,6 +384,44 @@ public class MainActivity extends Activity {
 
     }
 
+    public void setRecordMode(boolean mode) {
+        appSettingsEditor.putBoolean("recordmode", mode);
+        appSettingsEditor.commit();
+
+
+        recordModeChosen = mode;
+
+        if (mode == false) {
+
+        } else if (mode == true) {
+            if (!(appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) {
+                 recMicrophone.setChecked(true);
+                 appSettingsEditor.putBoolean("checksoundmic", true);
+                 appSettingsEditor.commit();
+            }
+        }
+
+    }
+
+    public void onRecordingModeChecked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        if (checked == true) {
+            if (view.getId() == R.id.record_video) {
+                setRecordMode(false);
+            } else if (view.getId() == R.id.record_audio) {
+                if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+                    recordVideoOption.toggle();
+                    String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
+                    requestPermissions(accesspermission, REQUEST_MODE_CHANGE);
+                } else {
+                    recordAudioOption.toggle();
+                    setRecordMode(true);
+                }
+            }
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -389,7 +463,12 @@ public class MainActivity extends Activity {
     }
 
     void proceedRecording() {
-        startActivityForResult(activityProjectionManager.createScreenCaptureIntent(), REQUEST_RECORD);
+
+        if (appSettings.getBoolean("recordmode", false) == true && appSettings.getBoolean("checksoundplayback", false) == false && recordingBinder != null) {
+            doStartService(0, null);
+        } else {
+            startActivityForResult(activityProjectionManager.createScreenCaptureIntent(), REQUEST_RECORD);
+        }
     }
 
     void resetFolder() {
@@ -480,7 +559,15 @@ public class MainActivity extends Activity {
             } else {
                 Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == REQUEST_MODE_CHANGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                recordAudioOption.toggle();
+                setRecordMode(true);
+            } else {
+                Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
+            }
         }
+
 
     }
 

@@ -56,6 +56,7 @@ import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.view.Display;
+import android.view.Surface;
 import android.widget.Toast;
 import android.provider.DocumentsContract;
 import android.content.SharedPreferences;
@@ -69,6 +70,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.lang.SecurityException;
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -87,6 +89,7 @@ public class ScreenRecorder extends Service {
     public static final int RECORDING_RESUME = 103;
 
     public static String ACTION_START = MainActivity.appName+".START_RECORDING";
+    public static String ACTION_START_NOVIDEO = MainActivity.appName+".START_RECORDING_NOVIDEO";
     public static String ACTION_PAUSE = MainActivity.appName+".PAUSE_RECORDING";
     public static String ACTION_CONTINUE = MainActivity.appName+".CONTINUE_RECORDING";
     public static String ACTION_STOP = MainActivity.appName+".STOP_RECORDING";
@@ -122,7 +125,7 @@ public class ScreenRecorder extends Service {
 
     private boolean isRestarting = false;
 
-    private int orientationOnStart = 0;
+    private int orientationOnStart;
 
     private SharedPreferences appSettings;
 
@@ -134,15 +137,26 @@ public class ScreenRecorder extends Service {
 
     private boolean showFloatingControls = false;
 
+    private boolean recordOnlyAudio = false;
+
+    private boolean isActive = false;
+
+    private int screenWidthNormal;
+
+    private int screenHeightNormal;
+
     private SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent e) {
             if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                if (orientationOnStart != display.getRotation()) {
-                    sensor.unregisterListener(sensorListener);
-                    isRestarting = true;
-                    screenRecordingStop();
-                    screenRecordingStart();
+                if (orientationOnStart != display.getRotation() && isActive == true) {
+                    orientationOnStart = display.getRotation();
+                    if (recordOnlyAudio == false) {
+                        isActive = false;
+                        isRestarting = true;
+                        screenRecordingStop();
+                        screenRecordingStart();
+                    }
                 }
             }
         }
@@ -235,6 +249,10 @@ public class ScreenRecorder extends Service {
             return ScreenRecorder.this.runningService;
         }
 
+        void registerListener() {
+            sensor.registerListener(sensorListener, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI);
+        }
+
         void recordingPause() {
             ScreenRecorder.this.screenRecordingPause();
         }
@@ -265,6 +283,13 @@ public class ScreenRecorder extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+        sensor = (SensorManager)getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
+
+        sensor.registerListener(sensorListener, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI);
+
         Intent serviceIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
         serviceIntent.setAction(FloatingControls.ACTION_RECORD_PANEL);
         bindService(serviceIntent, mPanelConnection, Context.BIND_AUTO_CREATE);
@@ -274,6 +299,10 @@ public class ScreenRecorder extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             if (intent.getAction() == ACTION_START) {
+                recordOnlyAudio = false;
+                actionStart();
+            } else if (intent.getAction() == ACTION_START_NOVIDEO) {
+                recordOnlyAudio = true;
                 actionStart();
             } else if (intent.getAction() == ACTION_STOP) {
                 screenRecordingStop();
@@ -297,6 +326,19 @@ public class ScreenRecorder extends Service {
     } 
 
     public void actionStart() {
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getRealMetrics(metrics);
+
+        orientationOnStart = display.getRotation();
+
+        if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
+            screenWidthNormal = metrics.heightPixels;
+            screenHeightNormal = metrics.widthPixels;
+        } else {
+            screenWidthNormal = metrics.widthPixels;
+            screenHeightNormal = metrics.heightPixels;
+        }
 
         appSettings = getSharedPreferences(prefsident, 0);
 
@@ -361,58 +403,56 @@ public class ScreenRecorder extends Service {
     private int[] getScreenResolution() {
         int[] resolution = new int[2];
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealMetrics(metrics);
 
         boolean landscape = false;
 
-        if (metrics.widthPixels > metrics.heightPixels) {
+        if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
             landscape = true;
         }
 
-        if (landscape == true) {
+        if ((landscape == true && screenWidthNormal < screenHeightNormal) || (landscape == false && screenWidthNormal > screenHeightNormal)) {
             resolution[0] = 1920;
             resolution[1] = 1080;
 
-            if (metrics.widthPixels == 3840) {
+            if (screenHeightNormal == 3840) {
                 resolution[0] = 3840;
                 resolution[1] = 2160;
-            } else if (metrics.widthPixels < 3840 && metrics.widthPixels >= 1920) {
+            } else if (screenHeightNormal < 3840 && screenHeightNormal >= 1920) {
                 resolution[0] = 1920;
                 resolution[1] = 1080;
-            } else if (metrics.widthPixels < 1920 && metrics.widthPixels >= 1280) {
+            } else if (screenHeightNormal < 1920 && screenHeightNormal >= 1280) {
                 resolution[0] = 1280;
                 resolution[1] = 720;
-            } else if (metrics.widthPixels < 1280 && metrics.widthPixels >= 720) {
+            } else if (screenHeightNormal < 1280 && screenHeightNormal >= 720) {
                 resolution[0] = 720;
                 resolution[1] = 480;
-            } else if (metrics.widthPixels < 720 && metrics.widthPixels >= 480) {
+            } else if (screenHeightNormal < 720 && screenHeightNormal >= 480) {
                 resolution[0] = 480;
                 resolution[1] = 360;
-            } else if (metrics.widthPixels < 480 && metrics.widthPixels >= 320) {
+            } else if (screenHeightNormal < 480 && screenHeightNormal >= 320) {
                 resolution[0] = 360;
                 resolution[1] = 240;
             }
-        } else {
+        } else if ((landscape == false && screenWidthNormal < screenHeightNormal) || (landscape == true && screenWidthNormal > screenHeightNormal)) {
             resolution[0] = 1080;
             resolution[1] = 1920;
 
-            if (metrics.heightPixels == 3840) {
+            if (screenWidthNormal == 3840) {
                 resolution[0] = 2160;
                 resolution[1] = 3840;
-            } else if (metrics.heightPixels < 3840 && metrics.heightPixels >= 1920) {
+            } else if (screenWidthNormal < 3840 && screenWidthNormal >= 1920) {
                 resolution[0] = 1080;
                 resolution[1] = 1920;
-            } else if (metrics.heightPixels < 1920 && metrics.heightPixels >= 1280) {
+            } else if (screenWidthNormal < 1920 && screenWidthNormal >= 1280) {
                 resolution[0] = 720;
                 resolution[1] = 1280;
-            } else if (metrics.heightPixels < 1280 && metrics.heightPixels >= 720) {
+            } else if (screenWidthNormal < 1280 && screenWidthNormal >= 720) {
                 resolution[0] = 480;
                 resolution[1] = 720;
-            } else if (metrics.heightPixels < 720 && metrics.heightPixels >= 480) {
+            } else if (screenWidthNormal < 720 && screenWidthNormal >= 480) {
                 resolution[0] = 360;
                 resolution[1] = 480;
-            } else if (metrics.heightPixels < 480 && metrics.heightPixels >= 320) {
+            } else if (screenWidthNormal < 480 && screenWidthNormal >= 320) {
                 resolution[0] = 240;
                 resolution[1] = 360;
             }
@@ -425,9 +465,8 @@ public class ScreenRecorder extends Service {
 
         showFloatingControls = ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == true));
 
-        if (showFloatingControls == true) {
+        if (showFloatingControls == true && isRestarting == false) {
             Intent panelIntent = new Intent(ScreenRecorder.this, FloatingControls.class);
-
             panelIntent.setAction(FloatingControls.ACTION_RECORD_PANEL);
             startService(panelIntent);
         }
@@ -438,7 +477,10 @@ public class ScreenRecorder extends Service {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-        String fullFileName = "ScreenRecording_" + formatter.format(Calendar.getInstance().getTime());
+        String timeString = formatter.format(Calendar.getInstance().getTime());
+
+        String fullFileName = "ScreenRecording_" + timeString;
+
         String providertree = "^content://[^/]*/tree/";
 
         String filetreepattern = "^content://com\\.android\\.externalstorage\\.documents/tree/.*";
@@ -447,16 +489,29 @@ public class ScreenRecorder extends Service {
 
         String documentspath = appSettings.getString("folderpath", "").replaceFirst(providertree, "");
 
+        String docExtension = ".mp4";
+
+        String docMime = "video/mp4";
+
+        if (recordOnlyAudio == true) {
+            fullFileName = "AudioRecording_" + timeString;
+            docExtension = ".m4a";
+            docMime = "audio/mp4";
+        }
+
         if (appSettings.getString("folderpath", "").matches(filetreepattern)) {
             if (documentspath.startsWith("primary%3A")) {
-                filefulluri = Uri.parse("/storage/emulated/0/" + Uri.decode(documentspath.replaceFirst("primary%3A", "")) + "/" + fullFileName + ".mp4");
+                filefulluri = Uri.parse("/storage/emulated/0/" + Uri.decode(documentspath.replaceFirst("primary%3A", "")) + "/" + fullFileName + docExtension);
             } else {
-                filefulluri = Uri.parse("/storage/" + Uri.decode(documentspath.replaceFirst("%3A", "/")) + "/" + fullFileName + ".mp4");
+                filefulluri = Uri.parse("/storage/" + Uri.decode(documentspath.replaceFirst("%3A", "/")) + "/" + fullFileName + docExtension);
             }
         }
 
         try {
-            Uri outdocpath = DocumentsContract.createDocument(getContentResolver(), Uri.parse(appSettings.getString("folderpath", "") + "/document/" + documentspath), "video/mp4", fullFileName);
+            Uri outdocpath = DocumentsContract.createDocument(getContentResolver(), Uri.parse(appSettings.getString("folderpath", "") + "/document/" + documentspath), docMime, fullFileName);
+            if (!outdocpath.toString().endsWith(".m4a") && recordOnlyAudio == true) {
+                outdocpath = DocumentsContract.renameDocument(getContentResolver(), outdocpath, fullFileName + ".m4a");
+            }
 
             if (outdocpath == null) {
                 recordingError();
@@ -472,6 +527,16 @@ public class ScreenRecorder extends Service {
         } catch (FileNotFoundException e) {
             if (activityBinder != null) {
                 recordingError();
+
+                activityBinder.resetDir();
+                stopSelf();
+                return;
+            }
+
+        } catch (SecurityException e) {
+            if (activityBinder != null) {
+                recordingError();
+
                 activityBinder.resetDir();
                 stopSelf();
                 return;
@@ -548,8 +613,17 @@ public class ScreenRecorder extends Service {
 
         ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealMetrics(metrics);
 
-        int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
+        int width = 0;
+        int height = 0;
+
+        if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
+            width = screenHeightNormal;
+            height = screenWidthNormal;
+        } else {
+            width = screenWidthNormal;
+            height = screenHeightNormal;
+        }
+
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
             int[] resolutions = getScreenResolution();
@@ -568,9 +642,15 @@ public class ScreenRecorder extends Service {
         if (recordingMediaProjection != null) {
             recordingMediaProjection.stop();
         }
-        recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
+        if (recordOnlyAudio == true && recordPlayback == false) {
+            recordingMediaProjection = null;
+        } else {
+            recordingMediaProjection = recordingMediaProjectionManager.getMediaProjection(result, data);
+        }
 
-        recordingVirtualDisplay = recordingMediaProjection.createVirtualDisplay("DroidRec", width, height, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null);
+        if (recordOnlyAudio == false) {
+            recordingVirtualDisplay = recordingMediaProjection.createVirtualDisplay("DroidRec", width, height, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, null, null, null);
+        }
 
         isRestarting = false;
 
@@ -620,15 +700,21 @@ public class ScreenRecorder extends Service {
                     recordingMediaRecorder.setAudioSamplingRate(sampleRate);
                 }
 
-                recordingMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-                recordingMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                if (recordOnlyAudio == false) {
+                    recordingMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+                    recordingMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+                } else {
+                    recordingMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+                }
 
 
                 recordingMediaRecorder.setOutputFile(recordingFileDescriptor);
 
-                recordingMediaRecorder.setVideoSize(width, height);
+                if (recordOnlyAudio == false) {
+                    recordingMediaRecorder.setVideoSize(width, height);
 
-                recordingMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+                    recordingMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+                }
 
                 if (recordMicrophone == true) {
                     recordingMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
@@ -649,9 +735,11 @@ public class ScreenRecorder extends Service {
                     recordingBitrate = bitrateValue;
                 }
 
-                recordingMediaRecorder.setVideoEncodingBitRate(recordingBitrate);
+                if (recordOnlyAudio == false) {
+                    recordingMediaRecorder.setVideoEncodingBitRate(recordingBitrate);
 
-                recordingMediaRecorder.setVideoFrameRate(frameRate);
+                    recordingMediaRecorder.setVideoFrameRate(frameRate);
+                }
                 recordingMediaRecorder.prepare();
             } catch (IOException e) {
                 recordingError();
@@ -659,27 +747,26 @@ public class ScreenRecorder extends Service {
             try {
                 recordingMediaRecorder.start();
             } catch (IllegalStateException e) {
-                recordingMediaProjection.stop();
+                if (recordingMediaProjection != null) {
+                    recordingMediaProjection.stop();
+                }
                 recordingError();
             }
-            recordingVirtualDisplay.setSurface(recordingMediaRecorder.getSurface());
+            if (recordOnlyAudio == false) {
+                recordingVirtualDisplay.setSurface(recordingMediaRecorder.getSurface());
+            }
         } else {
-            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec);
+            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec);
 
             recorderPlayback.start();
         }
 
-        display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
-        orientationOnStart = display.getRotation();
-
-        sensor = (SensorManager)getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
-
-        sensor.registerListener(sensorListener, sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_UI);
-
+        isActive = true;
     }
 
     private void screenRecordingStop() {
+        isActive = false;
+
         timeStart = 0;
         timeRecorded = 0;
         isPaused = false;
@@ -687,7 +774,9 @@ public class ScreenRecorder extends Service {
         if (isRestarting == false) {
             runningService = false;
 
-            sensor.unregisterListener(sensorListener);
+            if (sensor != null) {
+                sensor.unregisterListener(sensorListener);
+            }
 
             if (tileBinder != null) {
                 tileBinder.recordingState(false);
@@ -700,20 +789,30 @@ public class ScreenRecorder extends Service {
         }
 
         if (panelBinder != null && showFloatingControls == true) {
-            panelBinder.setStop();
+            if (isRestarting == false) {
+                panelBinder.setStop();
+            } else {
+                panelBinder.setRestart(orientationOnStart);
+            }
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            try {
-                recordingMediaRecorder.stop();
-                recordingMediaRecorder.reset();
-                recordingMediaRecorder.release();
-                recordingVirtualDisplay.release();
-            } catch (RuntimeException e) {
-                Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show();
+            if (recordingMediaRecorder != null) {
+                try {
+                    recordingMediaRecorder.stop();
+                    recordingMediaRecorder.reset();
+                    recordingMediaRecorder.release();
+                    if (recordOnlyAudio == false) {
+                        recordingVirtualDisplay.release();
+                    }
+                } catch (RuntimeException e) {
+                    Toast.makeText(this, R.string.error_recorder_failed, Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
-            recorderPlayback.quit();
+            if (recorderPlayback != null) {
+                recorderPlayback.quit();
+            }
         }
 
         Intent openFolderIntent = new Intent(this, ScreenRecorder.class);
@@ -722,7 +821,9 @@ public class ScreenRecorder extends Service {
 
         PendingIntent openFolderActionIntent = PendingIntent.getService(this, 0, openFolderIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        MediaScannerConnection.scanFile(ScreenRecorder.this, new String[] { recordFileFullPath.toString() }, null, null);
+        if (recordFileFullPath != null) {
+            MediaScannerConnection.scanFile(ScreenRecorder.this, new String[] { recordFileFullPath.toString() }, null, null);
+        }
 
         if (isRestarting == false) {
             Icon finishedIcon = Icon.createWithResource(this, R.drawable.icon_record_finished_status);
