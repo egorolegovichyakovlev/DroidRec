@@ -81,6 +81,8 @@ public class ScreenRecorder extends Service {
     private int result;
 
     private Uri recordFilePath;
+    private Uri recordFilePathParent;
+    private String recordFileMime;
     private Uri recordFileFullPath;
 
     public static final int RECORDING_START = 100;
@@ -96,6 +98,14 @@ public class ScreenRecorder extends Service {
     public static String ACTION_ACTIVITY_CONNECT = MainActivity.appName+".ACTIVITY_CONNECT";
     public static String ACTION_ACTIVITY_DISCONNECT = MainActivity.appName+".ACTIVITY_DISCONNECT";
     public static String ACTION_ACTIVITY_FINISHED_FILE = MainActivity.appName+".ACTIVITY_FINISHED_FILE";
+    public static String ACTION_ACTIVITY_DELETE_FINISHED_FILE = MainActivity.appName+".ACTIVITY_DELETE_FINISHED_FILE";
+    public static String ACTION_ACTIVITY_SHARE_FINISHED_FILE = MainActivity.appName+".ACTIVITY_SHARE_FINISHED_FILE";
+
+    private Intent finishedFileIntent = null;
+    private Intent shareFinishedFileIntent = null;
+
+    private Uri deleteFinishedFileDocument;
+    private boolean deletedFinishedFileDocument;
 
     private static String NOTIFICATIONS_RECORDING_CHANNEL = "notifications";
 
@@ -311,9 +321,14 @@ public class ScreenRecorder extends Service {
             } else if (intent.getAction() == ACTION_CONTINUE) {
                 screenRecordingResume();
             } else if (intent.getAction() == ACTION_ACTIVITY_FINISHED_FILE) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setDataAndType(recordFileFullPath, "video/mp4");
-                startActivity(i);
+                startActivity(finishedFileIntent);
+            } else if (intent.getAction() == ACTION_ACTIVITY_DELETE_FINISHED_FILE) {
+                deletedFinishedFileDocument = true;
+                try {
+                    DocumentsContract.deleteDocument(getContentResolver(), deleteFinishedFileDocument);
+                } catch (FileNotFoundException e) {} catch (SecurityException e) {}
+            } else if (intent.getAction() == ACTION_ACTIVITY_SHARE_FINISHED_FILE && deletedFinishedFileDocument == false) {
+                startActivity(shareFinishedFileIntent);
             }
         } else {
             if (runningService == false) {
@@ -493,6 +508,8 @@ public class ScreenRecorder extends Service {
 
         String docMime = "video/mp4";
 
+        Uri docParent = Uri.parse(appSettings.getString("folderpath", "") + "/document/" + documentspath);
+
         if (recordOnlyAudio == true) {
             fullFileName = "AudioRecording_" + timeString;
             docExtension = ".m4a";
@@ -508,7 +525,7 @@ public class ScreenRecorder extends Service {
         }
 
         try {
-            Uri outdocpath = DocumentsContract.createDocument(getContentResolver(), Uri.parse(appSettings.getString("folderpath", "") + "/document/" + documentspath), docMime, fullFileName);
+            Uri outdocpath = DocumentsContract.createDocument(getContentResolver(), docParent, docMime, fullFileName);
             if (!outdocpath.toString().endsWith(".m4a") && recordOnlyAudio == true) {
                 outdocpath = DocumentsContract.renameDocument(getContentResolver(), outdocpath, fullFileName + ".m4a");
             }
@@ -522,6 +539,8 @@ public class ScreenRecorder extends Service {
                 return;
             } else {
                 recordFilePath = outdocpath;
+                recordFileMime = docMime;
+                recordFilePathParent = docParent;
                 recordFileFullPath = filefulluri;
             }
         } catch (FileNotFoundException e) {
@@ -815,11 +834,46 @@ public class ScreenRecorder extends Service {
             }
         }
 
+        finishedFileIntent = new Intent(Intent.ACTION_VIEW);
+        finishedFileIntent.setDataAndType(recordFileFullPath, recordFileMime);
+        finishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         Intent openFolderIntent = new Intent(this, ScreenRecorder.class);
 
         openFolderIntent.setAction(ACTION_ACTIVITY_FINISHED_FILE);
 
         PendingIntent openFolderActionIntent = PendingIntent.getService(this, 0, openFolderIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        deleteFinishedFileDocument = recordFilePath;
+
+        deletedFinishedFileDocument = false;
+
+        Intent deleteRecordIntent = new Intent(this, ScreenRecorder.class);
+
+        deleteRecordIntent.setAction(ACTION_ACTIVITY_DELETE_FINISHED_FILE);
+
+        Icon deleteIcon = Icon.createWithResource(this, R.drawable.icon_record_delete_color_action);
+
+        PendingIntent deleteRecordActionIntent = PendingIntent.getService(this, 0, deleteRecordIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        Notification.Action.Builder deleteRecordAction = new Notification.Action.Builder(deleteIcon, getString(R.string.notifications_delete), deleteRecordActionIntent);
+
+        shareFinishedFileIntent = new Intent(Intent.ACTION_SEND);
+        shareFinishedFileIntent.setType(recordFileMime);
+        shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, recordFileFullPath);
+        shareFinishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+
+        Intent shareRecordIntent = new Intent(this, ScreenRecorder.class);
+
+        shareRecordIntent.setAction(ACTION_ACTIVITY_SHARE_FINISHED_FILE);
+
+        Icon shareIcon = Icon.createWithResource(this, R.drawable.icon_record_share_color_action);
+
+        PendingIntent shareRecordActionIntent = PendingIntent.getService(this, 0, shareRecordIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        Notification.Action.Builder shareRecordAction = new Notification.Action.Builder(shareIcon, getString(R.string.notifications_share), shareRecordActionIntent);
+
 
         if (recordFileFullPath != null) {
             MediaScannerConnection.scanFile(ScreenRecorder.this, new String[] { recordFileFullPath.toString() }, null, null);
@@ -844,6 +898,8 @@ public class ScreenRecorder extends Service {
                 .setContentIntent(openFolderActionIntent)
                 .setSmallIcon(finishedIcon)
                 .setLargeIcon(finishedIconLarge)
+                .addAction(shareRecordAction.build())
+                .addAction(deleteRecordAction.build())
                 .setAutoCancel(true);
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
