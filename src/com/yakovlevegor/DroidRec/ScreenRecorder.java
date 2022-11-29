@@ -327,6 +327,7 @@ public class ScreenRecorder extends Service {
                 try {
                     DocumentsContract.deleteDocument(getContentResolver(), deleteFinishedFileDocument);
                 } catch (FileNotFoundException e) {} catch (SecurityException e) {}
+                recordingNotificationManager.cancel(NOTIFICATION_RECORDING_FINISHED_ID);
             } else if (intent.getAction() == ACTION_ACTIVITY_SHARE_FINISHED_FILE && deletedFinishedFileDocument == false) {
                 startActivity(shareFinishedFileIntent);
             }
