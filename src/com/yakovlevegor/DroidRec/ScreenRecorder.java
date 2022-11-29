@@ -105,7 +105,6 @@ public class ScreenRecorder extends Service {
     private Intent shareFinishedFileIntent = null;
 
     private Uri deleteFinishedFileDocument;
-    private boolean deletedFinishedFileDocument;
 
     private static String NOTIFICATIONS_RECORDING_CHANNEL = "notifications";
 
@@ -323,12 +322,11 @@ public class ScreenRecorder extends Service {
             } else if (intent.getAction() == ACTION_ACTIVITY_FINISHED_FILE) {
                 startActivity(finishedFileIntent);
             } else if (intent.getAction() == ACTION_ACTIVITY_DELETE_FINISHED_FILE) {
-                deletedFinishedFileDocument = true;
                 try {
                     DocumentsContract.deleteDocument(getContentResolver(), deleteFinishedFileDocument);
                 } catch (FileNotFoundException e) {} catch (SecurityException e) {}
                 recordingNotificationManager.cancel(NOTIFICATION_RECORDING_FINISHED_ID);
-            } else if (intent.getAction() == ACTION_ACTIVITY_SHARE_FINISHED_FILE && deletedFinishedFileDocument == false) {
+            } else if (intent.getAction() == ACTION_ACTIVITY_SHARE_FINISHED_FILE) {
                 startActivity(shareFinishedFileIntent);
             }
         } else {
@@ -846,8 +844,6 @@ public class ScreenRecorder extends Service {
         PendingIntent openFolderActionIntent = PendingIntent.getService(this, 0, openFolderIntent, PendingIntent.FLAG_IMMUTABLE);
 
         deleteFinishedFileDocument = recordFilePath;
-
-        deletedFinishedFileDocument = false;
 
         Intent deleteRecordIntent = new Intent(this, ScreenRecorder.class);
 
