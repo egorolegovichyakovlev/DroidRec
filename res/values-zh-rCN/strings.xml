@@ -66,12 +66,16 @@
     <string name="notifications_stop">停止</string>
     <string name="notifications_pause">暂停</string>
     <string name="notifications_resume">继续</string>
+    <string name="notifications_share">分享</string>
+    <string name="notifications_delete">删除</string>
     <string name="error_storage_select_folder">错误：选择录制文件夹</string>
     <string name="error_audio_required">错误：允许录音</string>
     <string name="error_invalid_folder">错误：无效的录制文件夹</string>
     <string name="error_recorder_failed">错误：录制失败</string>
     <string name="error_recorder_codec_error">错误：编解码器错误</string>
     <string name="setting_recordings_folder">更改录制文件保存文件夹</string>
+    <string name="setting_record_type_video">视频</string>
+    <string name="setting_record_type_audio">仅音频</string>
     <string name="setting_audio_record_microphone_sound">录制麦克风</string>
     <string name="setting_audio_record_playback_sound">录音</string>
 </resources>
