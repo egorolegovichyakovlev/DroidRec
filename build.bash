@@ -17,6 +17,7 @@ if [ $# -ge 1 ]; then
     ANDROID_SDK_PLATFORM="$1"
 fi;
 
+echo ""
 echo "Preparing resources."
 
 if [ -d "$RUNDIR/build" ]; then
@@ -37,6 +38,7 @@ mkdir "$RUNDIR/build/gen"
 "$dirprefix"aapt2 link -I $ANDROID_SDK_PLATFORM/android.jar --manifest "$RUNDIR/AndroidManifest.xml" --java "$RUNDIR/build/gen" -o "$RUNDIR/build/res.apk" "$RUNDIR/build/resources.zip"
 rm "$RUNDIR/build/resources.zip"
 
+echo ""
 echo "Compiling sources."
 
 if [ -d "$RUNDIR/build/obj" ]; then
@@ -45,17 +47,19 @@ fi
 
 mkdir "$RUNDIR/build/obj"
 
-javac -Xlint:all -source 1.8 -target 1.8 -bootclasspath $ANDROID_SDK_PLATFORM/android.jar -sourcepath java:gen $(find "$RUNDIR/src" "$RUNDIR/build/gen" -type f -name '*.java') -d "$RUNDIR/build/obj"
+javac -Xlint:all -source 1.8 -target 1.8 -bootclasspath $ANDROID_SDK_PLATFORM/android.jar $(find "$RUNDIR/src" "$RUNDIR/build/gen" -type f -name '*.java') -d "$RUNDIR/build/obj"
 
 rm -rf "$RUNDIR/build/gen"
 
+echo ""
 echo "Linking libraries."
 
 "$dirprefix"d8 --release --classpath $ANDROID_SDK_PLATFORM/android.jar --output "$RUNDIR/build" $(find "$RUNDIR/build/obj" -type f)
 
 rm -rf "$RUNDIR/build/obj"
 
-echo "Packing application."
+echo ""
+echo "Packaging application."
 
 zip -j -u "$RUNDIR/build/res.apk" "$RUNDIR/build/classes.dex"
 
@@ -70,12 +74,16 @@ fi
 rm "$RUNDIR/build/res.apk"
 
 if [ ! -f "$RUNDIR/signature.keystore" ]; then
+  echo ""
   echo "Unsigned build complete."
   exit
 fi
 
+echo ""
 echo "Signing application."
+
 "$dirprefix"apksigner sign --ks "$RUNDIR/signature.keystore" --out "$RUNDIR/build/app-build.apk" "$RUNDIR/build/out-aligned.apk"
 rm "$RUNDIR/build/out-aligned.apk"
 
+echo ""
 echo "Build complete."
