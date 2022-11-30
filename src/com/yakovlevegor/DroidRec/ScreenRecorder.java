@@ -709,18 +709,11 @@ public class ScreenRecorder extends Service {
             });
 
             try {
-                String sampleRateValue = ((AudioManager)getSystemService(Context.AUDIO_SERVICE)).getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-
-                int sampleRate = 44100;
-
-                if (sampleRateValue != null) {
-                    sampleRate = Integer.parseInt(sampleRateValue);
-                }
 
                 if (recordMicrophone == true) {
                     recordingMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    recordingMediaRecorder.setAudioEncodingBitRate(sampleRate*32*2);
-                    recordingMediaRecorder.setAudioSamplingRate(sampleRate);
+                    recordingMediaRecorder.setAudioEncodingBitRate(44100*32*2);
+                    recordingMediaRecorder.setAudioSamplingRate(44100);
                 }
 
                 if (recordOnlyAudio == false) {
@@ -743,22 +736,22 @@ public class ScreenRecorder extends Service {
                     recordingMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                 }
 
-
-                if (customFPS == true) {
-                    frameRate = fpsValue;
-                }
-
-                int recordingBitrate = (int)(BPP*frameRate*width*height);
-
-                if (customQuality == true) {
-                    recordingBitrate = (int)(recordingBitrate*qualityScale);
-                }
-
-                if (customBitrate == true) {
-                    recordingBitrate = bitrateValue;
-                }
-
                 if (recordOnlyAudio == false) {
+
+                    if (customFPS == true) {
+                        frameRate = fpsValue;
+                    }
+
+                    int recordingBitrate = (int)(BPP*frameRate*width*height);
+
+                    if (customQuality == true) {
+                        recordingBitrate = (int)(recordingBitrate*qualityScale);
+                    }
+
+                    if (customBitrate == true) {
+                        recordingBitrate = bitrateValue;
+                    }
+
                     recordingMediaRecorder.setVideoEncodingBitRate(recordingBitrate);
 
                     recordingMediaRecorder.setVideoFrameRate(frameRate);
