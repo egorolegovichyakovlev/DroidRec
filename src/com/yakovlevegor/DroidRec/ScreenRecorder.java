@@ -278,6 +278,11 @@ public class ScreenRecorder extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if (sensor != null) {
+            sensor.unregisterListener(sensorListener);
+        }
+
     }
 
     @Override
@@ -791,10 +796,6 @@ public class ScreenRecorder extends Service {
 
         if (isRestarting == false) {
             runningService = false;
-
-            if (sensor != null) {
-                sensor.unregisterListener(sensorListener);
-            }
 
             if (tileBinder != null) {
                 tileBinder.recordingState(false);
