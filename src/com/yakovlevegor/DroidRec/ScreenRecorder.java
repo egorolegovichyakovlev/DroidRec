@@ -150,6 +150,8 @@ public class ScreenRecorder extends Service {
 
     private boolean isActive = false;
 
+    private boolean ignoreRotate = false;
+
     private int screenWidthNormal;
 
     private int screenHeightNormal;
@@ -160,7 +162,7 @@ public class ScreenRecorder extends Service {
             if (e.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 if (orientationOnStart != display.getRotation() && isActive == true) {
                     orientationOnStart = display.getRotation();
-                    if (recordOnlyAudio == false) {
+                    if (recordOnlyAudio == false && ignoreRotate == false) {
                         isActive = false;
                         isRestarting = true;
                         screenRecordingStop();
@@ -360,6 +362,8 @@ public class ScreenRecorder extends Service {
         }
 
         appSettings = getSharedPreferences(prefsident, 0);
+
+        ignoreRotate = appSettings.getBoolean("norotate", false);
 
         recordingNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 

@@ -55,6 +55,12 @@
             android:dialogTitle="@string/codec_option"
             android:defaultValue="@string/codec_option_auto_value" />
 
+        <CheckBoxPreference
+            android:key="norotate"
+            android:summary="@string/norotate_option_description"
+            android:title="@string/norotate_option"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
