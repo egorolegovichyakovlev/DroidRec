@@ -628,10 +628,12 @@ public class ScreenRecorder extends Service {
             notification.addAction(pauseRecordAction.build());
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_RECORDING_ID, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
-        } else {
-            startForeground(NOTIFICATION_RECORDING_ID, notification.build());
+        if (isRestarting == false) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(NOTIFICATION_RECORDING_ID, notification.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
+            } else {
+                startForeground(NOTIFICATION_RECORDING_ID, notification.build());
+            }
         }
 
 
@@ -941,9 +943,8 @@ public class ScreenRecorder extends Service {
 
         }
 
-        stopForeground(Service.STOP_FOREGROUND_REMOVE);
-
         if (isRestarting == false) {
+            stopForeground(Service.STOP_FOREGROUND_REMOVE);
             stopSelf();
         }
     }
