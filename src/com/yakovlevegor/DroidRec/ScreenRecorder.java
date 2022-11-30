@@ -827,9 +827,11 @@ public class ScreenRecorder extends Service {
             }
         }
 
-        finishedFileIntent = new Intent(Intent.ACTION_VIEW);
-        finishedFileIntent.setDataAndType(Uri.parse("file://" + recordFileFullPath.toString()), recordFileMime);
-        finishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (recordFileFullPath != null) {
+            finishedFileIntent = new Intent(Intent.ACTION_VIEW);
+            finishedFileIntent.setDataAndType(Uri.parse("file://" + recordFileFullPath.toString()), recordFileMime);
+            finishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
 
         Intent openFolderIntent = new Intent(this, ScreenRecorder.class);
 
@@ -849,10 +851,12 @@ public class ScreenRecorder extends Service {
 
         Notification.Action.Builder deleteRecordAction = new Notification.Action.Builder(deleteIcon, getString(R.string.notifications_delete), deleteRecordActionIntent);
 
-        shareFinishedFileIntent = new Intent(Intent.ACTION_SEND);
-        shareFinishedFileIntent.setType(recordFileMime);
-        shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + recordFileFullPath.toString()));
-        shareFinishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (recordFileFullPath != null) {
+            shareFinishedFileIntent = new Intent(Intent.ACTION_SEND);
+            shareFinishedFileIntent.setType(recordFileMime);
+            shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + recordFileFullPath.toString()));
+            shareFinishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
 
 
         Intent shareRecordIntent = new Intent(this, ScreenRecorder.class);
