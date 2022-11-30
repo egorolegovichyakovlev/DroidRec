@@ -66,12 +66,16 @@
     <string name="notifications_stop">עמד</string>
     <string name="notifications_pause">שבת</string>
     <string name="notifications_resume">משך</string>
+    <string name="notifications_share">שתף</string>
+    <string name="notifications_delete">מחק</string>
     <string name="error_storage_select_folder">טעות: אין נתיב</string>
     <string name="error_audio_required">טעות: לא רשיון משמע</string>
     <string name="error_invalid_folder">טעות: הנתיב הרע</string>
     <string name="error_recorder_failed">טעות: שגיאה מלזכר</string>
     <string name="error_recorder_codec_error">טעות: שגאיאה מאנקודר</string>
     <string name="setting_recordings_folder">שקע נתיב</string>
+    <string name="setting_record_type_video">וידאו</string>
+    <string name="setting_record_type_audio">שמע יחיד</string>
     <string name="setting_audio_record_microphone_sound">גרה רשיון מבטוי</string>
     <string name="setting_audio_record_playback_sound">גרה רשיון משמע</string>
 </resources>

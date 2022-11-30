@@ -66,12 +66,16 @@
     <string name="notifications_stop">Завершити</string>
     <string name="notifications_pause">Призупинити</string>
     <string name="notifications_resume">Продовжити</string>
+    <string name="notifications_share">Поділитися</string>
+    <string name="notifications_delete">Видалити</string>
     <string name="error_storage_select_folder">Помилка: оберіть каталог записів</string>
     <string name="error_audio_required">Помилка: дозвольте записувати аудіо</string>
     <string name="error_invalid_folder">Помилка: хибний каталог записів</string>
     <string name="error_recorder_failed">Помилка: не вдалося записати</string>
     <string name="error_recorder_codec_error">Помилка: збій кодека</string>
     <string name="setting_recordings_folder">Змінити каталог записів</string>
+    <string name="setting_record_type_video">Відео</string>
+    <string name="setting_record_type_audio">Тільки аудіо</string>
     <string name="setting_audio_record_microphone_sound">Записати мікрофон</string>
     <string name="setting_audio_record_playback_sound">Записати аудіо</string>
 </resources>

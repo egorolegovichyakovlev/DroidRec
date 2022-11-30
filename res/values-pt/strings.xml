@@ -66,12 +66,16 @@
     <string name="notifications_stop">Parar</string>
     <string name="notifications_pause">Pausar</string>
     <string name="notifications_resume">Retomar</string>
+    <string name="notifications_share">Patilhar</string>
+    <string name="notifications_delete">Deletar</string>
     <string name="error_storage_select_folder">Erro: Selecione a pasta de gravações</string>
     <string name="error_audio_required">Erro: Permitir a gravação de áudio</string>
     <string name="error_invalid_folder">Erro: Pasta de gravações inválida</string>
     <string name="error_recorder_failed">Erro: A gravação falhou</string>
     <string name="error_recorder_codec_error">Erro: Codec falhou</string>
     <string name="setting_recordings_folder">Alterar a pasta de gravações</string>
+    <string name="setting_record_type_video">Vídeo</string>
+    <string name="setting_record_type_audio">Áudio único</string>
     <string name="setting_audio_record_microphone_sound">Também gravar via microfone</string>
     <string name="setting_audio_record_playback_sound">Também gravar de áudio</string>
 </resources>
