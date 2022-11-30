@@ -152,6 +152,8 @@ public class ScreenRecorder extends Service {
 
     private boolean ignoreRotate = false;
 
+    private boolean dontNotifyOnRotate = false;
+
     private int screenWidthNormal;
 
     private int screenHeightNormal;
@@ -364,6 +366,8 @@ public class ScreenRecorder extends Service {
         appSettings = getSharedPreferences(prefsident, 0);
 
         ignoreRotate = appSettings.getBoolean("norotate", false);
+
+        dontNotifyOnRotate = appSettings.getBoolean("dontnotifyonrotate", false);
 
         recordingNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -931,7 +935,9 @@ public class ScreenRecorder extends Service {
                 restartNotification.setPriority(Notification.PRIORITY_LOW);
             }
 
-            recordingNotificationManager.notify(NOTIFICATION_RECORDING_FINISHED_ID, restartNotification.build());
+            if (dontNotifyOnRotate == false) {
+                recordingNotificationManager.notify(NOTIFICATION_RECORDING_FINISHED_ID, restartNotification.build());
+            }
 
         }
 

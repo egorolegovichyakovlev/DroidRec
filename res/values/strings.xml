@@ -25,6 +25,8 @@
     <string name="codec_option">Choose custom codec</string>
     <string name="codec_option_description">Set custom codec</string>
     <string name="codec_option_auto">Default</string>
+    <string name="dontnotifyonrotate_option">Don\'t notify on rotate</string>
+    <string name="dontnotifyonrotate_option_description">Don\'t notify on new recording start when screen rotates</string>
     <string name="norotate_option">Don\'t restart recording on rotate</string>
     <string name="norotate_option_description">WARNING: If enabled, your video will lose quality after rotation!</string>
     <string name="controls_settings">Controls settings</string>
