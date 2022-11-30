@@ -42,7 +42,6 @@ import android.os.Bundle;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.os.StrictMode;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -237,9 +236,6 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
 
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();

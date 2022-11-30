@@ -33,6 +33,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.graphics.drawable.Icon;
@@ -315,6 +316,7 @@ public class ScreenRecorder extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         if (intent != null) {
             if (intent.getAction() == ACTION_START) {
                 recordOnlyAudio = false;
@@ -536,42 +538,38 @@ public class ScreenRecorder extends Service {
             }
         }
 
+        Uri outdocpath = null;
+
         try {
-            Uri outdocpath = DocumentsContract.createDocument(getContentResolver(), docParent, docMime, fullFileName);
-            if (!outdocpath.toString().endsWith(".m4a") && recordOnlyAudio == true) {
-                outdocpath = DocumentsContract.renameDocument(getContentResolver(), outdocpath, fullFileName + ".m4a");
-            }
+            outdocpath = DocumentsContract.createDocument(getContentResolver(), docParent, docMime, fullFileName);
+        } catch (FileNotFoundException e) {} catch (SecurityException e) {}
 
-            if (outdocpath == null) {
-                recordingError();
-                if (activityBinder != null) {
-                    activityBinder.resetDir();
-                }
-                stopSelf();
-                return;
+        if (!outdocpath.toString().endsWith(".m4a") && recordOnlyAudio == true) {
+            Uri outdocpathnew = null;
+
+            try {
+                outdocpathnew = DocumentsContract.renameDocument(getContentResolver(), outdocpath, fullFileName + ".m4a");
+            } catch (FileNotFoundException e) {} catch (SecurityException e) {}
+
+            if (outdocpathnew == null) {
+                outdocpath = Uri.parse(outdocpath.toString() + ".m4a");
             } else {
-                recordFilePath = outdocpath;
-                recordFileMime = docMime;
-                recordFilePathParent = docParent;
-                recordFileFullPath = filefulluri;
+                outdocpath = outdocpathnew;
             }
-        } catch (FileNotFoundException e) {
+        }
+
+        if (outdocpath == null) {
+            recordingError();
             if (activityBinder != null) {
-                recordingError();
-
                 activityBinder.resetDir();
-                stopSelf();
-                return;
             }
-
-        } catch (SecurityException e) {
-            if (activityBinder != null) {
-                recordingError();
-
-                activityBinder.resetDir();
-                stopSelf();
-                return;
-            }
+            stopSelf();
+            return;
+        } else {
+            recordFilePath = outdocpath;
+            recordFileMime = docMime;
+            recordFilePathParent = docParent;
+            recordFileFullPath = filefulluri;
         }
 
         timeStart = SystemClock.elapsedRealtime();
@@ -853,7 +851,10 @@ public class ScreenRecorder extends Service {
 
         if (recordFileFullPath != null) {
             finishedFileIntent = new Intent(Intent.ACTION_VIEW);
-            finishedFileIntent.setDataAndType(Uri.parse("file://" + recordFileFullPath.toString()), recordFileMime);
+            finishedFileIntent.setDataAndType(recordFilePath, recordFileMime);
+            finishedFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            finishedFileIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            finishedFileIntent.setClipData(ClipData.newRawUri("", recordFilePath));
             finishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
@@ -878,7 +879,10 @@ public class ScreenRecorder extends Service {
         if (recordFileFullPath != null) {
             shareFinishedFileIntent = new Intent(Intent.ACTION_SEND);
             shareFinishedFileIntent.setType(recordFileMime);
-            shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + recordFileFullPath.toString()));
+            shareFinishedFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareFinishedFileIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, recordFilePath);
+            shareFinishedFileIntent.setClipData(ClipData.newRawUri("", recordFilePath));
             shareFinishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
 
