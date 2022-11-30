@@ -834,7 +834,7 @@ public class ScreenRecorder extends Service {
         }
 
         finishedFileIntent = new Intent(Intent.ACTION_VIEW);
-        finishedFileIntent.setDataAndType(recordFileFullPath, recordFileMime);
+        finishedFileIntent.setDataAndType(Uri.parse("file://" + recordFileFullPath.toString()), recordFileMime);
         finishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         Intent openFolderIntent = new Intent(this, ScreenRecorder.class);
@@ -857,7 +857,7 @@ public class ScreenRecorder extends Service {
 
         shareFinishedFileIntent = new Intent(Intent.ACTION_SEND);
         shareFinishedFileIntent.setType(recordFileMime);
-        shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, recordFileFullPath);
+        shareFinishedFileIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + recordFileFullPath.toString()));
         shareFinishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
