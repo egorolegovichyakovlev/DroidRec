@@ -721,17 +721,31 @@ public class ScreenRecorder extends Service {
             try {
 
                 if (recordMicrophone == true) {
+
+                    String sampleRateValue = ((AudioManager)getSystemService(Context.AUDIO_SERVICE)).getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+
+                    int sampleRate = 44100;
+
+                    if (sampleRateValue != null) {
+                        if (sampleRateValue.length() < 10) {
+                            try {
+                                sampleRate = Integer.parseInt(sampleRateValue);
+                            } catch (NumberFormatException exception) {
+                                sampleRate = 44100;
+                            }
+                        }
+                    }
+
                     recordingMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                    recordingMediaRecorder.setAudioEncodingBitRate(44100*32*2);
-                    recordingMediaRecorder.setAudioSamplingRate(44100);
+                    recordingMediaRecorder.setAudioEncodingBitRate(sampleRate*32*2);
+                    recordingMediaRecorder.setAudioSamplingRate(sampleRate);
                 }
 
                 if (recordOnlyAudio == false) {
                     recordingMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-                    recordingMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                } else {
-                    recordingMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
                 }
+
+                recordingMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
 
                 recordingMediaRecorder.setOutputFile(recordingFileDescriptor);
