@@ -25,6 +25,10 @@
     <string name="codec_option">选择自定义的编解码器</string>
     <string name="codec_option_description">设置自定义的编解码器</string>
     <string name="codec_option_auto">默认</string>
+    <string name="dontnotifyonrotate_option">旋转时不通知</string>
+    <string name="dontnotifyonrotate_option_description">屏幕旋转时，不通知新录制开始</string>
+    <string name="norotate_option">旋转时不重新启动录制</string>
+    <string name="norotate_option_description">警告：一旦启用, 你的视频在旋转后将丢失分辨率！</string>
     <string name="controls_settings">控件设置</string>
     <string name="floating_controls_option">开启浮窗控件</string>
     <string name="floating_controls_option_description">显示浮窗控件面板</string>
