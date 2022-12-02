@@ -25,6 +25,10 @@
     <string name="codec_option">Personalizar codec</string>
     <string name="codec_option_description">Ajustar codec</string>
     <string name="codec_option_auto">Default</string>
+    <string name="dontnotifyonrotate_option">Não notificar quando rotação</string>
+    <string name="dontnotifyonrotate_option_description">Não notificar por começo da gravação quando rotação</string>
+    <string name="norotate_option">Não começar a gravação quando rotação</string>
+    <string name="norotate_option_description">Aviso: Se ajustar vídeo perder qualidade!</string>
     <string name="controls_settings">Parâmetros da interface</string>
     <string name="floating_controls_option">Habilitar flutuante interface</string>
     <string name="floating_controls_option_description">Apresentar flutuante painel</string>

@@ -25,6 +25,10 @@
     <string name="codec_option">שונה אנקודר מוידאו</string>
     <string name="codec_option_description">הגדיר שונה אנקודר</string>
     <string name="codec_option_auto">תקן</string>
+    <string name="dontnotifyonrotate_option">לא התראה בתנועה</string>
+    <string name="dontnotifyonrotate_option_description">לא התראה בתנועה ממסך</string>
+    <string name="norotate_option">לא חדש סרטון בתנועה</string>
+    <string name="norotate_option_description">זהירות: אלו החליף בתנועה וידאו אבד איכות!</string>
     <string name="controls_settings">הגדרות מממשקים</string>
     <string name="floating_controls_option">הפעיל עליון ממשק</string>
     <string name="floating_controls_option_description">הציג ממשק למעלה מסך</string>
