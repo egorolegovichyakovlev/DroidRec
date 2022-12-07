@@ -17,7 +17,7 @@ Or download the apk from [the release section](https://github.com/yakovlevegor/D
 
 ## Building
 
-To build this app, run **gradle assembleRelease**.
+To build this app, run **gradle assembleRelease**
 
 To sign the build, first generate your keystore with `keytool -genkeypair -keystore mykey.keystore -validity 365000 -keysize 4096 -keyalg RSA` and place it in this folder under `signature.keystore` name.
 (**Note**: Run keytool with the same or older Java version on which you are going to build the application)
