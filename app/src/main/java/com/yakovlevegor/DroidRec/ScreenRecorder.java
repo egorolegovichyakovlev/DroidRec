@@ -952,6 +952,14 @@ public class ScreenRecorder extends Service {
             }
         }
 
+        finishedFile = recordFile;
+
+        finishedFileDocument = recordFilePath;
+
+        finishedFullFileDocument = recordFileFullPath;
+
+        finishedDocumentMime = recordFileMime;
+
         finishedFileIntent = new Intent(Intent.ACTION_VIEW);
         finishedFileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         finishedFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -975,14 +983,6 @@ public class ScreenRecorder extends Service {
 
 
         PendingIntent openFolderActionIntent = PendingIntent.getActivity(this, 0, finishedFileIntent, intentFlag);
-
-        finishedFile = recordFile;
-
-        finishedFileDocument = recordFilePath;
-
-        finishedFullFileDocument = recordFileFullPath;
-
-        finishedDocumentMime = recordFileMime;
 
         Intent deleteRecordIntent = new Intent(this, ScreenRecorder.class);
 
