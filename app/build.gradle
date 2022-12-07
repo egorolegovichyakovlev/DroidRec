@@ -1,0 +1,35 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.yakovlevegor.DroidRec'
+
+    compileSdkVersion 33
+
+    buildToolsVersion "33.0.0"
+
+    defaultConfig {
+
+        applicationId 'com.yakovlevegor.DroidRec'
+
+        minSdk 21
+
+        targetSdk 33
+
+        versionCode 14
+
+        versionName "2.3"
+    }
+
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.9.0'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:all"
+}

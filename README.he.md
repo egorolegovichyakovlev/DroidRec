@@ -7,7 +7,7 @@
 
 לזכר משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
 
-<img src="metadata/he/images/phoneScreenshots/1.jpg" alt="DroidRec צילם" width="400"/>
+<img src="metadata/iw/images/phoneScreenshots/1.jpg" alt="DroidRec צילם" width="400"/>
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -16,6 +16,8 @@
 [רכש היישום](https://github.com/yakovlevegor/DroidRec/releases)
 
 ## בנוה
+בנוה היישום פתח **gradle assembleRelease**
+
 ברא מפתח
 
 `keytool -genkeypair -keystore mykey.keystore -validity 365000 -keysize 4096 -keyalg RSA`
@@ -26,19 +28,15 @@
 
 (**עיון**: היי אחד נוסח מג'אווה)
 
-בנוה היישום פתח **build.bash** וטענות:
+אחרי פתח **quicksign.bash** וטענה נתיב אל מאנדראיד קבצים מלבנות
 
-א. נתיב אל אנדראיד
-
-"platforms/android-*version*"
-
-ב. (*לא חשוב*) אלו אין תוכנות בבנוה מאנדראיד שקע הנתיב
+(*לא חשוב*) אלו אין תוכנות בבנוה מאנדראיד שקע הנתיב
 
 "build-tools/*version*"
 
 למשל:
 
-`./build.bash path/to/android/sdk/platforms/android-33 path/to/android/sdk/build-tools/33.0.0`
+`./quicksign.bash $ANDROID_HOME/build-tools/33.0.0`
 
 ## התעודה
 

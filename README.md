@@ -16,14 +16,15 @@ Audio Playback recording requires Android 10 or later. No Root needed.
 Or download the apk from [the release section](https://github.com/yakovlevegor/DroidRec/releases).
 
 ## Building
-Generate your keystore with `keytool -genkeypair -keystore mykey.keystore -validity 365000 -keysize 4096 -keyalg RSA` and place it in this folder under `signature.keystore` name.
+
+To build this app, run **gradle assembleRelease**.
+
+To sign the build, first generate your keystore with `keytool -genkeypair -keystore mykey.keystore -validity 365000 -keysize 4096 -keyalg RSA` and place it in this folder under `signature.keystore` name.
 (**Note**: Run keytool with the same or older Java version on which you are going to build the application)
 
-To build this app, run **build.bash** with arguments:
-1. Path to your Android SDK "platforms/android-*version*"
-2. (*Optional*) If you don't have Android SDK build tools installed on your system, specify path to your Android SDK "build-tools/*version*"
+Then you can run **quicksign.bash** with path to your Android SDK "build-tools/*version*" as an *optional* argument(if build tools aren't in your $PATH).
 
-Example: `./build.bash path/to/android/sdk/platforms/android-33 path/to/android/sdk/build-tools/33.0.0`
+Example: `./quicksign.bash $ANDROID_HOME/build-tools/33.0.0`
 
 ## License
 
