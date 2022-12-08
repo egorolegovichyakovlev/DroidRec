@@ -89,7 +89,7 @@
     <string name="notifications_resume">משך</string>
     <string name="notifications_share">שתף</string>
     <string name="notifications_delete">מחק</string>
-    <string name="error_storage_required">טעות: אין הסכימו להשתנות מקובצים</string>
+    <string name="error_storage_required">טעות: אין הסכימו להשתנו מקובצים</string>
     <string name="error_storage_select_folder">טעות: אין נתיב</string>
     <string name="error_audio_required">טעות: לא רשיון משמע</string>
     <string name="error_invalid_folder">טעות: הנתיב הרע</string>
