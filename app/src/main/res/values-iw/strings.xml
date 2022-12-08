@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DroidRec</string>
-    <string name="record_start">התחיל לזכר</string>
-    <string name="record_stop">עמד לזכר</string>
-    <string name="record_pause">שבת לזכר</string>
-    <string name="record_resume">משך לזכר</string>
+    <string name="record_start">התחיל לרשום</string>
+    <string name="record_stop">עמד לרשום</string>
+    <string name="record_pause">שבת לרשום</string>
+    <string name="record_resume">משך לרשום</string>
     <string name="settings_title">הגדרות</string>
-    <string name="capture_settings">הגדרות מזכר</string>
+    <string name="capture_settings">הגדרות מרשום</string>
     <string name="quality_indicator_custom">שונה איכות מוידאו</string>
     <string name="quality_indicator_custom_description">התעלם תקנות הגדרות מוידאו</string>
     <string name="quality_indicator">איכות מוידאו</string>
@@ -69,16 +69,16 @@
     <string name="overlay_notice_button">פתח הגדרות</string>
     <string name="recording_tile">כתב מהסרטון</string>
     <string name="recording_started_title">בכתב מהסרטון</string>
-    <string name="recording_started_text">בהיה לזכר</string>
+    <string name="recording_started_text">בהיה לרשום</string>
     <string name="recording_audio_started_title">בכתב מהשמע</string>
-    <string name="recording_audio_started_text">בהיה לזכר משמע</string>
-    <string name="recording_paused_title">לזכר ממסך בהפוגה</string>
+    <string name="recording_audio_started_text">בהיה לרשום משמע</string>
+    <string name="recording_paused_title">לרשום ממסך בהפוגה</string>
     <string name="recording_paused_text">מסך בהפוגה</string>
-    <string name="recording_audio_paused_title">לזכר משמע בהפוגה</string>
+    <string name="recording_audio_paused_title">לרשום משמע בהפוגה</string>
     <string name="recording_audio_paused_text">שמע בהפוגה</string>
-    <string name="recording_finished_title">לזכר מסרטון המוכן</string>
+    <string name="recording_finished_title">לרשום מסרטון המוכן</string>
     <string name="recording_finished_text">סרטון מוכן</string>
-    <string name="recording_audio_finished_title">לזכר משמע המוכן</string>
+    <string name="recording_audio_finished_title">לרשום משמע המוכן</string>
     <string name="recording_audio_finished_text">שמע המוכן</string>
     <string name="recording_rotated_title">מסך הפך</string>
     <string name="recording_rotated_text">הסרטון החדש</string>
@@ -93,11 +93,11 @@
     <string name="error_storage_select_folder">טעות: אין נתיב</string>
     <string name="error_audio_required">טעות: לא רשיון משמע</string>
     <string name="error_invalid_folder">טעות: הנתיב הרע</string>
-    <string name="error_recorder_failed">טעות: שגיאה מלזכר</string>
+    <string name="error_recorder_failed">טעות: שגיאה מלרשום</string>
     <string name="error_recorder_codec_error">טעות: שגאיאה מאנקודר</string>
     <string name="setting_recordings_folder">שקע נתיב</string>
     <string name="setting_record_type_video">וידאו</string>
     <string name="setting_record_type_audio">שמע יחיד</string>
-    <string name="setting_audio_record_microphone_sound">גרה רשיון מבטוי</string>
-    <string name="setting_audio_record_playback_sound">גרה רשיון משמע</string>
+    <string name="setting_audio_record_microphone_sound">רשום ממיקרופון</string>
+    <string name="setting_audio_record_playback_sound">רשום משמע</string>
 </resources>
