@@ -17,9 +17,9 @@ android {
 
         targetSdk 33
 
-        versionCode 14
+        versionCode 15
 
-        versionName "2.3"
+        versionName "2.4"
     }
 
 }
