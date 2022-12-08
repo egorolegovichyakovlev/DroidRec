@@ -17,11 +17,11 @@
     <string name="fps_indicator_custom">שונה תמונות בשניה</string>
     <string name="fps_indicator_custom_description">התעלם תקנות הגדרות מתמונות בשניה</string>
     <string name="fps_indicator">תמונות בשניה מוידאו</string>
-    <string name="fps_indicator_description">הגדיר שונה כמות מתמונות בשניה</string>
+    <string name="fps_indicator_description">הגדיר שונה כמהו מתמונות בשניה</string>
     <string name="bitrate_indicator_custom">שונה ביטים בשניה</string>
     <string name="bitrate_indicator_custom_description">התעלם תקנות הגדרות מביטים בשניה</string>
     <string name="bitrate_indicator">ביטימ בשניה מוידאו</string>
-    <string name="bitrate_indicator_description">הגדיר שונה כמות מביטים בשניה</string>
+    <string name="bitrate_indicator_description">הגדיר שונה כמהו מביטים בשניה</string>
     <string name="codec_option">שונה אנקודר מוידאו</string>
     <string name="codec_option_description">הגדיר שונה אנקודר</string>
     <string name="codec_option_auto">תקן</string>
