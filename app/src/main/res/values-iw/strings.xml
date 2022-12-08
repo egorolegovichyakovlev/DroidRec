@@ -56,14 +56,14 @@
     <string name="floating_controls_opacity">שקיפות מעליון ממשק</string>
     <string name="floating_controls_opacity_description">הגדיר שקיפות מממשק</string>
     <string name="floating_controls_description_handle">ידית מממשק</string>
-    <string name="dark_theme_option">השתמש צבה</string>
-    <string name="dark_theme_option_description">הגדיר הגדרה מצבה</string>
+    <string name="dark_theme_option">נושא</string>
+    <string name="dark_theme_option_description">הגדיר צבע מנושא</string>
     <array name="dark_theme_option_preferences">
         <item name="dark_theme_option_dark">חשוך</item>
         <item name="dark_theme_option_light">בהיר</item>
         <item name="dark_theme_option_auto_item">בחר תקן</item>
     </array>
-    <string name="dark_theme_change_notice">שוב היישום התחיל לעדכון הצבה</string>
+    <string name="dark_theme_change_notice">שוב היישום התחיל לעדכון הנושא</string>
     <string name="overlay_notice_title">הציג למעלה יישובים</string>
     <string name="overlay_notice_description">להציג עליון ממשק הגדיר הציג למעלה אחרים יישובים בהגדרות</string>
     <string name="overlay_notice_button">פתח הגדרות</string>
