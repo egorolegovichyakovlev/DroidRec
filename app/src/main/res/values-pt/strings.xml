@@ -51,13 +51,13 @@
         <item name="floating_controls_size_option_large">Grande</item>
         <item name="floating_controls_size_option_normal">Normal</item>
         <item name="floating_controls_size_option_small">Pequeno</item>
-        <item name="floating_controls_size_option_little">Pequenino</item>
+        <item name="floating_controls_size_option_tiny">Pequenino</item>
     </array>
     <string name="floating_controls_opacity">Transparência da flutuante painel</string>
     <string name="floating_controls_opacity_description">Ajustar transparência</string>
     <string name="floating_controls_description_handle">Maçaneta da painel</string>
-    <string name="dark_theme_option">Uso escura tema</string>
-    <string name="dark_theme_option_description">Ajustar escura tema</string>
+    <string name="dark_theme_option">Tema</string>
+    <string name="dark_theme_option_description">Ajustar tema</string>
     <array name="dark_theme_option_preferences">
         <item name="dark_theme_option_dark">Escura</item>
         <item name="dark_theme_option_light">Clara</item>

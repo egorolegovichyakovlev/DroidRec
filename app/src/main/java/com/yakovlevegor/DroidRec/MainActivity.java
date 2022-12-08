@@ -339,6 +339,17 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main);
 
+        if (appSettings.getString("floatingcontrolssize", getResources().getString(R.string.floating_controls_size_option_auto_value)) == "Little") {
+            appSettingsEditor.putString("floatingcontrolssize", "Tiny");
+            appSettingsEditor.putBoolean("panelpositionhorizontalhiddentiny", appSettings.getBoolean("panelpositionhorizontalhiddenlittle", false));
+            appSettingsEditor.putBoolean("panelpositionverticalhiddentiny", appSettings.getBoolean("panelpositionverticalhiddenlittle", false));
+            appSettingsEditor.putInt("panelpositionhorizontalxtiny", appSettings.getInt("panelpositionhorizontalxlittle", 0));
+            appSettingsEditor.putInt("panelpositionhorizontalytiny", appSettings.getInt("panelpositionhorizontalylittle", 0));
+            appSettingsEditor.putInt("panelpositionverticalxtiny", appSettings.getInt("panelpositionverticalxlittle", 0));
+            appSettingsEditor.putInt("panelpositionverticalytiny", appSettings.getInt("panelpositionverticalylittle", 0));
+            appSettingsEditor.commit();
+        }
+
         if (appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             appSettingsEditor.putBoolean("checksoundplayback", false);
             appSettingsEditor.commit();

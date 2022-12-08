@@ -51,13 +51,13 @@
         <item name="floating_controls_size_option_large">Великий</item>
         <item name="floating_controls_size_option_normal">Нормальний</item>
         <item name="floating_controls_size_option_small">Маленький</item>
-        <item name="floating_controls_size_option_little">Дуже маленький</item>
+        <item name="floating_controls_size_option_tiny">Дуже маленький</item>
     </array>
     <string name="floating_controls_opacity">Прозорість плавучої панелі</string>
     <string name="floating_controls_opacity_description">Визначати прозорість плавучої панелі</string>
     <string name="floating_controls_description_handle">Ручка плавучої панелі</string>
-    <string name="dark_theme_option">Використати темну тему</string>
-    <string name="dark_theme_option_description">Активувати темну тему</string>
+    <string name="dark_theme_option">Тема</string>
+    <string name="dark_theme_option_description">Вибирати тему</string>
     <array name="dark_theme_option_preferences">
         <item name="dark_theme_option_dark">Темна</item>
         <item name="dark_theme_option_light">Світла</item>

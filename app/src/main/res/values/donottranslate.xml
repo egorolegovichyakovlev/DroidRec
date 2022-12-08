@@ -11,7 +11,7 @@
         <item name="floating_controls_size_option_large">Large</item>
         <item name="floating_controls_size_option_normal">Normal</item>
         <item name="floating_controls_size_option_small">Small</item>
-        <item name="floating_controls_size_option_little">Little</item>
+        <item name="floating_controls_size_option_tiny">Tiny</item>
     </array>
     <string name="floating_controls_size_option_auto_value">Normal</string>
     <array name="audio_channels_preferences_values">
