@@ -51,7 +51,7 @@
             <item name="floating_controls_size_option_large">大</item>
             <item name="floating_controls_size_option_normal">一般</item>
             <item name="floating_controls_size_option_small">小</item>
-            <item name="floating_controls_size_option_little">极小</item>
+            <item name="floating_controls_size_option_tiny">极小</item>
         </array>
     <string name="floating_controls_opacity">浮窗控件不透明度</string>
     <string name="floating_controls_opacity_description">设置浮窗控件不透明度</string>
