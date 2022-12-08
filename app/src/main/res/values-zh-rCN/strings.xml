@@ -25,6 +25,16 @@
     <string name="codec_option">选择自定义的编解码器</string>
     <string name="codec_option_description">设置自定义的编解码器</string>
     <string name="codec_option_auto">默认</string>
+    <string name="samplerate_indicator_custom">自定义音频采样率</string>
+    <string name="samplerate_indicator_custom_description">忽略默认采样率</string>
+    <string name="samplerate_indicator">音频采样率</string>
+    <string name="samplerate_indicator_description">设置自定义的音频采样率</string>
+    <string name="audio_channels">音频通道</string>
+    <array name="audio_channels_preferences">
+        <item name="audio_channels_preferences_option_mono">单声道</item>
+        <item name="audio_channels_preferences_option_stereo">立体声</item>
+    </array>
+    <string name="audio_channels_description">Set audio channels</string>
     <string name="dontnotifyonrotate_option">旋转时不通知</string>
     <string name="dontnotifyonrotate_option_description">屏幕旋转时，不通知新录制开始</string>
     <string name="norotate_option">旋转时不重新启动录制</string>
@@ -41,12 +51,13 @@
             <item name="floating_controls_size_option_large">大</item>
             <item name="floating_controls_size_option_normal">一般</item>
             <item name="floating_controls_size_option_small">小</item>
-            <item name="floating_controls_size_option_tiny">微小</item>
+            <item name="floating_controls_size_option_little">极小</item>
         </array>
     <string name="floating_controls_opacity">浮窗控件不透明度</string>
     <string name="floating_controls_opacity_description">设置浮窗控件不透明度</string>
-    <string name="dark_theme_option">使用深色主题</string>
-    <string name="dark_theme_option_description">设置深色主题选项</string>
+    <string name="floating_controls_description_handle">浮窗控件处理</string>
+    <string name="dark_theme_option">主题</string>
+    <string name="dark_theme_option_description">设置主题选项</string>
         <array name="dark_theme_option_preferences">
             <item name="dark_theme_option_dark">深色</item>
             <item name="dark_theme_option_light">浅色</item>
@@ -59,10 +70,16 @@
     <string name="recording_tile">录屏</string>
     <string name="recording_started_title">录屏中</string>
     <string name="recording_started_text">正在进行录屏</string>
+    <string name="recording_audio_started_title">录音中</string>
+    <string name="recording_audio_started_text">正在进行录音</string>
     <string name="recording_paused_title">已暂停</string>
     <string name="recording_paused_text">已暂停录屏</string>
+    <string name="recording_audio_paused_title">已暂停</string>
+    <string name="recording_audio_paused_text">已暂停录音</string>
     <string name="recording_finished_title">录制完成</string>
     <string name="recording_finished_text">录屏结束</string>
+    <string name="recording_audio_finished_title">录制完成</string>
+    <string name="recording_audio_finished_text">录音结束</string>
     <string name="recording_rotated_title">屏幕旋转</string>
     <string name="recording_rotated_text">开始了新录制</string>
     <string name="audio_playback_unavailable">需要 Android 10 及之后的系统版本才能进行“音频回放”录制</string>
@@ -72,6 +89,7 @@
     <string name="notifications_resume">继续</string>
     <string name="notifications_share">分享</string>
     <string name="notifications_delete">删除</string>
+    <string name="error_storage_required">出错：需要存储权限</string>
     <string name="error_storage_select_folder">错误：选择录制文件夹</string>
     <string name="error_audio_required">错误：允许录音</string>
     <string name="error_invalid_folder">错误：无效的录制文件夹</string>
