@@ -786,7 +786,7 @@ public class ScreenRecorder extends Service {
 
         isRestarting = false;
 
-        int frameRate = (int)(display.getRefreshRate());
+        int frameRate = 30;
 
 
         boolean customQuality = appSettings.getBoolean("customquality", false);
