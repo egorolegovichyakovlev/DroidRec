@@ -436,8 +436,8 @@ public class ScreenRecorder extends Service {
                 if (sampleRateValue.length() < 10) {
                     try {
                         int newSampleRate = Integer.parseInt(sampleRateValue);
-                        if (newSampleRate > customSampleRate) {
-                            customSampleRate = newSampleRate;
+                        if (newSampleRate > 44100 && newSampleRate >= 48000) {
+                            customSampleRate = 48000;
                         }
                     } catch (NumberFormatException exception) {
                         customSampleRate = 44100;

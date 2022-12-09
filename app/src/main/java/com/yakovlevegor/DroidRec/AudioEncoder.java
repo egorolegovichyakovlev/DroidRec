@@ -38,6 +38,15 @@ import java.nio.ByteBuffer;
 
 class AudioEncoder implements Encoder {
 
+    private int sampleRate = 44100;
+
+    private int channelsCount = 2;
+
+    AudioEncoder(int rate, int channels) {
+        sampleRate = rate;
+        channelsCount = channels;
+    }
+
     private static MediaCodecInfo selectCodec(String mimeType) {
         MediaCodecList listCodecs = new MediaCodecList(MediaCodecList.ALL_CODECS);
         MediaCodecInfo[] allCodecsList = listCodecs.getCodecInfos();
@@ -60,7 +69,7 @@ class AudioEncoder implements Encoder {
     }
 
     protected MediaFormat createMediaFormat() {
-        MediaFormat format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, 44100, 2);
+        MediaFormat format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, sampleRate, channelsCount);
         format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
         format.setInteger(MediaFormat.KEY_BIT_RATE, selectCodec(MediaFormat.MIMETYPE_AUDIO_AAC).getCapabilitiesForType(MediaFormat.MIMETYPE_AUDIO_AAC).getAudioCapabilities().getBitrateRange().getUpper());
         return format;

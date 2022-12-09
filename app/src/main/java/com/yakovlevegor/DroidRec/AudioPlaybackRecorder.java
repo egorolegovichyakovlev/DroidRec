@@ -69,7 +69,7 @@ class AudioPlaybackRecorder implements Encoder {
     private int mChannelsSampleRate;
 
     AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, AudioRecord playbackPreset) {
-        mEncoder = new AudioEncoder();
+        mEncoder = new AudioEncoder(audioRate, channels);
         mSampleRate = audioRate;
         mChannelsSampleRate = mSampleRate * 2;
         mChannelConfig = AudioFormat.CHANNEL_IN_STEREO;
