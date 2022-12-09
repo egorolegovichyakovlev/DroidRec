@@ -68,8 +68,6 @@ public class SettingsPanel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        settingsPanel = new SettingsFragment();
-
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
 
         String darkTheme = appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto));
@@ -84,7 +82,12 @@ public class SettingsPanel extends AppCompatActivity {
         }
 
         setContentView(R.layout.settings_panel);
-        getSupportFragmentManager().beginTransaction().replace(R.id.settings, settingsPanel).commit();
+        if (savedInstanceState == null) {
+            settingsPanel = new SettingsFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.settings, settingsPanel).commit();
+        } else {
+            settingsPanel = (SettingsFragment) getSupportFragmentManager().findFragmentById(R.id.settings);
+        }
 
     }
 
