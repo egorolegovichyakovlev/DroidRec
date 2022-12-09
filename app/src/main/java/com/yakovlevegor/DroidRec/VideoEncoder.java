@@ -33,6 +33,7 @@ import android.media.MediaCodecList;
 import android.media.MediaCodecInfo;
 import android.view.Surface;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Looper;
 
 import java.io.IOException;
@@ -66,6 +67,12 @@ class VideoEncoder implements Encoder {
         if (customBitrate == true) {
             usedBitrate = inBitrate;
         }
+    }
+
+    public void suspendCodec(int suspend) {
+        Bundle params = new Bundle();
+        params.putInt(MediaCodec.PARAMETER_KEY_SUSPEND, suspend);
+        mEncoder.setParameters(params);
     }
 
     protected void onEncoderConfigured(MediaCodec encoder) {

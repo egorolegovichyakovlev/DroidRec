@@ -73,6 +73,7 @@ public class PlaybackRecorder {
 
     private AtomicBoolean mForceQuit = new AtomicBoolean(false);
     private AtomicBoolean mIsRunning = new AtomicBoolean(false);
+
     private VirtualDisplay mVirtualDisplay;
 
     private HandlerThread mWorker;
@@ -131,6 +132,10 @@ public class PlaybackRecorder {
     private int sampleRateValue;
 
     private int channelsCountValue;
+
+    private long lastPaused = 0;
+
+    private long lastTimeout = 0;
 
     private void getAllCodecs() {
         MediaCodecList listCodecs = new MediaCodecList(MediaCodecList.ALL_CODECS);
@@ -259,10 +264,24 @@ public class PlaybackRecorder {
     }
 
     public final void pause() {
+        lastPaused = System.currentTimeMillis() * 1000;
         mIsRunning.set(false);
+        if (mVideoEncoder != null) {
+            mVideoEncoder.suspendCodec(1);
+        }
+        if (mAudioEncoder != null) {
+            mAudioEncoder.suspendEncoder(1);
+        }
     }
 
     public final void resume() {
+        lastTimeout += (System.currentTimeMillis() * 1000) - lastPaused;
+        if (mVideoEncoder != null) {
+            mVideoEncoder.suspendCodec(0);
+        }
+        if (mAudioEncoder != null) {
+            mAudioEncoder.suspendEncoder(0);
+        }
         mIsRunning.set(true);
     }
 
@@ -447,6 +466,7 @@ public class PlaybackRecorder {
         if ((buffer.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             buffer.size = 0;
         }
+        buffer.presentationTimeUs -= lastTimeout;
         boolean eos = (buffer.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0;
         if (buffer.size == 0 && !eos) {
             encodedData = null;

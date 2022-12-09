@@ -32,6 +32,7 @@ import android.media.MediaFormat;
 import android.media.MediaCodecList;
 import android.media.MediaCodecInfo;
 import android.os.Looper;
+import android.os.Bundle;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -73,6 +74,12 @@ class AudioEncoder implements Encoder {
         format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
         format.setInteger(MediaFormat.KEY_BIT_RATE, selectCodec(MediaFormat.MIMETYPE_AUDIO_AAC).getCapabilitiesForType(MediaFormat.MIMETYPE_AUDIO_AAC).getAudioCapabilities().getBitrateRange().getUpper());
         return format;
+    }
+
+    public void suspendCodec(int suspend) {
+        Bundle params = new Bundle();
+        params.putInt(MediaCodec.PARAMETER_KEY_SUSPEND, suspend);
+        mEncoder.setParameters(params);
     }
 
     static abstract class Callback implements Encoder.Callback {
