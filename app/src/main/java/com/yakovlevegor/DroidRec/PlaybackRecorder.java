@@ -310,6 +310,8 @@ public class PlaybackRecorder {
     }
 
     public void start() {
+        lastPaused = 0;
+        lastTimeout = 0;
         if (audioOnly == false) {
             String codecInName = getCodec();
             if (useCustomCodec == true) {
