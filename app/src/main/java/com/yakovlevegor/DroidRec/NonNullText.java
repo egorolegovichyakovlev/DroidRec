@@ -36,6 +36,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.InputType;
 
 import com.yakovlevegor.DroidRec.R;
 
@@ -54,6 +55,7 @@ public class NonNullText extends EditTextPreference {
     private EditTextPreference.OnBindEditTextListener editListener = new EditTextPreference.OnBindEditTextListener () {
         @Override
         public void onBindEditText(EditText editText) {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
             textEdit = editText;
 
             persistedString = NonNullText.this.getPersistedString(defaultString);
