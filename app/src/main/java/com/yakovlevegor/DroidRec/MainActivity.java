@@ -554,14 +554,14 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 boolean extStoragePermissionDenied = false;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     extStoragePermissionDenied = (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED);
                 }
 
                 if (audioPermissionDenied && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (appSettings.getBoolean("checksoundmic", false) == true || (appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q))) {
                     String accesspermission[] = {Manifest.permission.RECORD_AUDIO};
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
-                } else if (extStoragePermissionDenied && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                } else if (extStoragePermissionDenied && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     String accesspermission[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
                     requestPermissions(accesspermission, REQUEST_STORAGE);
                 } else if ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == false)) {
