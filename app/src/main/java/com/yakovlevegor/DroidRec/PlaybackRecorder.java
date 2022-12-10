@@ -265,7 +265,6 @@ public class PlaybackRecorder {
 
     public final void pause() {
         lastPaused = System.currentTimeMillis() * 1000;
-        mIsRunning.set(false);
         if (mVideoEncoder != null) {
             mVideoEncoder.suspendCodec(1);
         }
@@ -282,7 +281,6 @@ public class PlaybackRecorder {
         if (mAudioEncoder != null) {
             mAudioEncoder.suspendEncoder(0);
         }
-        mIsRunning.set(true);
     }
 
     public final void quit() {
@@ -435,6 +433,7 @@ public class PlaybackRecorder {
             return;
         }
         ByteBuffer encodedData = mVideoEncoder.getOutputBuffer(index);
+        buffer.presentationTimeUs -= lastTimeout;
         writeSampleData(mVideoTrackIndex, buffer, encodedData);
         mVideoEncoder.releaseOutputBuffer(index);
         if ((buffer.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
@@ -456,6 +455,7 @@ public class PlaybackRecorder {
         }
 
         ByteBuffer encodedData = mAudioEncoder.getOutputBuffer(index);
+        buffer.presentationTimeUs -= lastTimeout;
         writeSampleData(mAudioTrackIndex, buffer, encodedData);
         mAudioEncoder.releaseOutputBuffer(index);
         if ((buffer.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
@@ -468,7 +468,6 @@ public class PlaybackRecorder {
         if ((buffer.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
             buffer.size = 0;
         }
-        buffer.presentationTimeUs -= lastTimeout;
         boolean eos = (buffer.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0;
         if (buffer.size == 0 && !eos) {
             encodedData = null;
