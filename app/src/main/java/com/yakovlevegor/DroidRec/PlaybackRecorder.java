@@ -219,7 +219,7 @@ public class PlaybackRecorder {
                 .setBufferSizeInBytes(minBytes * 2)
                 .setAudioPlaybackCaptureConfig(config)
                 .build();
-        } catch (SecurityException e) {
+        } catch (Exception e) {
             Toast.makeText(mainContext, R.string.error_playback_not_allowed, Toast.LENGTH_SHORT).show();
             return null;
         }
