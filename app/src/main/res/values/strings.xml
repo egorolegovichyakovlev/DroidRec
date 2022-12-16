@@ -95,6 +95,7 @@
     <string name="error_invalid_folder">Error: Invalid recordings folder</string>
     <string name="error_recorder_failed">Error: Recording failed</string>
     <string name="error_recorder_codec_error">Error: Codec error</string>
+    <string name="error_playback_not_allowed">Error: Audio Playback recording not allowed</string>
     <string name="setting_recordings_folder">Change recordings folder</string>
     <string name="setting_record_type_video">Video</string>
     <string name="setting_record_type_audio">Audio only</string>

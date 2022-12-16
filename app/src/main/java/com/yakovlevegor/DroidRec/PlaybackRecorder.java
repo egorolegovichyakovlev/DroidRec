@@ -183,7 +183,7 @@ public class PlaybackRecorder {
     }
 
     @TargetApi(Build.VERSION_CODES.Q)
-    private static AudioRecord createAudioRecord(int sampleRateInHz, int channelConfig, int audioFormat, MediaProjection captureProjection) {
+    private AudioRecord createAudioRecord(int sampleRateInHz, int channelConfig, int audioFormat, MediaProjection captureProjection) {
         int minBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat);
         if (minBytes <= 0) {
             return null;
@@ -197,6 +197,18 @@ public class PlaybackRecorder {
 
         AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(captureProjection)
             .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
+            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING)
+            .addMatchingUsage(AudioAttributes.USAGE_GAME)
+            .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
+            .addMatchingUsage(AudioAttributes.USAGE_ALARM)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANT)
+            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
             .build();
 
         AudioRecord record = null;
@@ -208,6 +220,7 @@ public class PlaybackRecorder {
                 .setAudioPlaybackCaptureConfig(config)
                 .build();
         } catch (SecurityException e) {
+            Toast.makeText(mainContext, R.string.error_playback_not_allowed, Toast.LENGTH_SHORT).show();
             return null;
         }
 
