@@ -99,6 +99,6 @@
     <string name="setting_recordings_folder">Mudar pasta de gravação</string>
     <string name="setting_record_type_video">Vídeo</string>
     <string name="setting_record_type_audio">Somente áudio</string>
-    <string name="setting_audio_record_microphone_sound">"Capturar microfone"</string>
+    <string name="setting_audio_record_microphone_sound">Capturar microfone</string>
     <string name="setting_audio_record_playback_sound">Capturar áudio</string>
 </resources>
