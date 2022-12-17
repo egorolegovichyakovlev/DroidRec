@@ -95,6 +95,7 @@
     <string name="error_invalid_folder">错误：无效的录制文件夹</string>
     <string name="error_recorder_failed">错误：录制失败</string>
     <string name="error_recorder_codec_error">错误：编解码器错误</string>
+    <string name="error_playback_not_allowed">错误：音频播放录制不被允许</string>
     <string name="setting_recordings_folder">更改录制文件保存文件夹</string>
     <string name="setting_record_type_video">视频</string>
     <string name="setting_record_type_audio">仅音频</string>
