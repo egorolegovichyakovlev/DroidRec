@@ -27,49 +27,51 @@
 
 package com.yakovlevegor.DroidRec;
 
-import androidx.appcompat.app.AppCompatActivity;
+import static java.lang.Math.sqrt;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-
-import android.app.AlertDialog;
 import android.Manifest;
-import android.content.Context;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.annotation.TargetApi;
-import android.os.Bundle;
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.SystemClock;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.Toast;
-import android.widget.CheckBox;
-import android.widget.Chronometer;
-import android.widget.TextView;
-import android.widget.RadioButton;
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.display.DisplayManager;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.SystemClock;
 import android.provider.Settings;
-import android.graphics.Color;
-import android.view.WindowManager;
-import android.graphics.Rect;
 import android.view.Display;
 import android.view.Surface;
-import android.hardware.display.DisplayManager;
-import android.view.WindowInsets;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Chronometer;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.yakovlevegor.DroidRec.R;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -136,6 +138,40 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog dialog;
 
     private boolean recordModeChosen;
+
+    private SensorManager sensorManager = null;
+    private float acceleration = 0f;
+    private float currentAcceleration = 0f;
+    private float lastAcceleration = 0f;
+
+    private SensorEventListener sensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            // Fetching x,y,z values
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            lastAcceleration = currentAcceleration;
+
+            // Getting current accelerations
+            // with the help of fetched x,y,z values
+            currentAcceleration = (float) sqrt((double) (x * x + y * y + z * z));
+            float delta = currentAcceleration - lastAcceleration;
+            acceleration = acceleration * 0.9f + delta;
+
+            // Display a Toast message if
+            // acceleration value is over 12
+            if (acceleration > 12 && recordingBinder.isStarted()) {
+                recordingBinder.stopService();
+                Toast.makeText(getApplicationContext(), "Recording is stopped", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
 
     public class ActivityBinder extends Binder {
         void recordingStart() {
@@ -479,6 +515,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(
+                sensorListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL
+        );
+
+        acceleration = 10f;
+        currentAcceleration = SensorManager.GRAVITY_EARTH;
+        lastAcceleration = SensorManager.GRAVITY_EARTH;
     }
 
     public void setRecordMode(boolean mode) {
@@ -688,8 +734,18 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
             }
         }
-
-
+    }
+    @Override
+    protected void onResume() {
+        sensorManager.registerListener(sensorListener, sensorManager.getDefaultSensor(
+                Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
+        );
+        super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        sensorManager.unregisterListener(sensorListener);
+        super.onPause();
+    }
 }
