@@ -35,7 +35,6 @@ import android.media.MediaCodecList;
 import android.media.MediaCodecInfo;
 import android.media.MediaMuxer;
 import android.media.projection.MediaProjection;
-import android.media.AudioPlaybackCaptureConfiguration;
 import android.media.AudioFormat;
 import android.media.AudioAttributes;
 import android.os.Handler;
@@ -89,7 +88,7 @@ public class PlaybackRecorder {
 
     private boolean recordAudio;
 
-    private AudioRecord audioPlaybackRecord = null;
+    private MediaProjection audioPlaybackProjection = null;
 
     private ArrayList<String> codecsList = new ArrayList<String>();
 
@@ -182,54 +181,6 @@ public class PlaybackRecorder {
         return codecReturn;
     }
 
-    @TargetApi(Build.VERSION_CODES.Q)
-    private AudioRecord createAudioRecord(int sampleRateInHz, int channelConfig, int audioFormat, MediaProjection captureProjection) {
-        int minBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat);
-        if (minBytes <= 0) {
-            return null;
-        }
-
-        AudioFormat captureAudioFormat = new AudioFormat.Builder()
-            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-            .setSampleRate(sampleRateInHz)
-            .setChannelMask(channelConfig)
-            .build();
-
-        AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(captureProjection)
-            .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
-            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING)
-            .addMatchingUsage(AudioAttributes.USAGE_GAME)
-            .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
-            .addMatchingUsage(AudioAttributes.USAGE_ALARM)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANT)
-            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION)
-            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
-            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-            .build();
-
-        AudioRecord record = null;
-
-        try {
-            record = new AudioRecord.Builder()
-                .setAudioFormat(captureAudioFormat)
-                .setBufferSizeInBytes(minBytes * 2)
-                .setAudioPlaybackCaptureConfig(config)
-                .build();
-        } catch (Exception e) {
-            Toast.makeText(mainContext, R.string.error_playback_not_allowed, Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        if (record.getState() == AudioRecord.STATE_UNINITIALIZED) {
-            return null;
-        }
-        return record;
-    }
-
     public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, int sampleRate, int channelsCount) {
         sampleRateValue = sampleRate;
         channelsCountValue = channelsCount;
@@ -249,7 +200,7 @@ public class PlaybackRecorder {
             if (channelsCount == 1) {
                 channelConfig = AudioFormat.CHANNEL_IN_MONO;
             }
-            audioPlaybackRecord = createAudioRecord(sampleRate, channelConfig, AudioFormat.ENCODING_PCM_16BIT, projection);
+            audioPlaybackProjection = projection;
         }
 
         if (customQuality == true) {
@@ -337,7 +288,7 @@ public class PlaybackRecorder {
         if (recordMicrophone == false && recordAudio == false) {
             mAudioEncoder = null;
         } else {
-            mAudioEncoder = new AudioPlaybackRecorder(recordMicrophone, recordAudio, sampleRateValue, channelsCountValue, audioPlaybackRecord);
+            mAudioEncoder = new AudioPlaybackRecorder(recordMicrophone, recordAudio, sampleRateValue, channelsCountValue, audioPlaybackProjection, mainContext);
         }
 
         if (mWorker != null && doRestart == false) {
@@ -672,10 +623,6 @@ public class PlaybackRecorder {
         if (mAudioEncoder != null) {
             mAudioEncoder.release();
             mAudioEncoder = null;
-        }
-
-        if (doRestart == false && audioPlaybackRecord != null) {
-            audioPlaybackRecord.release();
         }
 
         if (mMuxer != null) {

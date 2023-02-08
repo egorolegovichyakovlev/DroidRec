@@ -32,12 +32,19 @@ import android.media.AudioRecord;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.media.MediaRecorder;
+import android.media.projection.MediaProjection;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.SparseLongArray;
+import android.content.Context;
+import android.os.Build;
+import android.widget.Toast;
+import android.media.AudioAttributes;
+import android.annotation.TargetApi;
+import android.media.AudioPlaybackCaptureConfiguration;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -52,8 +59,7 @@ class AudioPlaybackRecorder implements Encoder {
     private final HandlerThread mRecordThread;
     private RecordHandler mRecordHandler;
 
-    private AudioRecord mPlaybackPreset;
-
+    private MediaProjection mProjection;
     private AudioRecord mPlayback;
     private AudioRecord mMic;
 
@@ -63,12 +69,16 @@ class AudioPlaybackRecorder implements Encoder {
     private static boolean recordMicrophone;
     private static boolean recordAudio;
 
+    private Context mainContext;
+
     private AtomicBoolean mForceStop = new AtomicBoolean(false);
     private AudioEncoder.Callback mCallback;
     private CallbackDelegate mCallbackDelegate;
     private int mChannelsSampleRate;
 
-    AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, AudioRecord playbackPreset) {
+    private static int audioBufLimit = 4096;
+
+    AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, MediaProjection playbackProjection, Context ctx) {
         mEncoder = new AudioEncoder(audioRate, channels);
         mSampleRate = audioRate;
         mChannelsSampleRate = mSampleRate * 2;
@@ -77,9 +87,10 @@ class AudioPlaybackRecorder implements Encoder {
             mChannelConfig = AudioFormat.CHANNEL_IN_MONO;
         }
         recordMicrophone = microphone;
+        mProjection = playbackProjection;
         recordAudio = audio;
-        mPlaybackPreset = playbackPreset;
         mRecordThread = new HandlerThread(TAG);
+        mainContext = ctx;
     }
 
     public void setCallback(Callback callback) {
@@ -186,7 +197,7 @@ class AudioPlaybackRecorder implements Encoder {
                 AudioRecord r;
                 AudioRecord m;
                 if (recordAudio == true) {
-                    r = mPlaybackPreset;
+                    r = createAudioRecord(mSampleRate, mChannelConfig, AudioFormat.ENCODING_PCM_16BIT, mProjection);
                     if (r == null) {
                         mCallbackDelegate.onError(AudioPlaybackRecorder.this, new IllegalArgumentException());
                     } else {
@@ -216,15 +227,16 @@ class AudioPlaybackRecorder implements Encoder {
                 mMuxingOutputBufferIndices.poll();
                 pollInputIfNeed();
             } else if (msg.what == MSG_STOP) {
+                if (recordAudio == true && mPlayback != null) {
+                    mPlayback.stop();
+                }
                 if (recordMicrophone == true && mMic != null) {
                     mMic.stop();
                 }
                 mEncoder.stop();
             } else if (msg.what == MSG_RELEASE) {
                 if (mPlayback != null) {
-                    if (mPlaybackPreset == null) {
-                        mPlayback.release();
-                    }
+                    mPlayback.release();
                     mPlayback = null;
                 }
                 if (recordMicrophone == true) {
@@ -290,7 +302,7 @@ class AudioPlaybackRecorder implements Encoder {
         final boolean eos = r.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED;
         final ByteBuffer frame = mEncoder.getInputBuffer(index);
         int offset = frame.position();
-        int limit = frame.limit();
+        int limit = audioBufLimit;
         int read = 0;
         int readmic = 0;
 
@@ -352,8 +364,56 @@ class AudioPlaybackRecorder implements Encoder {
         return currentUs;
     }
 
+    @TargetApi(Build.VERSION_CODES.Q)
+    private AudioRecord createAudioRecord(int sampleRateInHz, int channelConfig, int audioFormat, MediaProjection captureProjection) {
+        int minBytes = audioBufLimit;
+        if (minBytes <= 0) {
+            return null;
+        }
+
+        AudioFormat captureAudioFormat = new AudioFormat.Builder()
+            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+            .setSampleRate(sampleRateInHz)
+            .setChannelMask(channelConfig)
+            .build();
+
+        AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(captureProjection)
+            .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
+            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING)
+            .addMatchingUsage(AudioAttributes.USAGE_GAME)
+            .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
+            .addMatchingUsage(AudioAttributes.USAGE_ALARM)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANT)
+            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+            .build();
+
+        AudioRecord record = null;
+
+        try {
+            record = new AudioRecord.Builder()
+                .setAudioFormat(captureAudioFormat)
+                .setBufferSizeInBytes(minBytes * 2)
+                .setAudioPlaybackCaptureConfig(config)
+                .build();
+        } catch (Exception e) {
+            Toast.makeText(mainContext, R.string.error_playback_not_allowed, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+        if (record.getState() == AudioRecord.STATE_UNINITIALIZED) {
+            return null;
+        }
+        return record;
+    }
+
     private static AudioRecord createMicRecord(int sampleRateInHz, int channelConfig, int audioFormat) {
-        int minBytes = AudioRecord.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat);
+        int minBytes = audioBufLimit;
         if (minBytes <= 0) {
             return null;
         }
