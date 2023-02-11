@@ -76,12 +76,6 @@ class AudioEncoder implements Encoder {
         return format;
     }
 
-    public void suspendCodec(int suspend) {
-        Bundle params = new Bundle();
-        params.putInt(MediaCodec.PARAMETER_KEY_SUSPEND, suspend);
-        mEncoder.setParameters(params);
-    }
-
     static abstract class Callback implements Encoder.Callback {
         void onInputBufferAvailable(AudioEncoder encoder, int index) {}
         void onOutputFormatChanged(AudioEncoder encoder, MediaFormat format) {}

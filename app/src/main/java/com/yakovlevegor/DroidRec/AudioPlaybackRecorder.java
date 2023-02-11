@@ -130,10 +130,6 @@ class AudioPlaybackRecorder implements Encoder {
         return mEncoder.getOutputBuffer(index);
     }
 
-    public void suspendEncoder(int suspend) {
-        mEncoder.suspendCodec(suspend);
-    }
-
     private static class CallbackDelegate extends Handler {
         private AudioEncoder.Callback mCallback;
 

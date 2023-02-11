@@ -72,6 +72,7 @@ public class PlaybackRecorder {
 
     private AtomicBoolean mForceQuit = new AtomicBoolean(false);
     private AtomicBoolean mIsRunning = new AtomicBoolean(false);
+    private AtomicBoolean mIsPaused = new AtomicBoolean(false);
 
     private VirtualDisplay mVirtualDisplay;
 
@@ -228,12 +229,10 @@ public class PlaybackRecorder {
     }
 
     public final void pause() {
+        mIsPaused.set(true);
         lastPaused = System.currentTimeMillis() * 1000;
         if (mVideoEncoder != null) {
             mVideoEncoder.suspendCodec(1);
-        }
-        if (mAudioEncoder != null) {
-            mAudioEncoder.suspendEncoder(1);
         }
     }
 
@@ -242,9 +241,7 @@ public class PlaybackRecorder {
         if (mVideoEncoder != null) {
             mVideoEncoder.suspendCodec(0);
         }
-        if (mAudioEncoder != null) {
-            mAudioEncoder.suspendEncoder(0);
-        }
+        mIsPaused.set(false);
     }
 
     public final void quit() {
@@ -396,10 +393,15 @@ public class PlaybackRecorder {
             mPendingVideoEncoderBufferInfos.add(buffer);
             return;
         }
-        ByteBuffer encodedData = mVideoEncoder.getOutputBuffer(index);
-        buffer.presentationTimeUs -= lastTimeout;
-        writeSampleData(mVideoTrackIndex, buffer, encodedData);
+
+        if (mIsPaused.get() == false) {
+            ByteBuffer encodedData = mVideoEncoder.getOutputBuffer(index);
+            buffer.presentationTimeUs -= lastTimeout;
+            writeSampleData(mVideoTrackIndex, buffer, encodedData);
+        }
+
         mVideoEncoder.releaseOutputBuffer(index);
+
         if ((buffer.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
             mVideoTrackIndex = INVALID_INDEX;
             signalStop(true);
@@ -418,10 +420,14 @@ public class PlaybackRecorder {
             return;
         }
 
-        ByteBuffer encodedData = mAudioEncoder.getOutputBuffer(index);
-        buffer.presentationTimeUs -= lastTimeout;
-        writeSampleData(mAudioTrackIndex, buffer, encodedData);
+        if (mIsPaused.get() == false) {
+            ByteBuffer encodedData = mAudioEncoder.getOutputBuffer(index);
+            buffer.presentationTimeUs -= lastTimeout;
+            writeSampleData(mAudioTrackIndex, buffer, encodedData);
+        }
+
         mAudioEncoder.releaseOutputBuffer(index);
+
         if ((buffer.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
             mAudioTrackIndex = INVALID_INDEX;
             signalStop(true);
