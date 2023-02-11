@@ -76,7 +76,7 @@ class AudioPlaybackRecorder implements Encoder {
     private CallbackDelegate mCallbackDelegate;
     private int mChannelsSampleRate;
 
-    private static int audioBufLimit = 4096;
+    private static int audioBufLimit = 2048;
 
     AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, MediaProjection playbackProjection, Context ctx) {
         mEncoder = new AudioEncoder(audioRate, channels);
@@ -366,11 +366,6 @@ class AudioPlaybackRecorder implements Encoder {
 
     @TargetApi(Build.VERSION_CODES.Q)
     private AudioRecord createAudioRecord(int sampleRateInHz, int channelConfig, int audioFormat, MediaProjection captureProjection) {
-        int minBytes = audioBufLimit;
-        if (minBytes <= 0) {
-            return null;
-        }
-
         AudioFormat captureAudioFormat = new AudioFormat.Builder()
             .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
             .setSampleRate(sampleRateInHz)
@@ -398,7 +393,7 @@ class AudioPlaybackRecorder implements Encoder {
         try {
             record = new AudioRecord.Builder()
                 .setAudioFormat(captureAudioFormat)
-                .setBufferSizeInBytes(minBytes * 2)
+                .setBufferSizeInBytes(audioBufLimit)
                 .setAudioPlaybackCaptureConfig(config)
                 .build();
         } catch (Exception e) {
@@ -413,15 +408,10 @@ class AudioPlaybackRecorder implements Encoder {
     }
 
     private static AudioRecord createMicRecord(int sampleRateInHz, int channelConfig, int audioFormat) {
-        int minBytes = audioBufLimit;
-        if (minBytes <= 0) {
-            return null;
-        }
-
         AudioRecord record = null;
 
         try {
-            record = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRateInHz, channelConfig, AudioFormat.ENCODING_PCM_16BIT, minBytes * 2);
+            record = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRateInHz, channelConfig, AudioFormat.ENCODING_PCM_16BIT, audioBufLimit);
         } catch (SecurityException e) {
             return null;
         }
