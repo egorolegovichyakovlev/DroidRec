@@ -27,6 +27,7 @@
 
 package com.yakovlevegor.DroidRec;
 
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.EditTextPreference;
@@ -53,6 +54,8 @@ import android.os.Build;
 import android.annotation.TargetApi;
 
 import com.yakovlevegor.DroidRec.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class SettingsPanel extends AppCompatActivity {
 
@@ -91,9 +94,27 @@ public class SettingsPanel extends AppCompatActivity {
 
     }
 
+//    public static class OnShakePreferenceChangeEvent {
+//        private String state;
+//        public OnShakePreferenceChangeEvent(String state) {
+//            this.state = state;
+//        }
+//
+//        public String getState() {
+//            return state;
+//        }
+//    }
+
     @Override
     public void onStart() {
         super.onStart();
+
+        Preference onShake = settingsPanel.findPreference("onshake");
+        onShake.setOnPreferenceChangeListener((preference, newValue) -> {
+            EventBus.getDefault().post(new OnShakePreferenceChangeEvent(newValue.toString()));
+            return true;
+        });
+
         Preference overlayPreference = settingsPanel.findPreference("floatingcontrols");
 
         Preference overlayPreferencePosition = settingsPanel.findPreference("floatingcontrolsposition");

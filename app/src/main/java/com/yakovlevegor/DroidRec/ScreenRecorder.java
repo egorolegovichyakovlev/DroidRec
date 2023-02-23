@@ -1072,6 +1072,8 @@ public class ScreenRecorder extends Service {
 
     @TargetApi(Build.VERSION_CODES.N)
     private void screenRecordingPause() {
+        if (isPaused) return;
+
         isPaused = true;
         timeRecorded += SystemClock.elapsedRealtime() - timeStart;
         timeStart = 0;
