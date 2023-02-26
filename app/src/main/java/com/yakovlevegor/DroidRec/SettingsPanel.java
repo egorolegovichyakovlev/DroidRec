@@ -27,32 +27,28 @@
 
 package com.yakovlevegor.DroidRec;
 
-import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
-import androidx.preference.EditTextPreference;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.activity.result.contract.ActivityResultContracts;
-
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Build;
-import android.provider.Settings;
-import android.util.DisplayMetrics;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.content.Intent;
-import android.app.AlertDialog;
-import android.view.WindowManager;
-import android.content.Context;
-import android.widget.Toast;
-import android.view.Window;
-import android.graphics.Color;
-
-import android.os.Build;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Toast;
 
-import com.yakovlevegor.DroidRec.R;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+
+import com.yakovlevegor.DroidRec.shake.event.OnShakePreferenceChangeEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class SettingsPanel extends AppCompatActivity {
 
@@ -94,6 +90,9 @@ public class SettingsPanel extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        addEventListenerOnShakeEvent();
+
         Preference overlayPreference = settingsPanel.findPreference("floatingcontrols");
 
         Preference overlayPreferencePosition = settingsPanel.findPreference("floatingcontrolsposition");
@@ -251,4 +250,11 @@ public class SettingsPanel extends AppCompatActivity {
         dialog.show();
     }
 
+    private void addEventListenerOnShakeEvent() {
+        Preference onShake = settingsPanel.findPreference("onshake");
+        onShake.setOnPreferenceChangeListener((preference, newValue) -> {
+            EventBus.getDefault().post(new OnShakePreferenceChangeEvent(newValue.toString()));
+            return true;
+        });
+    }
 }

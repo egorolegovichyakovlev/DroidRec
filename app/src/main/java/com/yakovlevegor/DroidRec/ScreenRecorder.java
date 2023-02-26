@@ -27,70 +27,54 @@
 
 package com.yakovlevegor.DroidRec;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationChannelCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.graphics.drawable.IconCompat;
-
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.ClipData;
 import android.content.Intent;
-import android.content.UriPermission;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ServiceInfo;
-import android.graphics.drawable.Icon;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
-import android.media.CamcorderProfile;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.os.ParcelFileDescriptor;
+import android.os.SystemClock;
+import android.provider.DocumentsContract;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.view.WindowManager;
 import android.view.Display;
 import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.Toast;
-import android.provider.DocumentsContract;
-import android.content.SharedPreferences;
-import android.content.ServiceConnection;
-import android.content.ComponentName;
-import android.provider.Settings;
-import android.media.MediaScannerConnection;
+
+import androidx.core.app.NotificationChannelCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
-import android.content.res.Configuration;
-import android.graphics.Rect;
-import android.view.WindowInsets;
-
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-
-import android.os.Build;
-import android.annotation.TargetApi;
+import androidx.core.graphics.drawable.IconCompat;
 
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 import java.text.SimpleDateFormat;
-import java.lang.SecurityException;
-
-import com.yakovlevegor.DroidRec.R;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class ScreenRecorder extends Service {
 
@@ -217,20 +201,20 @@ public class ScreenRecorder extends Service {
     private Display display;
 
     public class RecordingBinder extends Binder {
-        boolean isStarted() {
+        public boolean isStarted() {
             return ScreenRecorder.this.runningService;
         }
 
-        void recordingPause() {
+        public void recordingPause() {
             ScreenRecorder.this.screenRecordingPause();
+        }
+
+        public void stopService() {
+            ScreenRecorder.this.screenRecordingStop();
         }
 
         void recordingResume() {
             ScreenRecorder.this.screenRecordingResume();
-        }
-
-        void stopService() {
-            ScreenRecorder.this.screenRecordingStop();
         }
 
         long getTimeStart() {
@@ -1072,6 +1056,8 @@ public class ScreenRecorder extends Service {
 
     @TargetApi(Build.VERSION_CODES.N)
     private void screenRecordingPause() {
+        if (isPaused) return;
+
         isPaused = true;
         timeRecorded += SystemClock.elapsedRealtime() - timeStart;
         timeStart = 0;

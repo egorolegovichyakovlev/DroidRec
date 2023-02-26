@@ -138,6 +138,15 @@
             android:entryValues="@array/dark_theme_option_preferences_values"
             android:defaultValue="@string/dark_theme_option_auto" />
 
+        <ListPreference
+            android:key="onshake"
+            android:summary="@string/on_shake_option_summary"
+            android:title="@string/on_shake_option_title"
+            android:dialogTitle="@string/on_shake_dialog"
+            android:entries="@array/on_shake_option_preferences"
+            android:entryValues="@array/on_shake_preferences_values"
+            android:defaultValue="@string/on_shake_default"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -27,49 +27,51 @@
 
 package com.yakovlevegor.DroidRec;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-
-import android.app.AlertDialog;
 import android.Manifest;
-import android.content.Context;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.annotation.TargetApi;
-import android.os.Bundle;
-import android.os.Binder;
-import android.os.IBinder;
-import android.os.SystemClock;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.Toast;
-import android.widget.CheckBox;
-import android.widget.Chronometer;
-import android.widget.TextView;
-import android.widget.RadioButton;
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.SystemClock;
 import android.provider.Settings;
-import android.graphics.Color;
-import android.view.WindowManager;
-import android.graphics.Rect;
 import android.view.Display;
 import android.view.Surface;
-import android.hardware.display.DisplayManager;
-import android.view.WindowInsets;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Chronometer;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.yakovlevegor.DroidRec.R;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.yakovlevegor.DroidRec.shake.OnShakeEventHelper;
+import com.yakovlevegor.DroidRec.shake.event.ServiceConnectedEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog dialog;
 
     private boolean recordModeChosen;
+
+    private OnShakeEventHelper onShakeEventHelper;
 
     public class ActivityBinder extends Binder {
         void recordingStart() {
@@ -211,11 +215,14 @@ public class MainActivity extends AppCompatActivity {
                 serviceToRecording = false;
                 recordingStart();
             }
+
+            EventBus.getDefault().post(new ServiceConnectedEvent(true));
         }
 
         public void onServiceDisconnected(ComponentName className) {
             recordingBinder.setDisconnect();
             screenRecorderStarted = false;
+            EventBus.getDefault().post(new ServiceConnectedEvent(false));
         }
     };
 
@@ -310,15 +317,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        onShakeEventHelper.unregisterListener();
         super.onDestroy();
-
         doUnbindService();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
 
@@ -479,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        EventBus.getDefault().register(this);
     }
 
     public void setRecordMode(boolean mode) {
@@ -688,8 +696,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
             }
         }
-
-
+    }
+    @Override
+    protected void onResume() {
+        if(onShakeEventHelper != null && onShakeEventHelper.hasListenerChanged()) {
+            onShakeEventHelper.unregisterListener();
+            onShakeEventHelper.registerListener();
+        }
+        super.onResume();
     }
 
+    @Subscribe
+    public void onServiceConnected(ServiceConnectedEvent event) {
+        if(event.isServiceConnected()) {
+            onShakeEventHelper = new OnShakeEventHelper(recordingBinder, this);
+            onShakeEventHelper.registerListener();
+        }
+        else {
+            onShakeEventHelper.unregisterListener();
+        }
+    }
 }

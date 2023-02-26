@@ -64,6 +64,14 @@
         <item name="dark_theme_option_auto_item">Automático</item>
     </array>
     <string name="dark_theme_change_notice">Abra o aplicativo novamente para aplicar o tema</string>
+    <string name="on_shake_option_summary">Ação na vibração do dispositivo</string>
+    <string name="on_shake_option_title">Ao agitar</string>
+    <string name="on_shake_dialog">Na caixa de diálogo agitar</string>
+    <array name="on_shake_option_preferences">
+        <item name="on_shake_option_nothing">Fazer nada</item>
+        <item name="on_shake_option_pause">Pausa</item>
+        <item name="on_shake_option_stop">Parar</item>
+    </array>
     <string name="overlay_notice_title">Sobrepor outros apps</string>
     <string name="overlay_notice_description">Para mostrar o painel flutuante, ative a sobreposição sobre outros apps</string>
     <string name="overlay_notice_button">Abrir configurações</string>
