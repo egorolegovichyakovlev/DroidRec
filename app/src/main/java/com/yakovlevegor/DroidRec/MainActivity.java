@@ -542,12 +542,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onStop() {
-//        EventBus.getDefault().unregister(this);
-//        super.onStop();
-//    }
-
     public void checkDirRecord() {
         if (appSettings.getString("folderpath", "NULL") == "NULL") {
             chooseDir(true);
