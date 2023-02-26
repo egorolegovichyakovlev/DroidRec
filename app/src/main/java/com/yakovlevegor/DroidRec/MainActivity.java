@@ -27,8 +27,6 @@
 
 package com.yakovlevegor.DroidRec;
 
-import static java.lang.Math.sqrt;
-
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -42,10 +40,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.hardware.display.DisplayManager;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
@@ -72,12 +66,12 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
+
+import com.yakovlevegor.DroidRec.shake.OnShakeEventHelper;
+import com.yakovlevegor.DroidRec.shake.event.ServiceConnectedEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.function.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -145,65 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean recordModeChosen;
 
-    private SensorManager sensorManager = null;
-    private float acceleration = 0f;
-    private float currentAcceleration = 0f;
-    private float lastAcceleration = 0f;
-
-    @Subscribe
-    public void onShakePreferenceChanged(OnShakePreferenceChangeEvent event) {
-        currentListener = giveMeSensorListenerFor(event.state);
-    }
-
-    private SensorEventListener currentListener;
-    private SensorEventListener emptyListener = new SensorEventListener() {
-
-        @Override
-        public void onSensorChanged(SensorEvent sensorEvent) { }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int i) { }
-    };
-
-    private SensorEventListener giveMeSensorListenerFor(Runnable action, String msg) {
-        return new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                // Fetching x,y,z values
-                float x = event.values[0];
-                float y = event.values[1];
-                float z = event.values[2];
-                lastAcceleration = currentAcceleration;
-
-                // Getting current accelerations
-                // with the help of fetched x,y,z values
-                currentAcceleration = (float) sqrt(x * x + y * y + z * z);
-                float delta = currentAcceleration - lastAcceleration;
-                acceleration = acceleration * 0.9f + delta;
-
-                // Display a Toast message if
-                // acceleration value is over 12
-                if (acceleration > 12 && recordingBinder.isStarted()) {
-                    action.run();
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int i) {
-
-            }
-        };
-    }
-    private SensorEventListener giveMeSensorListenerFor(String state) {
-        if("Do nothing".equals(state)) return emptyListener;
-
-        if("Pause".equals(state)) return giveMeSensorListenerFor(() -> recordingBinder.recordingPause(), "Recording is paused");
-
-        if("Stop".equals(state)) return giveMeSensorListenerFor(() -> recordingBinder.stopService(), "Recording is stopped");
-
-        throw new IllegalArgumentException("Should never occur");
-    }
+    private OnShakeEventHelper onShakeEventHelper;
 
     public class ActivityBinder extends Binder {
         void recordingStart() {
@@ -279,11 +215,14 @@ public class MainActivity extends AppCompatActivity {
                 serviceToRecording = false;
                 recordingStart();
             }
+
+            EventBus.getDefault().post(new ServiceConnectedEvent(true));
         }
 
         public void onServiceDisconnected(ComponentName className) {
             recordingBinder.setDisconnect();
             screenRecorderStarted = false;
+            EventBus.getDefault().post(new ServiceConnectedEvent(false));
         }
     };
 
@@ -379,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
+        onShakeEventHelper.unregisterListener();
         super.onDestroy();
         doUnbindService();
     }
@@ -386,9 +326,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        EventBus.getDefault().register(this);
-
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
         appSettingsEditor = appSettings.edit();
 
@@ -549,17 +486,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        currentListener = giveMeSensorListenerFor(appSettings.getString("onshake", "Do nothing"));
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        sensorManager.registerListener(
-                currentListener,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL
-        );
-
-        acceleration = 10f;
-        currentAcceleration = SensorManager.GRAVITY_EARTH;
-        lastAcceleration = SensorManager.GRAVITY_EARTH;
+        EventBus.getDefault().register(this);
     }
 
     public void setRecordMode(boolean mode) {
@@ -614,6 +541,12 @@ public class MainActivity extends AppCompatActivity {
             recordingStart();
         }
     }
+
+//    @Override
+//    protected void onStop() {
+//        EventBus.getDefault().unregister(this);
+//        super.onStop();
+//    }
 
     public void checkDirRecord() {
         if (appSettings.getString("folderpath", "NULL") == "NULL") {
@@ -772,15 +705,21 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onResume() {
-        sensorManager.registerListener(currentListener, sensorManager.getDefaultSensor(
-                Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
-        );
+        if(onShakeEventHelper != null && onShakeEventHelper.hasListenerChanged()) {
+            onShakeEventHelper.unregisterListener();
+            onShakeEventHelper.registerListener();
+        }
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
-        sensorManager.unregisterListener(currentListener);
-        super.onPause();
+    @Subscribe
+    public void onServiceConnected(ServiceConnectedEvent event) {
+        if(event.isServiceConnected()) {
+            onShakeEventHelper = new OnShakeEventHelper(recordingBinder, this);
+            onShakeEventHelper.registerListener();
+        }
+        else {
+            onShakeEventHelper.unregisterListener();
+        }
     }
 }

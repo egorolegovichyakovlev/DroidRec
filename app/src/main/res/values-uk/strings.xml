@@ -63,6 +63,14 @@
         <item name="dark_theme_option_light">Світла</item>
         <item name="dark_theme_option_auto_item">Стандартна</item>
     </array>
+    <string name="on_shake_option_title">На струс пристрію</string>
+    <string name="on_shake_dialog">На струс пристрію</string>
+    <string name="on_shake_option_summary">Що робити на струс пристрію</string>
+    <array name="on_shake_option_preferences">
+        <item name="on_shake_option_nothing">Нічого</item>
+        <item name="on_shake_option_pause">Запис на паузу</item>
+        <item name="on_shake_option_stop">Зупинити запис</item>
+    </array>
     <string name="dark_theme_change_notice">Для використання теми треба відкрити програму знову</string>
     <string name="overlay_notice_title">Активувати показувати над іншими програмами</string>
     <string name="overlay_notice_description">Для використання панелі треба aктивувати Показувати над іншими програмами в параметрах cмартфону</string>

@@ -140,12 +140,12 @@
 
         <ListPreference
             android:key="onshake"
-            android:summary="Action on device shake"
-            android:title="On shake"
-            android:dialogTitle="on shake dialog"
+            android:summary="@string/on_shake_option_summary"
+            android:title="@string/on_shake_option_title"
+            android:dialogTitle="@string/on_shake_dialog"
             android:entries="@array/on_shake_option_preferences"
-            android:entryValues="@array/onshake_preferences_values"
-            android:defaultValue="Do nothing"/>
+            android:entryValues="@array/on_shake_preferences_values"
+            android:defaultValue="@string/on_shake_default"/>
 
     </PreferenceCategory>
 
