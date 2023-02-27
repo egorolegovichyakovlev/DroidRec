@@ -63,6 +63,14 @@
             <item name="dark_theme_option_light">浅色</item>
             <item name="dark_theme_option_auto_item">自动</item>
         </array>
+        <string name="on_shake_option_summary">晃动设备时的操作</string>
+        <string name="on_shake_option_title">晃动</string>
+        <string name="on_shake_dialog">晃动对话框</string>
+        <array name="on_shake_option_preferences">
+            <item name="on_shake_option_nothing">什么也不做</item>
+            <item name="on_shake_option_pause">暂停</item>
+            <item name="on_shake_option_stop">停止</item>
+    </array>
     <string name="dark_theme_change_notice">要让主题设置生效，请重新打开本应用</string>
     <string name="overlay_notice_title">显示在其他应用上方</string>
     <string name="overlay_notice_description">要显示浮窗操控，请启用“显示在其他应用上方”权限</string>
