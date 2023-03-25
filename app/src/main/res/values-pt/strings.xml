@@ -35,6 +35,8 @@
         <item name="audio_channels_preferences_option_mono">Mono</item>
         <item name="audio_channels_preferences_option_stereo">Estéreo</item>
     </array>
+    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
+    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
     <string name="dontnotifyonrotate_option">Não notificar ao rotacionar</string>
     <string name="dontnotifyonrotate_option_description">Não notificar ao rotacionar a tela</string>
     <string name="norotate_option">Não reiniciar grav. ao rotacionar</string>

@@ -35,6 +35,8 @@
         <item name="audio_channels_preferences_option_mono">Моно</item>
         <item name="audio_channels_preferences_option_stereo">Стерео</item>
     </array>
+    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
+    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
     <string name="dontnotifyonrotate_option">Не повідомляти про зміну орієнтації екрана</string>
     <string name="dontnotifyonrotate_option_description">Не повідомляти про нову запис в разі зміну орієнтації екрана</string>
     <string name="norotate_option">Не розпочати нову запис в разі зміну орієнтації екрана</string>

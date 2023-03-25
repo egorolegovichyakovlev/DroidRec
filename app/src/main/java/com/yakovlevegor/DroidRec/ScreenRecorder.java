@@ -162,6 +162,8 @@ public class ScreenRecorder extends Service {
 
     private boolean dontNotifyOnRotate = false;
 
+    private boolean dontNotifyOnFinish = false;
+
     private int screenWidthNormal;
 
     private int screenHeightNormal;
@@ -392,6 +394,8 @@ public class ScreenRecorder extends Service {
 
         dontNotifyOnRotate = appSettings.getBoolean("dontnotifyonrotate", false);
 
+        dontNotifyOnFinish = appSettings.getBoolean("dontnotifyonfinish", false);
+
         intentFlag = PendingIntent.FLAG_UPDATE_CURRENT;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -558,7 +562,7 @@ public class ScreenRecorder extends Service {
 
     @SuppressWarnings("deprecation")
     private void screenRecordingStart() {
-
+        
         Intent minimizeIntent = new Intent(Intent.ACTION_MAIN);
         minimizeIntent.addCategory(Intent.CATEGORY_HOME);
         minimizeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1031,7 +1035,9 @@ public class ScreenRecorder extends Service {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW);
 
-            recordingNotificationManager.notify(NOTIFICATION_RECORDING_FINISHED_ID, finishedNotification.build());
+            if (dontNotifyOnFinish == false) {
+                recordingNotificationManager.notify(NOTIFICATION_RECORDING_FINISHED_ID, finishedNotification.build());
+            }
         } else {
             IconCompat restartIcon = IconCompat.createWithResource(this, R.drawable.icon_rotate_status);
 

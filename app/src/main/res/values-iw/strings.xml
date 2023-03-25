@@ -35,6 +35,8 @@
         <item name="audio_channels_preferences_option_mono">מונו</item>
         <item name="audio_channels_preferences_option_stereo">סטראו</item>
     </array>
+    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
+    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
     <string name="dontnotifyonrotate_option">לא התראה בתנועה</string>
     <string name="dontnotifyonrotate_option_description">לא התראה בתנועה ממסך</string>
     <string name="norotate_option">לא חדש סרטון בתנועה</string>

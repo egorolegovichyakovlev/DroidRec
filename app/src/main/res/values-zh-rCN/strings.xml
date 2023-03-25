@@ -30,11 +30,13 @@
     <string name="samplerate_indicator">音频采样率</string>
     <string name="samplerate_indicator_description">设置自定义的音频采样率</string>
     <string name="audio_channels">音频通道</string>
+    <string name="audio_channels_description">Set audio channels</string>
     <array name="audio_channels_preferences">
         <item name="audio_channels_preferences_option_mono">单声道</item>
         <item name="audio_channels_preferences_option_stereo">立体声</item>
     </array>
-    <string name="audio_channels_description">Set audio channels</string>
+    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
+    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
     <string name="dontnotifyonrotate_option">旋转时不通知</string>
     <string name="dontnotifyonrotate_option_description">屏幕旋转时，不通知新录制开始</string>
     <string name="norotate_option">旋转时不重新启动录制</string>
