@@ -562,6 +562,11 @@ public class ScreenRecorder extends Service {
 
     @SuppressWarnings("deprecation")
     private void screenRecordingStart() {
+        
+        Intent minimizeIntent = new Intent(Intent.ACTION_MAIN);
+        minimizeIntent.addCategory(Intent.CATEGORY_HOME);
+        minimizeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(minimizeIntent);
 
         showFloatingControls = ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == true));
 
