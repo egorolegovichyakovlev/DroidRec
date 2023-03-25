@@ -576,11 +576,6 @@ public class ScreenRecorder extends Service {
             startService(panelIntent);
         }
 
-        Intent minimizeIntent = new Intent(Intent.ACTION_MAIN);
-        minimizeIntent.addCategory(Intent.CATEGORY_HOME);
-        minimizeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(minimizeIntent);
-
         recordMicrophone = appSettings.getBoolean("checksoundmic", false);
 
         recordPlayback = appSettings.getBoolean("checksoundplayback", false);
