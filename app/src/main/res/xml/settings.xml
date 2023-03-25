@@ -80,6 +80,12 @@
             android:defaultValue="@string/audio_channels_preferences_option_default_value" />
 
         <CheckBoxPreference
+            android:key="dontnotifyonfinish"
+            android:summary="@string/dontnotifyonfinish_option_description"
+            android:title="@string/dontnotifyonfinish_option"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
             android:key="dontnotifyonrotate"
             android:summary="@string/dontnotifyonrotate_option_description"
             android:title="@string/dontnotifyonrotate_option"
