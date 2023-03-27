@@ -40,7 +40,16 @@ public class CodecList extends ListPreference {
 
     private ArrayList<String> codecsList = new ArrayList<String>();
 
+    private String prefName;
+
     private void getAllCodecs() {
+        String codecMime = MediaFormat.MIMETYPE_VIDEO_AVC;
+
+        if (prefName == "audiocodecvalue") {
+            codecMime = MediaFormat.MIMETYPE_AUDIO_AAC;
+        }
+
+
         MediaCodecList listCodecs = new MediaCodecList(MediaCodecList.ALL_CODECS);
         MediaCodecInfo[] allCodecsList = listCodecs.getCodecInfos();
         int numCodecs = allCodecsList.length;
@@ -53,7 +62,7 @@ public class CodecList extends ListPreference {
 
             String[] types = codecInfo.getSupportedTypes();
             for (int j = 0; j < types.length; j++) {
-                if (types[j].equalsIgnoreCase(MediaFormat.MIMETYPE_VIDEO_AVC)) {
+                if (types[j].equalsIgnoreCase(codecMime)) {
                     codecsList.add(codecInfo.getName());
                 }
             }
@@ -62,8 +71,14 @@ public class CodecList extends ListPreference {
 
     public CodecList(Context context, AttributeSet attrs) {
         super(context, attrs);
+        prefName = getKey();
         String autoEntry = context.getResources().getString(R.string.codec_option_auto);
         String autoValue = context.getResources().getString(R.string.codec_option_auto_value);
+
+        if (prefName == "audiocodecvalue") {
+            autoEntry = context.getResources().getString(R.string.audio_codec_option_auto);
+            autoValue = context.getResources().getString(R.string.audio_codec_option_auto_value);
+        }
 
         getAllCodecs();
         String[] codecsAllEntries = new String[codecsList.size()+1];

@@ -93,6 +93,8 @@ public class PlaybackRecorder {
 
     private ArrayList<String> codecsList = new ArrayList<String>();
 
+    private ArrayList<String> codecsAudioList = new ArrayList<String>();
+
     private int codecsTryIndex = 0;
 
     private int codecsTryFramerate = 30;
@@ -125,6 +127,10 @@ public class PlaybackRecorder {
 
     private String customCodec;
 
+    private boolean useCustomAudioCodec = false;
+
+    private String customAudioCodec;
+
     private Context mainContext;
 
     private boolean audioOnly;
@@ -136,6 +142,26 @@ public class PlaybackRecorder {
     private long lastPaused = 0;
 
     private long lastTimeout = 0;
+
+    private void getAllAudioCodecs() {
+        MediaCodecList listCodecs = new MediaCodecList(MediaCodecList.ALL_CODECS);
+        MediaCodecInfo[] allCodecsList = listCodecs.getCodecInfos();
+        int numCodecs = allCodecsList.length;
+        for (int i = 0; i < numCodecs; i++) {
+            MediaCodecInfo codecInfo = allCodecsList[i];
+
+            if (!codecInfo.isEncoder()) {
+                continue;
+            }
+
+            String[] types = codecInfo.getSupportedTypes();
+            for (int j = 0; j < types.length; j++) {
+                if (types[j].equalsIgnoreCase(MediaFormat.MIMETYPE_AUDIO_AAC)) {
+                    codecsAudioList.add(codecInfo.getName());
+                }
+            }
+        }
+    }
 
     private void getAllCodecs() {
         MediaCodecList listCodecs = new MediaCodecList(MediaCodecList.ALL_CODECS);
@@ -182,13 +208,14 @@ public class PlaybackRecorder {
         return codecReturn;
     }
 
-    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, int sampleRate, int channelsCount) {
+    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, boolean setCustomAudioCodec, String codecAudioName, int sampleRate, int channelsCount) {
         sampleRateValue = sampleRate;
         channelsCountValue = channelsCount;
         mainContext = appContext;
         audioOnly = recordAudioOnly;
         nativeFramerate = framerate;
         getAllCodecs();
+        getAllAudioCodecs();
         mVirtualDisplay = display;
         mDstDesc = dstDesc;
         videoWidth = width;
@@ -220,6 +247,11 @@ public class PlaybackRecorder {
         if (setCustomCodec == true && codecsList.contains(codecName)) {
             useCustomCodec = setCustomCodec;
             customCodec = codecName;
+        }
+
+        if (setCustomAudioCodec == true && codecsAudioList.contains(codecAudioName)) {
+            useCustomAudioCodec = setCustomAudioCodec;
+            customAudioCodec = codecAudioName;
         }
 
         if (nativeFramerate <= 60) {
@@ -285,7 +317,7 @@ public class PlaybackRecorder {
         if (recordMicrophone == false && recordAudio == false) {
             mAudioEncoder = null;
         } else {
-            mAudioEncoder = new AudioPlaybackRecorder(recordMicrophone, recordAudio, sampleRateValue, channelsCountValue, audioPlaybackProjection, mainContext);
+            mAudioEncoder = new AudioPlaybackRecorder(recordMicrophone, recordAudio, sampleRateValue, channelsCountValue, audioPlaybackProjection, useCustomAudioCodec, customAudioCodec, mainContext);
         }
 
         if (mWorker != null && doRestart == false) {

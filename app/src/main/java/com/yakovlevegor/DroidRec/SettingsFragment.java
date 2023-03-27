@@ -76,8 +76,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             Preference codecPreference = findPreference("codecvalue");
+            Preference audioCodecPreference = findPreference("audiocodecvalue");
             PreferenceCategory codecPreferenceCategory = (PreferenceCategory) findPreference("capturesettings");
             codecPreferenceCategory.removePreference(codecPreference);
+            codecPreferenceCategory.removePreference(audioCodecPreference);
         }
 
     }

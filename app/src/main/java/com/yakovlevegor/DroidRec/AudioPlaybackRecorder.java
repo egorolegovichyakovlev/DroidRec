@@ -78,8 +78,8 @@ class AudioPlaybackRecorder implements Encoder {
 
     private static int audioBufLimit = 2048;
 
-    AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, MediaProjection playbackProjection, Context ctx) {
-        mEncoder = new AudioEncoder(audioRate, channels);
+    AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, MediaProjection playbackProjection, boolean useCustomCodec, String customCodec, Context ctx) {
+        mEncoder = new AudioEncoder(audioRate, channels, useCustomCodec, customCodec);
         mSampleRate = audioRate;
         mChannelsSampleRate = mSampleRate * 2;
         mChannelConfig = AudioFormat.CHANNEL_IN_STEREO;

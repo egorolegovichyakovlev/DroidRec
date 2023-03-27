@@ -799,6 +799,8 @@ public class ScreenRecorder extends Service {
 
         String customCodec = appSettings.getString("codecvalue", getResources().getString(R.string.codec_option_auto_value));
 
+        String customAudioCodec = appSettings.getString("audiocodecvalue", getResources().getString(R.string.audio_codec_option_auto_value));
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             recordingMediaRecorder = new MediaRecorder();
 
@@ -882,7 +884,7 @@ public class ScreenRecorder extends Service {
                 recordingError();
             }
 
-            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec, customSampleRate, customChannelsCount);
+            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec, (!customAudioCodec.contentEquals(getResources().getString(R.string.audio_codec_option_auto_value))), customAudioCodec, customSampleRate, customChannelsCount);
 
             recorderPlayback.start();
         }

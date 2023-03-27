@@ -43,7 +43,17 @@ class AudioEncoder implements Encoder {
 
     private int channelsCount = 2;
 
-    AudioEncoder(int rate, int channels) {
+    private boolean useCustomCodec = false;
+
+    private String codecName;
+
+    public MediaCodec mEncoder;
+
+    private Callback mCallback;
+
+    AudioEncoder(int rate, int channels, boolean setCustomCodec, String customCodecName) {
+        useCustomCodec = setCustomCodec;
+        codecName = customCodecName;
         sampleRate = rate;
         channelsCount = channels;
     }
@@ -62,17 +72,39 @@ class AudioEncoder implements Encoder {
             String[] types = codecInfo.getSupportedTypes();
             for (int j = 0; j < types.length; j++) {
                 if (types[j].equalsIgnoreCase(mimeType)) {
+                    MediaCodecInfo.AudioCapabilities codecCapabilities = codecInfo.getCapabilitiesForType(mimeType).getAudioCapabilities();
+                    if (codecCapabilities.isSampleRateSupported(44100) && codecCapabilities.isSampleRateSupported(48000) && codecCapabilities.getMaxInputChannelCount() >= 2) {
+                        return codecInfo;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < numCodecs; i++) {
+            MediaCodecInfo codecInfo = allCodecsList[i];
+
+            if (!codecInfo.isEncoder()) {
+                continue;
+            }
+
+            String[] types = codecInfo.getSupportedTypes();
+            for (int j = 0; j < types.length; j++) {
+                if (types[j].equalsIgnoreCase(mimeType)) {
                     return codecInfo;
                 }
             }
         }
+
         return null;
     }
 
     protected MediaFormat createMediaFormat() {
-        MediaFormat format = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_AAC, sampleRate, channelsCount);
+        MediaFormat format = new MediaFormat();
+        format.setString(MediaFormat.KEY_MIME, MediaFormat.MIMETYPE_AUDIO_AAC);
+        format.setInteger(MediaFormat.KEY_BIT_RATE, (sampleRate*16*channelsCount));
+        format.setInteger(MediaFormat.KEY_CHANNEL_COUNT, channelsCount);
+        format.setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate);
         format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
-        format.setInteger(MediaFormat.KEY_BIT_RATE, selectCodec(MediaFormat.MIMETYPE_AUDIO_AAC).getCapabilitiesForType(MediaFormat.MIMETYPE_AUDIO_AAC).getAudioCapabilities().getBitrateRange().getUpper());
         return format;
     }
 
@@ -104,7 +136,14 @@ class AudioEncoder implements Encoder {
         MediaFormat format = createMediaFormat();
 
         String mimeType = format.getString(MediaFormat.KEY_MIME);
-        final MediaCodec encoder = createEncoder(mimeType);
+
+        MediaCodec encoder = null;
+
+        if (useCustomCodec == false) {
+            encoder = MediaCodec.createEncoderByType(mimeType);
+        } else {
+            encoder = MediaCodec.createByCodecName(codecName);
+        }
 
         try {
             if (this.mCallback != null) {
@@ -151,9 +190,6 @@ class AudioEncoder implements Encoder {
             mEncoder = null;
         }
     }
-
-    public MediaCodec mEncoder;
-    private Callback mCallback;
 
     private MediaCodec.Callback mCodecCallback = new MediaCodec.Callback() {
         @Override
