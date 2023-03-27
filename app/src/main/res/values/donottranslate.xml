@@ -13,6 +13,7 @@
     </array>
     <string name="dark_theme_option_auto">Automatic</string>
     <string name="codec_option_auto_value">Default</string>
+    <string name="audio_codec_option_auto_value">Default</string>
     <array name="floating_controls_size_preferences_values">
         <item name="floating_controls_size_option_large">Large</item>
         <item name="floating_controls_size_option_normal">Normal</item>

@@ -55,6 +55,13 @@
             android:dialogTitle="@string/codec_option"
             android:defaultValue="@string/codec_option_auto_value" />
 
+        <com.yakovlevegor.DroidRec.CodecList
+            android:key="audiocodecvalue"
+            android:summary="@string/audio_codec_option_description"
+            android:title="@string/audio_codec_option"
+            android:dialogTitle="@string/audio_codec_option"
+            android:defaultValue="@string/audio_codec_option_auto_value" />
+
         <SwitchPreferenceCompat
             android:key="customsamplerate"
             android:summary="@string/samplerate_indicator_custom_description"

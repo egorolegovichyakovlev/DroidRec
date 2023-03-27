@@ -22,9 +22,12 @@
     <string name="bitrate_indicator_custom_description">Ignore automatic bitrate settings</string>
     <string name="bitrate_indicator">Recording bitrate</string>
     <string name="bitrate_indicator_description">Set custom bitrate</string>
-    <string name="codec_option">Choose custom codec</string>
-    <string name="codec_option_description">Set custom codec</string>
+    <string name="codec_option">Choose custom video codec</string>
+    <string name="codec_option_description">Set custom video codec</string>
     <string name="codec_option_auto">Default</string>
+    <string name="audio_codec_option">Choose custom audio codec</string>
+    <string name="audio_codec_option_description">Set custom audio codec</string>
+    <string name="audio_codec_option_auto">Default</string>
     <string name="samplerate_indicator_custom">Custom audio sample rate</string>
     <string name="samplerate_indicator_custom_description">Ignore default sample rate</string>
     <string name="samplerate_indicator">Audio sample rate</string>
