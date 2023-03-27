@@ -797,8 +797,7 @@ public class ScreenRecorder extends Service {
         int bitrateValue = Integer.parseInt(appSettings.getString("bitratevalue", "0"));
 
 
-        String customCodec = appSettings.getString("customcodec", getResources().getString(R.string.codec_option_auto_value));
-
+        String customCodec = appSettings.getString("codecvalue", getResources().getString(R.string.codec_option_auto_value));
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             recordingMediaRecorder = new MediaRecorder();
