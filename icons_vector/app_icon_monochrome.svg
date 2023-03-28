@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46667 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="app_icon_monochrome.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="2048px"
+     inkscape:zoom="1.0819965"
+     inkscape:cx="154.80642"
+     inkscape:cy="305.91597"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path155"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.229079"
+       d="M 67.733333 12.869499 A 54.863998 54.863998 0 0 0 12.869499 67.733333 A 54.863998 54.863998 0 0 0 67.733333 122.59717 A 54.863998 54.863998 0 0 0 122.59717 67.733333 A 54.863998 54.863998 0 0 0 67.733333 12.869499 z M 67.733333 40.301416 A 27.431999 27.431999 0 0 1 95.165251 67.733333 A 27.431999 27.431999 0 0 1 92.626388 79.219454 L 68.982353 65.568608 L 45.339868 51.918278 A 27.431999 27.431999 0 0 1 67.733333 40.301416 z M 42.839762 56.248246 L 66.482247 69.898576 L 90.126282 83.549422 A 27.431999 27.431999 0 0 1 67.733333 95.165251 A 27.431999 27.431999 0 0 1 40.301416 67.733333 A 27.431999 27.431999 0 0 1 42.839762 56.248246 z " />
+    <circle
+       id="path155-6-5"
+       cx="79.544525"
+       cy="55.922134"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.0293264"
+       r="7.0236354" />
+  </g>
+</svg>
