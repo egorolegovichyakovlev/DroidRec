@@ -22,9 +22,12 @@
     <string name="bitrate_indicator_custom_description">忽略自动比特率设置</string>
     <string name="bitrate_indicator">录制比特率</string>
     <string name="bitrate_indicator_description">设置自定义的比特率</string>
-    <string name="codec_option">选择自定义的编解码器</string>
-    <string name="codec_option_description">设置自定义的编解码器</string>
+    <string name="codec_option">选择自定义的视频编解码器</string>
+    <string name="codec_option_description">设置自定义的视频编解码器</string>
     <string name="codec_option_auto">默认</string>
+    <string name="audio_codec_option">选择自定义的音频编解码器</string>
+    <string name="audio_codec_option_description">设置自定义的音频编解码器</string>
+    <string name="audio_codec_option_auto">默认</string>
     <string name="samplerate_indicator_custom">自定义音频采样率</string>
     <string name="samplerate_indicator_custom_description">忽略默认采样率</string>
     <string name="samplerate_indicator">音频采样率</string>
