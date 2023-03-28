@@ -43,14 +43,16 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.yakovlevegor.DroidRec.shake.event.OnShakePreferenceChangeEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class SettingsPanel extends AppCompatActivity {
+public class SettingsPanel extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private SharedPreferences appSettings;
 
@@ -59,6 +61,17 @@ public class SettingsPanel extends AppCompatActivity {
     private AlertDialog dialog;
 
     private static final float BPP = 0.25f;
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+        final Bundle args = pref.getExtras();
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(getClassLoader(), pref.getFragment());
+        fragment.setArguments(args);
+        fragment.setTargetFragment(caller, 0);
+        getSupportFragmentManager().beginTransaction().replace(R.id.settings, fragment).addToBackStack(null).commit();
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

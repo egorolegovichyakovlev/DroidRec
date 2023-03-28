@@ -164,6 +164,12 @@ public class ScreenRecorder extends Service {
 
     private boolean dontNotifyOnFinish = false;
 
+    private boolean mediaAudioSource = true;
+
+    private boolean gameAudioSource = false;
+
+    private boolean unknownAudioSource = false;
+
     private int screenWidthNormal;
 
     private int screenHeightNormal;
@@ -395,6 +401,12 @@ public class ScreenRecorder extends Service {
         dontNotifyOnRotate = appSettings.getBoolean("dontnotifyonrotate", false);
 
         dontNotifyOnFinish = appSettings.getBoolean("dontnotifyonfinish", false);
+
+        mediaAudioSource = appSettings.getBoolean("audsourcemedia", true);
+
+        gameAudioSource = appSettings.getBoolean("audsourcegame", false);
+
+        unknownAudioSource = appSettings.getBoolean("audsourceunknown", false);
 
         intentFlag = PendingIntent.FLAG_UPDATE_CURRENT;
 
@@ -884,7 +896,7 @@ public class ScreenRecorder extends Service {
                 recordingError();
             }
 
-            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec, (!customAudioCodec.contentEquals(getResources().getString(R.string.audio_codec_option_auto_value))), customAudioCodec, customSampleRate, customChannelsCount);
+            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec, (!customAudioCodec.contentEquals(getResources().getString(R.string.audio_codec_option_auto_value))), customAudioCodec, customSampleRate, customChannelsCount, mediaAudioSource, gameAudioSource, unknownAudioSource);
 
             recorderPlayback.start();
         }

@@ -78,7 +78,11 @@ class AudioPlaybackRecorder implements Encoder {
 
     private static int audioBufLimit = 2048;
 
-    AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, MediaProjection playbackProjection, boolean useCustomCodec, String customCodec, Context ctx) {
+    private boolean sourceMedia = false;
+    private boolean sourceGame = false;
+    private boolean sourceUnknown = false;
+
+    AudioPlaybackRecorder(boolean microphone, boolean audio, int audioRate, int channels, MediaProjection playbackProjection, boolean useCustomCodec, String customCodec, Context ctx, boolean recordMedia, boolean recordGame, boolean recordUnknown) {
         mEncoder = new AudioEncoder(audioRate, channels, useCustomCodec, customCodec);
         mSampleRate = audioRate;
         mChannelsSampleRate = mSampleRate * 2;
@@ -91,6 +95,9 @@ class AudioPlaybackRecorder implements Encoder {
         recordAudio = audio;
         mRecordThread = new HandlerThread(TAG);
         mainContext = ctx;
+        sourceMedia = recordMedia;
+        sourceGame = recordGame;
+        sourceUnknown = recordUnknown;
     }
 
     public void setCallback(Callback callback) {
@@ -368,21 +375,25 @@ class AudioPlaybackRecorder implements Encoder {
             .setChannelMask(channelConfig)
             .build();
 
-        AudioPlaybackCaptureConfiguration config = new AudioPlaybackCaptureConfiguration.Builder(captureProjection)
-            .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
-            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-            .addMatchingUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION_SIGNALLING)
-            .addMatchingUsage(AudioAttributes.USAGE_GAME)
-            .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
-            .addMatchingUsage(AudioAttributes.USAGE_ALARM)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-            .addMatchingUsage(AudioAttributes.USAGE_ASSISTANT)
-            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION)
-            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
-            .addMatchingUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-            .build();
+        AudioPlaybackCaptureConfiguration.Builder configBuilder = new AudioPlaybackCaptureConfiguration.Builder(captureProjection);
+
+        if (sourceMedia == false && sourceGame == false && sourceUnknown == false) {
+            configBuilder = configBuilder.addMatchingUsage(AudioAttributes.USAGE_MEDIA);
+        }
+
+        if (sourceMedia == true) {
+            configBuilder = configBuilder.addMatchingUsage(AudioAttributes.USAGE_MEDIA);
+        }
+
+        if (sourceGame == true) {
+            configBuilder = configBuilder.addMatchingUsage(AudioAttributes.USAGE_GAME);
+        }
+
+        if (sourceUnknown == true) {
+            configBuilder = configBuilder.addMatchingUsage(AudioAttributes.USAGE_UNKNOWN);
+        }
+
+        AudioPlaybackCaptureConfiguration config = configBuilder.build();
 
         AudioRecord record = null;
 

@@ -135,6 +135,12 @@ public class PlaybackRecorder {
 
     private boolean audioOnly;
 
+    private boolean audioSourceMedia = false;
+
+    private boolean audioSourceGame = false;
+
+    private boolean audioSourceUnknown = false;
+
     private int sampleRateValue;
 
     private int channelsCountValue;
@@ -208,7 +214,7 @@ public class PlaybackRecorder {
         return codecReturn;
     }
 
-    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, boolean setCustomAudioCodec, String codecAudioName, int sampleRate, int channelsCount) {
+    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, boolean setCustomAudioCodec, String codecAudioName, int sampleRate, int channelsCount, boolean playbackMedia, boolean playbackGame, boolean playbackUnknown) {
         sampleRateValue = sampleRate;
         channelsCountValue = channelsCount;
         mainContext = appContext;
@@ -222,6 +228,10 @@ public class PlaybackRecorder {
         videoHeight = height;
         recordMicrophone = microphone;
         recordAudio = audio;
+
+        audioSourceMedia = playbackMedia;
+        audioSourceGame = playbackGame;
+        audioSourceUnknown = playbackUnknown;
 
         if (recordAudio == true) {
             int channelConfig = AudioFormat.CHANNEL_IN_STEREO;
@@ -317,7 +327,7 @@ public class PlaybackRecorder {
         if (recordMicrophone == false && recordAudio == false) {
             mAudioEncoder = null;
         } else {
-            mAudioEncoder = new AudioPlaybackRecorder(recordMicrophone, recordAudio, sampleRateValue, channelsCountValue, audioPlaybackProjection, useCustomAudioCodec, customAudioCodec, mainContext);
+            mAudioEncoder = new AudioPlaybackRecorder(recordMicrophone, recordAudio, sampleRateValue, channelsCountValue, audioPlaybackProjection, useCustomAudioCodec, customAudioCodec, mainContext, audioSourceMedia, audioSourceGame, audioSourceUnknown);
         }
 
         if (mWorker != null && doRestart == false) {
