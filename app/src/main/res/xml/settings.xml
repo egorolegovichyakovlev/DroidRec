@@ -104,6 +104,12 @@
             android:defaultValue="false" />
 
         <CheckBoxPreference
+            android:key="minimizeonstart"
+            android:summary="@string/minimizeonstart_option_description"
+            android:title="@string/minimizeonstart_option"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
             android:key="norotate"
             android:summary="@string/norotate_option_description"
             android:title="@string/norotate_option"

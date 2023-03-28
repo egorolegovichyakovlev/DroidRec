@@ -46,6 +46,8 @@
     <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
     <string name="dontnotifyonrotate_option">Don\'t notify on rotate</string>
     <string name="dontnotifyonrotate_option_description">Don\'t notify on new recording start when screen rotates</string>
+    <string name="minimizeonstart_option">Minimize on start</string>
+    <string name="minimizeonstart_option_description">Minimize the app when a new recording starts</string>
     <string name="norotate_option">Don\'t restart recording on rotate</string>
     <string name="norotate_option_description">WARNING: If enabled, your video will lose quality after rotation!</string>
     <string name="controls_settings">Controls settings</string>

@@ -170,6 +170,8 @@ public class ScreenRecorder extends Service {
 
     private boolean unknownAudioSource = false;
 
+    private boolean minimizeOnStart = false;
+
     private int screenWidthNormal;
 
     private int screenHeightNormal;
@@ -408,6 +410,8 @@ public class ScreenRecorder extends Service {
 
         unknownAudioSource = appSettings.getBoolean("audsourceunknown", false);
 
+        minimizeOnStart = appSettings.getBoolean("minimizeonstart", false);
+
         intentFlag = PendingIntent.FLAG_UPDATE_CURRENT;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -574,11 +578,13 @@ public class ScreenRecorder extends Service {
 
     @SuppressWarnings("deprecation")
     private void screenRecordingStart() {
-        
-        Intent minimizeIntent = new Intent(Intent.ACTION_MAIN);
-        minimizeIntent.addCategory(Intent.CATEGORY_HOME);
-        minimizeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(minimizeIntent);
+
+        if (minimizeOnStart == true) {
+            Intent minimizeIntent = new Intent(Intent.ACTION_MAIN);
+            minimizeIntent.addCategory(Intent.CATEGORY_HOME);
+            minimizeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(minimizeIntent);
+        }
 
         showFloatingControls = ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == true));
 
