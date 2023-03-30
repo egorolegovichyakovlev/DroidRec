@@ -22,9 +22,16 @@
     <string name="bitrate_indicator_custom_description">Ignorar taxa de bits automática</string>
     <string name="bitrate_indicator">Taxa de bits de gravação</string>
     <string name="bitrate_indicator_description">Selecionar taxa de bits</string>
-    <string name="codec_option">Codecs</string>
-    <string name="codec_option_description">Selecionar outro codec de gravação</string>
+    <string name="audio_sources_list">Selecionar origens de áudio input</string>
+    <string name="audio_source_media">Média origem de áudio</string>
+    <string name="audio_source_game">Game origem de áudio</string>
+    <string name="audio_source_unknown">Desconhecida origem de áudio</string>
+    <string name="codec_option">Codecs de vídeo</string>
+    <string name="codec_option_description">Selecionar outro codec de vídeo gravação</string>
     <string name="codec_option_auto">Padrão</string>
+    <string name="audio_codec_option">Codecs de áudio</string>
+    <string name="audio_codec_option_description">Selecionar outro codec de áudio gravação</string>
+    <string name="audio_codec_option_auto">Padrão</string>
     <string name="samplerate_indicator_custom">Taxa de amost. de áudio</string>
     <string name="samplerate_indicator_custom_description">Ignorar taxa de amostragem de áudio automática</string>
     <string name="samplerate_indicator">Mudar taxa de amostragem</string>
@@ -35,10 +42,12 @@
         <item name="audio_channels_preferences_option_mono">Mono</item>
         <item name="audio_channels_preferences_option_stereo">Estéreo</item>
     </array>
-    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
-    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
+    <string name="dontnotifyonfinish_option">Não notificar ao final</string>
+    <string name="dontnotifyonfinish_option_description">Não notificar ao final de gravação</string>
     <string name="dontnotifyonrotate_option">Não notificar ao rotacionar</string>
     <string name="dontnotifyonrotate_option_description">Não notificar ao rotacionar a tela</string>
+    <string name="minimizeonstart_option">Minimizar ao começo</string>
+    <string name="minimizeonstart_option_description">Minimizar ao começo de gravação</string>
     <string name="norotate_option">Não reiniciar grav. ao rotacionar</string>
     <string name="norotate_option_description">AVISO: Se habilitado, a gravação perderá qualidade ao rotacionar!</string>
     <string name="controls_settings">Configurações de controles</string>
@@ -64,6 +73,14 @@
         <item name="dark_theme_option_dark">Escuro</item>
         <item name="dark_theme_option_light">Claro</item>
         <item name="dark_theme_option_auto_item">Automático</item>
+    </array>
+    <string name="on_shake_option_summary">Ação ao sacudir de aparelho</string>
+    <string name="on_shake_option_title">Ao sacudir</string>
+    <string name="on_shake_dialog">Ao sacudir dialogar</string>
+    <array name="on_shake_option_preferences">
+        <item name="on_shake_option_nothing">Fazer nada</item>
+        <item name="on_shake_option_pause">Pausar</item>
+        <item name="on_shake_option_stop">Parar</item>
     </array>
     <string name="dark_theme_change_notice">Abra o aplicativo novamente para aplicar o tema</string>
     <string name="on_shake_option_summary">Ação na vibração do dispositivo</string>

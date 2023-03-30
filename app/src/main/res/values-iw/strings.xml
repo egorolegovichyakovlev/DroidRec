@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DroidRec</string>
-    <string name="record_start">התחיל לרשום</string>
-    <string name="record_stop">עמד לרשום</string>
-    <string name="record_pause">שבת לרשום</string>
-    <string name="record_resume">משך לרשום</string>
+    <string name="record_start">התחיל לרשם</string>
+    <string name="record_stop">עמד לרשם</string>
+    <string name="record_pause">שבת לרשם</string>
+    <string name="record_resume">משך לרשם</string>
     <string name="settings_title">הגדרות</string>
-    <string name="capture_settings">הגדרות מרשום</string>
+    <string name="capture_settings">הגדרות מרשם</string>
     <string name="quality_indicator_custom">שונה איכות מוידאו</string>
     <string name="quality_indicator_custom_description">התעלם תקנות הגדרות מוידאו</string>
     <string name="quality_indicator">איכות מוידאו</string>
@@ -22,9 +22,16 @@
     <string name="bitrate_indicator_custom_description">התעלם תקנות הגדרות מביטים בשניה</string>
     <string name="bitrate_indicator">ביטימ בשניה מוידאו</string>
     <string name="bitrate_indicator_description">הגדיר שונה כמהו מביטים בשניה</string>
+    <string name="audio_sources_list">שונה המקור משמע</string>
+    <string name="audio_source_media">תקשורת מקור משמע</string>
+    <string name="audio_source_game">מסחק מקור משמע</string>
+    <string name="audio_source_unknown">אנונימי מקור משמע</string>
     <string name="codec_option">שונה אנקודר מוידאו</string>
-    <string name="codec_option_description">הגדיר שונה אנקודר</string>
+    <string name="codec_option_description">הגדיר שונה וידאו אנקודר</string>
     <string name="codec_option_auto">תקן</string>
+    <string name="audio_codec_option">שונה אנקודר משמע</string>
+    <string name="audio_codec_option_description">הגדיר שונה שמע אנקודר</string>
+    <string name="audio_codec_option_auto">תקן</string>
     <string name="samplerate_indicator_custom">שונה שמע דוגמות בשניה</string>
     <string name="samplerate_indicator_custom_description">התעלם תקנות הגדרות שמע דוגמות בשניה</string>
     <string name="samplerate_indicator">שמע דוגמות בשניה</string>
@@ -35,10 +42,12 @@
         <item name="audio_channels_preferences_option_mono">מונו</item>
         <item name="audio_channels_preferences_option_stereo">סטראו</item>
     </array>
-    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
-    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
+    <string name="dontnotifyonfinish_option">לא התראה בסוף</string>
+    <string name="dontnotifyonfinish_option_description">לא התראה בסוף מסרטון</string>
     <string name="dontnotifyonrotate_option">לא התראה בתנועה</string>
     <string name="dontnotifyonrotate_option_description">לא התראה בתנועה ממסך</string>
+    <string name="minimizeonstart_option">סגר ייסום מתי התחלה</string>
+    <string name="minimizeonstart_option_description">סגר ייסום מתי התחיל לרשם</string>
     <string name="norotate_option">לא חדש סרטון בתנועה</string>
     <string name="norotate_option_description">זהירות: אלו החליף בתנועה וידאו אבד איכות!</string>
     <string name="controls_settings">הגדרות מממשקים</string>
@@ -65,8 +74,15 @@
         <item name="dark_theme_option_light">בהיר</item>
         <item name="dark_theme_option_auto_item">בחר תקן</item>
     </array>
+    <string name="on_shake_option_summary">פעלה אם זעזוע ממכשיר</string>
+    <string name="on_shake_option_title">אם זעזוע</string>
+    <string name="on_shake_dialog">בחירה פעלה אם זעזוע</string>
+    <array name="on_shake_option_preferences">
+        <item name="on_shake_option_nothing">ללא פעלה</item>
+        <item name="on_shake_option_pause">שבת</item>
+        <item name="on_shake_option_stop">עמד</item>
+    </array>
     <string name="dark_theme_change_notice">שוב היישום התחיל לעדכון הנושא</string>
-
     <string name="on_shake_option_summary">פעולה על רעידות המכשיר</string>
     <string name="on_shake_option_title">על שייק</string>
     <string name="on_shake_dialog">בשיחת ניעור</string>
@@ -81,16 +97,16 @@
     <string name="overlay_notice_button">פתח הגדרות</string>
     <string name="recording_tile">כתב מהסרטון</string>
     <string name="recording_started_title">בכתב מהסרטון</string>
-    <string name="recording_started_text">בהיה לרשום</string>
+    <string name="recording_started_text">בהיה לרשם</string>
     <string name="recording_audio_started_title">בכתב מהשמע</string>
-    <string name="recording_audio_started_text">בהיה לרשום משמע</string>
-    <string name="recording_paused_title">לרשום ממסך בהפוגה</string>
+    <string name="recording_audio_started_text">בהיה לרשם משמע</string>
+    <string name="recording_paused_title">לרשם ממסך בהפוגה</string>
     <string name="recording_paused_text">מסך בהפוגה</string>
-    <string name="recording_audio_paused_title">לרשום משמע בהפוגה</string>
+    <string name="recording_audio_paused_title">לרשם משמע בהפוגה</string>
     <string name="recording_audio_paused_text">שמע בהפוגה</string>
-    <string name="recording_finished_title">לרשום מסרטון המוכן</string>
+    <string name="recording_finished_title">לרשם מסרטון המוכן</string>
     <string name="recording_finished_text">סרטון מוכן</string>
-    <string name="recording_audio_finished_title">לרשום משמע המוכן</string>
+    <string name="recording_audio_finished_title">לרשם משמע המוכן</string>
     <string name="recording_audio_finished_text">שמע המוכן</string>
     <string name="recording_rotated_title">מסך הפך</string>
     <string name="recording_rotated_text">הסרטון החדש</string>
@@ -105,11 +121,12 @@
     <string name="error_storage_select_folder">טעות: אין נתיב</string>
     <string name="error_audio_required">טעות: לא רשיון משמע</string>
     <string name="error_invalid_folder">טעות: הנתיב הרע</string>
-    <string name="error_recorder_failed">טעות: שגיאה מלרשום</string>
+    <string name="error_recorder_failed">טעות: שגיאה מלרשם</string>
     <string name="error_recorder_codec_error">טעות: שגאיאה מאנקודר</string>
+    <string name="error_playback_not_allowed">טעות: כתיבה משמע אסור</string>
     <string name="setting_recordings_folder">שקע נתיב</string>
     <string name="setting_record_type_video">וידאו</string>
     <string name="setting_record_type_audio">שמע יחיד</string>
-    <string name="setting_audio_record_microphone_sound">רשום ממיקרופון</string>
-    <string name="setting_audio_record_playback_sound">רשום משמע</string>
+    <string name="setting_audio_record_microphone_sound">רשם ממיקרופון</string>
+    <string name="setting_audio_record_playback_sound">רשם משמע</string>
 </resources>

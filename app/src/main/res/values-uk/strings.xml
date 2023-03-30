@@ -22,9 +22,16 @@
     <string name="bitrate_indicator_custom_description">Ігнорувати автоматичний бітрейт запису</string>
     <string name="bitrate_indicator">Бітрейт запису</string>
     <string name="bitrate_indicator_description">Визначати бітрейт</string>
-    <string name="codec_option">Модифікувати кодек</string>
-    <string name="codec_option_description">Визначати кодек</string>
+    <string name="audio_sources_list">Визначати джерела входу аудіо</string>
+    <string name="audio_source_media">Медіа аудіо джерело</string>
+    <string name="audio_source_game">Гра аудіо джерело</string>
+    <string name="audio_source_unknown">Невідоме аудіо джерело</string>
+    <string name="codec_option">Модифікувати відео кодек</string>
+    <string name="codec_option_description">Визначати відео кодек</string>
     <string name="codec_option_auto">Стандартний</string>
+    <string name="audio_codec_option">Модифікувати аудіо кодек</string>
+    <string name="audio_codec_option_description">Визначати аудіо кодек</string>
+    <string name="audio_codec_option_auto">Стандартний</string>
     <string name="samplerate_indicator_custom">Модифікувати частоту дискретизації звуку</string>
     <string name="samplerate_indicator_custom_description">Ігнорувати автоматичну частоту дискретизації звуку</string>
     <string name="samplerate_indicator">Частота дискретизації звуку</string>
@@ -35,10 +42,12 @@
         <item name="audio_channels_preferences_option_mono">Моно</item>
         <item name="audio_channels_preferences_option_stereo">Стерео</item>
     </array>
-    <string name="dontnotifyonfinish_option">Don\'t notify on finish</string>
-    <string name="dontnotifyonfinish_option_description">Don\'t get notified that recording just finished</string>
+    <string name="dontnotifyonfinish_option">Не повідомляти про кінець</string>
+    <string name="dontnotifyonfinish_option_description">Не повідомляти про кінець запису</string>
     <string name="dontnotifyonrotate_option">Не повідомляти про зміну орієнтації екрана</string>
     <string name="dontnotifyonrotate_option_description">Не повідомляти про нову запис в разі зміну орієнтації екрана</string>
+    <string name="minimizeonstart_option">Мінімізувати коли нова запис</string>
+    <string name="minimizeonstart_option_description">Мінімізувати коли нова запис розпочала</string>
     <string name="norotate_option">Не розпочати нову запис в разі зміну орієнтації екрана</string>
     <string name="norotate_option_description">Попередження: Якшо вибрано, відео втратить якість в разі зміну орієнтації екрана!</string>
     <string name="controls_settings">Параметри інтерфейсу</string>
@@ -105,6 +114,7 @@
     <string name="error_invalid_folder">Помилка: хибний каталог записів</string>
     <string name="error_recorder_failed">Помилка: не вдалося записати</string>
     <string name="error_recorder_codec_error">Помилка: збій кодека</string>
+    <string name="error_playback_not_allowed">Помилка: запис аудіо заборонена</string>
     <string name="setting_recordings_folder">Змінити каталог записів</string>
     <string name="setting_record_type_video">Відео</string>
     <string name="setting_record_type_audio">Тільки аудіо</string>
