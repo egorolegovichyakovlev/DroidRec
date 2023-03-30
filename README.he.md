@@ -7,6 +7,8 @@
 
 לרשם משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
 
+(זחירות: לא כליהון מכשירים יכלים לרשם כליהון מקרים משמע או כלל)
+
 <img src="metadata/iw/images/phoneScreenshots/1.jpg" alt="DroidRec צילם" width="400"/>
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
