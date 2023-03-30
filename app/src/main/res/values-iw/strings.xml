@@ -74,14 +74,6 @@
         <item name="dark_theme_option_light">בהיר</item>
         <item name="dark_theme_option_auto_item">בחר תקן</item>
     </array>
-    <string name="on_shake_option_summary">פעלה אם זעזוע ממכשיר</string>
-    <string name="on_shake_option_title">אם זעזוע</string>
-    <string name="on_shake_dialog">בחירה פעלה אם זעזוע</string>
-    <array name="on_shake_option_preferences">
-        <item name="on_shake_option_nothing">ללא פעלה</item>
-        <item name="on_shake_option_pause">שבת</item>
-        <item name="on_shake_option_stop">עמד</item>
-    </array>
     <string name="dark_theme_change_notice">שוב היישום התחיל לעדכון הנושא</string>
     <string name="on_shake_option_summary">פעולה על רעידות המכשיר</string>
     <string name="on_shake_option_title">על שייק</string>

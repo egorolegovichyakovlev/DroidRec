@@ -74,14 +74,6 @@
         <item name="dark_theme_option_light">Claro</item>
         <item name="dark_theme_option_auto_item">Automático</item>
     </array>
-    <string name="on_shake_option_summary">Ação ao sacudir de aparelho</string>
-    <string name="on_shake_option_title">Ao sacudir</string>
-    <string name="on_shake_dialog">Ao sacudir dialogar</string>
-    <array name="on_shake_option_preferences">
-        <item name="on_shake_option_nothing">Fazer nada</item>
-        <item name="on_shake_option_pause">Pausar</item>
-        <item name="on_shake_option_stop">Parar</item>
-    </array>
     <string name="dark_theme_change_notice">Abra o aplicativo novamente para aplicar o tema</string>
     <string name="on_shake_option_summary">Ação na vibração do dispositivo</string>
     <string name="on_shake_option_title">Ao agitar</string>
