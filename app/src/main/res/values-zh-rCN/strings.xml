@@ -22,6 +22,10 @@
     <string name="bitrate_indicator_custom_description">忽略自动比特率设置</string>
     <string name="bitrate_indicator">录制比特率</string>
     <string name="bitrate_indicator_description">设置自定义的比特率</string>
+    <string name="audio_sources_list">选择输入音频源</string>
+    <string name="audio_source_media">媒体音频源</string>
+    <string name="audio_source_game">游戏音频源</string>
+    <string name="audio_source_unknown">未知音频源</string>
     <string name="codec_option">选择自定义的视频编解码器</string>
     <string name="codec_option_description">设置自定义的视频编解码器</string>
     <string name="codec_option_auto">默认</string>
@@ -42,6 +46,8 @@
     <string name="dontnotifyonfinish_option_description">不提示刚刚完成了录制</string>
     <string name="dontnotifyonrotate_option">旋转时不通知</string>
     <string name="dontnotifyonrotate_option_description">屏幕旋转时，不通知新录制开始</string>
+    <string name="minimizeonstart_option">启动时最小化</string>
+    <string name="minimizeonstart_option_description">开始新录制时最小化应用</string>
     <string name="norotate_option">旋转时不重新启动录制</string>
     <string name="norotate_option_description">警告：一旦启用, 你的视频在旋转后将丢失分辨率！</string>
     <string name="controls_settings">控件设置</string>
