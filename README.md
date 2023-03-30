@@ -7,7 +7,7 @@ DroidRec is an open-source Android screen recorder.
 
 Audio Playback recording requires Android 10 or later. No Root needed.
 
-(**WARNING**: Some device vendors still don't allow recording Audio Playback)
+(**WARNING**: Some device vendors may not allow recording some Audio Playback sources, or even recording it at all)
 
 <img src="metadata/en-US/images/phoneScreenshots/1.jpg" alt="DroidRec Screenshot" width="400"/>
 
