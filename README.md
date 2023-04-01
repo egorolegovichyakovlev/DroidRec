@@ -15,6 +15,8 @@ Audio Playback recording requires Android 10 or later. No Root needed.
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.yakovlevegor.DroidRec/)
 
+[Unofficial release on Play Store](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
+
 Or download the apk from [the release section](https://github.com/yakovlevegor/DroidRec/releases).
 
 ## Building

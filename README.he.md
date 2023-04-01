@@ -15,6 +15,8 @@
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.yakovlevegor.DroidRec/)
 
+[לא מקורי בPlay Store](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
+
 [רכש היישום](https://github.com/yakovlevegor/DroidRec/releases)
 
 ## בנוה
