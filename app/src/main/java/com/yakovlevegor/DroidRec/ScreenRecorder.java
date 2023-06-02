@@ -372,7 +372,10 @@ public class ScreenRecorder extends Service {
                         DocumentsContract.deleteDocument(getContentResolver(), finishedFileDocument);
                     } catch (Exception e) {}
                 }
-                recordingNotificationManager.cancel(NOTIFICATION_RECORDING_FINISHED_ID);
+
+                if (recordingNotificationManager != null) {
+                    recordingNotificationManager.cancel(NOTIFICATION_RECORDING_FINISHED_ID);
+                }
             }
         }
 
