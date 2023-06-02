@@ -230,11 +230,14 @@ public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> requestRecordingPermission = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
+            if (result != null) {
 
-            int requestCode = result.getResultCode();
+                int requestCode = result.getResultCode();
 
-            if (requestCode == RESULT_OK && recordingBinder != null) {
-                doStartService(requestCode, result.getData());
+                if (requestCode == RESULT_OK && recordingBinder != null) {
+                    doStartService(requestCode, result.getData());
+                }
+
             }
 
         }
@@ -243,18 +246,22 @@ public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> requestFolderPermission = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
+            if (result != null) {
 
-            requestFolder(result.getResultCode(), result.getData().getData(), false);
+                requestFolder(result.getResultCode(), result.getData().getData(), false);
 
+            }
         }
     });
 
     private final ActivityResultLauncher<Intent> requestFolderPermissionAndProceed = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
+            if (result != null) {
 
-            requestFolder(result.getResultCode(), result.getData().getData(), false);
+                requestFolder(result.getResultCode(), result.getData().getData(), false);
 
+            }
         }
     });
 
