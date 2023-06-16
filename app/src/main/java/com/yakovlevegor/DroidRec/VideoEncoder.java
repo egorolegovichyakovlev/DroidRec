@@ -77,9 +77,6 @@ class VideoEncoder implements Encoder {
 
     protected void onEncoderConfigured(MediaCodec encoder) {
         mSurface = encoder.createInputSurface();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            mSurface.setFrameRate((float)(screenFramerate), Surface.FRAME_RATE_COMPATIBILITY_DEFAULT);
-        }
     }
 
     protected MediaFormat createMediaFormat() {
