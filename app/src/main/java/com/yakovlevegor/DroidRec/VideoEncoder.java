@@ -72,7 +72,10 @@ class VideoEncoder implements Encoder {
     public void suspendCodec(int suspend) {
         Bundle params = new Bundle();
         params.putInt(MediaCodec.PARAMETER_KEY_SUSPEND, suspend);
-        mEncoder.setParameters(params);
+
+        if (mEncoder != null) {
+            mEncoder.setParameters(params);
+        }
     }
 
     protected void onEncoderConfigured(MediaCodec encoder) {
