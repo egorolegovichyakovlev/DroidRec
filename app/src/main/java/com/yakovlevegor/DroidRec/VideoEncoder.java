@@ -87,7 +87,7 @@ class VideoEncoder implements Encoder {
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
         format.setInteger(MediaFormat.KEY_BIT_RATE, usedBitrate);
         format.setInteger(MediaFormat.KEY_FRAME_RATE, screenFramerate);
-        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
+        format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 5);
 
         if (codecProfileLevel != null && codecProfileLevel.profile != 0 && codecProfileLevel.level != 0) {
             format.setInteger(MediaFormat.KEY_PROFILE, codecProfileLevel.profile);
