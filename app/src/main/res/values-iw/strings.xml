@@ -116,7 +116,7 @@
     <string name="error_recorder_failed">טעות: שגיאה מלרשם</string>
     <string name="error_recorder_codec_error">טעות: שגאיאה מאנקודר</string>
     <string name="error_playback_not_allowed">טעות: כתיבה משמע אסור</string>
-    <string name="setting_recordings_folder">שקע נתיב</string>
+    <string name="setting_video_recordings_folder">שקע נתיב</string>
     <string name="setting_record_type_video">וידאו</string>
     <string name="setting_record_type_audio">שמע יחיד</string>
     <string name="setting_audio_record_microphone_sound">רשם ממיקרופון</string>

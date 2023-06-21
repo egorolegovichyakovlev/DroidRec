@@ -95,7 +95,7 @@
     <string name="error_recorder_failed">Fehler: Aufnahme fehlgeschlagen</string>
     <string name="error_recorder_codec_error">Fehler: Codec Fehler</string>
     <string name="error_playback_not_allowed">Fehler: Audio-Wiedergabe-Aufnahme nicht erlaubt</string>
-    <string name="setting_recordings_folder">Ordner für Aufnahmen ändern</string>
+    <string name="setting_video_recordings_folder">Ordner für Aufnahmen ändern</string>
     <string name="setting_record_type_video">Video</string>
     <string name="setting_record_type_audio">Nur Audio</string>
     <string name="setting_audio_record_microphone_sound">Mikrofon aufnehmen</string>

@@ -95,7 +95,7 @@
     <string name="error_recorder_failed">Feil: Opptak mislyktes</string>
     <string name="error_recorder_codec_error">Error: Codec error</string>
     <string name="error_playback_not_allowed">Feil: Opptak av lydavspilling ikke tillatt</string>
-    <string name="setting_recordings_folder">Endre opptaksmappe</string>
+    <string name="setting_video_recordings_folder">Endre opptaksmappe</string>
     <string name="setting_record_type_video">Video</string>
     <string name="setting_record_type_audio">Bare lyd</string>
     <string name="setting_audio_record_microphone_sound">Ta opp mikrofon</string>

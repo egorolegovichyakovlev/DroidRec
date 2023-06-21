@@ -70,11 +70,22 @@
             android:background="#00000000"
             android:textSize="12sp"
             android:drawableStart="@drawable/icon_save_folder"
-            android:text="@string/setting_recordings_folder" />
+            android:text="@string/setting_video_recordings_folder" />
+
+        <Button
+            android:id="@+id/recordaudiofolder"
+            android:layout_below="@id/recordfolder"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="#00000000"
+            android:textSize="12sp"
+            android:drawableStart="@drawable/icon_save_folder"
+            android:text="@string/setting_audio_recordings_folder" />
 
         <Button
             android:id="@+id/recordsettings"
-            android:layout_below="@id/recordfolder"
+            android:layout_below="@id/recordaudiofolder"
             android:layout_centerHorizontal="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"

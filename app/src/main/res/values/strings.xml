@@ -118,7 +118,8 @@
     <string name="error_recorder_failed">Error: Recording failed</string>
     <string name="error_recorder_codec_error">Error: Codec error</string>
     <string name="error_playback_not_allowed">Error: Audio Playback recording not allowed</string>
-    <string name="setting_recordings_folder">Change recordings folder</string>
+    <string name="setting_video_recordings_folder">Video recordings folder</string>
+    <string name="setting_audio_recordings_folder">Audio recordings folder</string>
     <string name="setting_record_type_video">Video</string>
     <string name="setting_record_type_audio">Audio only</string>
     <string name="setting_audio_record_microphone_sound">Record microphone</string>

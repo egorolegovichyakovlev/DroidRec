@@ -75,12 +75,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_READ = 57206;
-
-    private static final int REQUEST_READ_RECORD = 57226;
-
-    private static final int REQUEST_RECORD = 59706;
-
     private static final int REQUEST_MICROPHONE = 56808;
 
     private static final int REQUEST_MICROPHONE_PLAYBACK = 59465;
@@ -88,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_MICROPHONE_RECORD = 58467;
 
     private static final int REQUEST_STORAGE = 58593;
+
+    private static final int REQUEST_STORAGE_AUDIO = 58563;
 
     private static final int REQUEST_MODE_CHANGE = 58857;
 
@@ -109,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button stopRecording;
 
-    Button chooseFolder;
+    Button chooseVideoFolder;
+
+    Button chooseAudioFolder;
 
     Button showSettings;
 
@@ -199,8 +197,8 @@ public class MainActivity extends AppCompatActivity {
             stopRecording.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.icon_stop_color_action_normal, 0, 0, 0);
         }
 
-        void resetDir() {
-            resetFolder();
+        void resetDir(boolean isAudio) {
+            resetFolder(isAudio);
         }
     }
 
@@ -248,23 +246,45 @@ public class MainActivity extends AppCompatActivity {
         public void onActivityResult(ActivityResult result) {
             if (result != null) {
 
-                requestFolder(result.getResultCode(), result.getData().getData(), false);
+                requestFolder(result.getResultCode(), result.getData().getData(), false, false);
 
             }
         }
     });
+
+    private final ActivityResultLauncher<Intent> requestAudioFolderPermission = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result != null) {
+
+                requestFolder(result.getResultCode(), result.getData().getData(), false, true);
+
+            }
+        }
+    });
+
 
     private final ActivityResultLauncher<Intent> requestFolderPermissionAndProceed = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result != null) {
 
-                requestFolder(result.getResultCode(), result.getData().getData(), false);
+                requestFolder(result.getResultCode(), result.getData().getData(), true, false);
 
             }
         }
     });
 
+    private final ActivityResultLauncher<Intent> requestAudioFolderPermissionAndProceed = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result != null) {
+
+                requestFolder(result.getResultCode(), result.getData().getData(), true, true);
+
+            }
+        }
+    });
 
 
     void doStartService(int result, Intent data) {
@@ -378,7 +398,8 @@ public class MainActivity extends AppCompatActivity {
         pauseRecording = (Button) findViewById(R.id.recordpausebutton);
         resumeRecording = (Button) findViewById(R.id.recordresumebutton);
         stopRecording = (Button) findViewById(R.id.recordstopbutton);
-        chooseFolder = (Button) findViewById(R.id.recordfolder);
+        chooseVideoFolder = (Button) findViewById(R.id.recordfolder);
+        chooseAudioFolder = (Button) findViewById(R.id.recordaudiofolder);
         showSettings = (Button) findViewById(R.id.recordsettings);
         recMicrophone = (CheckBox) findViewById(R.id.checksoundmic);
         recPlayback = (CheckBox) findViewById(R.id.checksoundplayback);
@@ -480,9 +501,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        chooseFolder.setOnClickListener(new View.OnClickListener() {
+        chooseVideoFolder.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                chooseDir(false);
+                chooseDir(false, false);
+            }
+        });
+
+        chooseAudioFolder.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                chooseDir(false, true);
             }
         });
 
@@ -504,8 +531,11 @@ public class MainActivity extends AppCompatActivity {
         recordModeChosen = mode;
 
         if (mode == false) {
-
+            chooseAudioFolder.setVisibility(View.GONE);
+            chooseVideoFolder.setVisibility(View.VISIBLE);
         } else if (mode == true) {
+            chooseVideoFolder.setVisibility(View.GONE);
+            chooseAudioFolder.setVisibility(View.VISIBLE);
             if (!(appSettings.getBoolean("checksoundplayback", false) == true && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) {
                  recMicrophone.setChecked(true);
                  appSettingsEditor.putBoolean("checksoundmic", true);
@@ -549,9 +579,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void checkDirRecord() {
-        if (appSettings.getString("folderpath", "NULL") == "NULL") {
-            chooseDir(true);
+    public void checkDirRecord(boolean isAudio) {
+        String audioPathPrefix = appSettings.getString("folderpath", "NULL");
+
+        if (isAudio == true) {
+            audioPathPrefix = appSettings.getString("folderaudiopath", "NULL");
+        }
+
+        if (audioPathPrefix == "NULL") {
+            chooseDir(true, isAudio);
         } else {
             proceedRecording();
         }
@@ -578,20 +614,24 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(accesspermission, REQUEST_MICROPHONE_RECORD);
                 } else if (extStoragePermissionDenied && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     String accesspermission[] = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                    requestPermissions(accesspermission, REQUEST_STORAGE);
+                    if (appSettings.getBoolean("recordmode", false) == false) {
+                        requestPermissions(accesspermission, REQUEST_STORAGE);
+                    } else {
+                        requestPermissions(accesspermission, REQUEST_STORAGE_AUDIO);
+                    }
                 } else if ((appSettings.getBoolean("floatingcontrols", false) == true) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (Settings.canDrawOverlays(this) == false)) {
                     appSettingsEditor.putBoolean("floatingcontrols", false);
                     appSettingsEditor.commit();
                     requestOverlayDisplayPermission();
                 } else {
-                    checkDirRecord();
+                    checkDirRecord(appSettings.getBoolean("recordmode", false));
                 }
 
             }
         }
     }
 
-    private void requestFolder(int resultCode, Uri extrauri, boolean proceedToRecording) {
+    private void requestFolder(int resultCode, Uri extrauri, boolean proceedToRecording, boolean isAudio) {
         if (resultCode == RESULT_OK) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -600,7 +640,12 @@ public class MainActivity extends AppCompatActivity {
                 getContentResolver().takePersistableUriPermission(extrauri, takeFlags);
             }
 
-            appSettingsEditor.putString("folderpath", extrauri.toString());
+            if (isAudio == true) {
+                appSettingsEditor.putString("folderaudiopath", extrauri.toString());
+            } else {
+                appSettingsEditor.putString("folderpath", extrauri.toString());
+            }
+
             appSettingsEditor.commit();
 
             if (proceedToRecording == true) {
@@ -609,8 +654,14 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
-            if (appSettings.getString("folderpath", "NULL") == "NULL") {
-                Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show();
+            if (isAudio == true) {
+                if (appSettings.getString("folderaudiopath", "NULL") == "NULL") {
+                    Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (appSettings.getString("folderpath", "NULL") == "NULL") {
+                    Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show();
+                }
             }
 
         }
@@ -626,23 +677,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void resetFolder() {
-        appSettingsEditor.remove("folderpath");
+    void resetFolder(boolean isAudio) {
+        if (isAudio == true) {
+            appSettingsEditor.remove("folderaudiopath");
+        } else {
+            appSettingsEditor.remove("folderpath");
+        }
+
         appSettingsEditor.commit();
         Toast.makeText(this, R.string.error_invalid_folder, Toast.LENGTH_SHORT).show();
-        chooseDir(true);
+        chooseDir(true, isAudio);
     }
 
-    void chooseDir(boolean toRecording) {
-        int reqcode = REQUEST_READ;
+    void chooseDir(boolean toRecording, boolean isAudio) {
 
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 
         if (toRecording == true) {
-            reqcode = REQUEST_READ_RECORD;
-            requestFolderPermissionAndProceed.launch(intent);
+            if (isAudio == true) {
+                requestAudioFolderPermissionAndProceed.launch(intent);
+            } else {
+                requestFolderPermissionAndProceed.launch(intent);
+            }
         } else {
-            requestFolderPermission.launch(intent);
+            if (isAudio == true) {
+                requestAudioFolderPermission.launch(intent);
+            } else {
+                requestFolderPermission.launch(intent);
+            }
         }
 
     }
@@ -685,13 +747,19 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_MICROPHONE_RECORD) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkDirRecord();
+                checkDirRecord(appSettings.getBoolean("recordmode", false));
             } else {
                 Toast.makeText(this, R.string.error_audio_required, Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == REQUEST_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkDirRecord();
+                checkDirRecord(false);
+            } else {
+                Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == REQUEST_STORAGE_AUDIO) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkDirRecord(true);
             } else {
                 Toast.makeText(this, R.string.error_storage_required, Toast.LENGTH_SHORT).show();
             }

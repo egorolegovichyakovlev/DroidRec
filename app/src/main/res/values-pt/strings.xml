@@ -115,7 +115,7 @@
     <string name="error_recorder_failed">Erro: Falha na gravação</string>
     <string name="error_recorder_codec_error">Erro: Erro de codec</string>
     <string name="error_playback_not_allowed">Erro: Gravação de áudio não permitida</string>
-    <string name="setting_recordings_folder">Mudar pasta de gravação</string>
+    <string name="setting_video_recordings_folder">Mudar pasta de gravação</string>
     <string name="setting_record_type_video">Vídeo</string>
     <string name="setting_record_type_audio">Somente áudio</string>
     <string name="setting_audio_record_microphone_sound">Capturar microfone</string>

@@ -115,7 +115,7 @@
     <string name="error_recorder_failed">Błąd: Niepowodzenie nagrywania</string>
     <string name="error_recorder_codec_error">Błąd: Błąd kodeka</string>
     <string name="error_playback_not_allowed">Błąd: Nagrywanie odtwarzania dźwięku nie jest dozwolone</string>
-    <string name="setting_recordings_folder">Zmień folder dla nagrań</string>
+    <string name="setting_video_recordings_folder">Zmień folder dla nagrań</string>
     <string name="setting_record_type_video">Wideo</string>
     <string name="setting_record_type_audio">Wyłącznie dźwięk</string>
     <string name="setting_audio_record_microphone_sound">Nagrywaj mikrofon</string>

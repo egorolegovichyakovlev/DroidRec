@@ -115,7 +115,7 @@
     <string name="error_recorder_failed">Помилка: не вдалося записати</string>
     <string name="error_recorder_codec_error">Помилка: збій кодека</string>
     <string name="error_playback_not_allowed">Помилка: запис аудіо заборонена</string>
-    <string name="setting_recordings_folder">Змінити каталог записів</string>
+    <string name="setting_video_recordings_folder">Змінити каталог записів</string>
     <string name="setting_record_type_video">Відео</string>
     <string name="setting_record_type_audio">Тільки аудіо</string>
     <string name="setting_audio_record_microphone_sound">Записати мікрофон</string>

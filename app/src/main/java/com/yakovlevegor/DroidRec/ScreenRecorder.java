@@ -613,13 +613,19 @@ public class ScreenRecorder extends Service {
 
         Uri filefulluri = null;
 
-        String documentspath = appSettings.getString("folderpath", "").replaceFirst(providertree, "");
+        String folderPathPrefix = appSettings.getString("folderpath", "");
+
+        if (recordOnlyAudio == true) {
+            folderPathPrefix = appSettings.getString("folderaudiopath", "");
+        }
+
+        String documentspath = folderPathPrefix.replaceFirst(providertree, "");
 
         String docExtension = ".mp4";
 
         String docMime = "video/mp4";
 
-        Uri docParent = Uri.parse(appSettings.getString("folderpath", "") + "/document/" + documentspath);
+        Uri docParent = Uri.parse(folderPathPrefix + "/document/" + documentspath);
 
         if (recordOnlyAudio == true) {
             fullFileName = "AudioRecording_" + timeString;
@@ -627,7 +633,7 @@ public class ScreenRecorder extends Service {
             docMime = "audio/mp4";
         }
 
-        if (appSettings.getString("folderpath", "").matches(filetreepattern)) {
+        if (folderPathPrefix.matches(filetreepattern)) {
             if (documentspath.startsWith("primary%3A")) {
                 filefulluri = Uri.parse("/storage/emulated/0/" + Uri.decode(documentspath.replaceFirst("primary%3A", "")) + "/" + fullFileName + docExtension);
             } else {
@@ -654,7 +660,7 @@ public class ScreenRecorder extends Service {
 
                 recordingError();
                 if (activityBinder != null) {
-                    activityBinder.resetDir();
+                    activityBinder.resetDir(recordOnlyAudio);
                 }
                 stopSelf();
                 return;
@@ -687,7 +693,7 @@ public class ScreenRecorder extends Service {
         if ((docFile == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) || (outdocpath == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)) {
             recordingError();
             if (activityBinder != null) {
-                activityBinder.resetDir();
+                activityBinder.resetDir(recordOnlyAudio);
             }
             stopSelf();
             return;
