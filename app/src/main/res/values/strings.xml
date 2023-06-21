@@ -26,6 +26,9 @@
     <string name="audio_source_media">Media audio source</string>
     <string name="audio_source_game">Game audio source</string>
     <string name="audio_source_unknown">Unknown audio source</string>
+    <string name="resolution_option">Choose custom video resolution</string>
+    <string name="resolution_option_description">Set custom video resolution</string>
+    <string name="resolution_option_auto">Native</string>
     <string name="codec_option">Choose custom video codec</string>
     <string name="codec_option_description">Set custom video codec</string>
     <string name="codec_option_auto">Default</string>

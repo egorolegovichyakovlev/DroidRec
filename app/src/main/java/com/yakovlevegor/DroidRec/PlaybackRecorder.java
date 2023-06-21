@@ -115,6 +115,8 @@ public class PlaybackRecorder {
 
     private int videoHeight;
 
+    private float videoScaleRatio;
+
     private boolean doRestart = false;
 
     private float recordQualityScale = 1.0f;
@@ -214,7 +216,7 @@ public class PlaybackRecorder {
         return codecReturn;
     }
 
-    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, boolean setCustomAudioCodec, String codecAudioName, int sampleRate, int channelsCount, boolean playbackMedia, boolean playbackGame, boolean playbackUnknown) {
+    public PlaybackRecorder(Context appContext, boolean recordAudioOnly, VirtualDisplay display, FileDescriptor dstDesc, MediaProjection projection, int width, int height, float scaleRatio, int framerate, boolean microphone, boolean audio, boolean customQuality, float qualityScale, boolean customFramerate, int framerateValue, boolean customBitrate, int bitrateValue, boolean setCustomCodec, String codecName, boolean setCustomAudioCodec, String codecAudioName, int sampleRate, int channelsCount, boolean playbackMedia, boolean playbackGame, boolean playbackUnknown) {
         sampleRateValue = sampleRate;
         channelsCountValue = channelsCount;
         mainContext = appContext;
@@ -226,6 +228,7 @@ public class PlaybackRecorder {
         mDstDesc = dstDesc;
         videoWidth = width;
         videoHeight = height;
+        videoScaleRatio = scaleRatio;
         recordMicrophone = microphone;
         recordAudio = audio;
 
@@ -319,7 +322,7 @@ public class PlaybackRecorder {
                 codecInName = customCodec;
                 currentProfileLevel = codecProfileLevels.get(codecsList.lastIndexOf(customCodec));
             }
-            mVideoEncoder = new VideoEncoder(videoWidth, videoHeight, nativeFramerate, recordQualityScale, useCustomBitrate, recordCustomBitrate, codecInName, currentProfileLevel);
+            mVideoEncoder = new VideoEncoder(videoWidth, videoHeight, videoScaleRatio, nativeFramerate, recordQualityScale, useCustomBitrate, recordCustomBitrate, codecInName, currentProfileLevel);
         } else {
             mVideoEncoder = null;
         }

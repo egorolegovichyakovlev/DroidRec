@@ -768,6 +768,8 @@ public class ScreenRecorder extends Service {
         int width = 0;
         int height = 0;
 
+        float scaleRatio = 1.0f;
+
         if (orientationOnStart == Surface.ROTATION_90 || orientationOnStart == Surface.ROTATION_270) {
             width = screenHeightNormal;
             height = screenWidthNormal;
@@ -776,11 +778,31 @@ public class ScreenRecorder extends Service {
             height = screenHeightNormal;
         }
 
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) {
             int[] resolutions = getScreenResolution();
             width = resolutions[0];
             height = resolutions[1];
+        }
+
+        if (appSettings.getString("resolutionvalue", "Native").contentEquals("Native") == false) {
+            String resolutionSetting = appSettings.getString("resolutionvalue", "Native");
+            int measureResolution = height;
+
+            if (height > width) {
+                measureResolution = width;
+            }
+
+            if (resolutionSetting.contentEquals("2160p") == true && measureResolution >= 2160) {
+                scaleRatio = (float)2160/(float)measureResolution;
+            } else if (resolutionSetting.contentEquals("1080p") == true && measureResolution >= 1080) {
+                scaleRatio = (float)1080/(float)measureResolution;
+            } else if (resolutionSetting.contentEquals("720p") == true && measureResolution >= 720) {
+                scaleRatio = (float)720/(float)measureResolution;
+            } else if (resolutionSetting.contentEquals("480p") == true && measureResolution >= 480) {
+                scaleRatio = (float)480/(float)measureResolution;
+            } else if (resolutionSetting.contentEquals("360p") == true && measureResolution >= 360) {
+                scaleRatio = (float)360/(float)measureResolution;
+            }
         }
 
         MediaProjectionManager recordingMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -852,7 +874,7 @@ public class ScreenRecorder extends Service {
 
 
                 if (recordOnlyAudio == false) {
-                    recordingMediaRecorder.setVideoSize(width, height);
+                    recordingMediaRecorder.setVideoSize((int)((float)width*scaleRatio), (int)((float)height*scaleRatio));
 
                     recordingMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
                 }
@@ -905,7 +927,7 @@ public class ScreenRecorder extends Service {
                 recordingError();
             }
 
-            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec, (!customAudioCodec.contentEquals(getResources().getString(R.string.audio_codec_option_auto_value))), customAudioCodec, customSampleRate, customChannelsCount, mediaAudioSource, gameAudioSource, unknownAudioSource);
+            recorderPlayback = new PlaybackRecorder(getApplicationContext(), recordOnlyAudio, recordingVirtualDisplay, recordingFileDescriptor, recordingMediaProjection, width, height, scaleRatio, frameRate, recordMicrophone, recordPlayback, customQuality, qualityScale, customFPS, fpsValue, customBitrate, bitrateValue, (!customCodec.contentEquals(getResources().getString(R.string.codec_option_auto_value))), customCodec, (!customAudioCodec.contentEquals(getResources().getString(R.string.audio_codec_option_auto_value))), customAudioCodec, customSampleRate, customChannelsCount, mediaAudioSource, gameAudioSource, unknownAudioSource);
 
             recorderPlayback.start();
         }

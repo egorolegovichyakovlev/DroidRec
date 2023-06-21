@@ -45,6 +45,7 @@ class VideoEncoder implements Encoder {
     private static final float BPP = 0.25f;
     private static int width = 1080;
     private static int height = 1920;
+    private static float scaleRatio = 1.0f;
 
     private MediaCodec mEncoder;
     private Callback mCallback;
@@ -57,9 +58,10 @@ class VideoEncoder implements Encoder {
 
     private int usedBitrate;
 
-    VideoEncoder(int inWidth, int inHeight, int inFramerate, float inQuality, boolean customBitrate, int inBitrate, String inCodec, MediaCodecInfo.CodecProfileLevel inProfileLevel) {
+    VideoEncoder(int inWidth, int inHeight, float inScaleRatio, int inFramerate, float inQuality, boolean customBitrate, int inBitrate, String inCodec, MediaCodecInfo.CodecProfileLevel inProfileLevel) {
         width = inWidth;
         height = inHeight;
+        scaleRatio = inScaleRatio;
         screenFramerate = inFramerate;
         codecName = inCodec;
         codecProfileLevel = inProfileLevel;
@@ -83,7 +85,7 @@ class VideoEncoder implements Encoder {
     }
 
     protected MediaFormat createMediaFormat() {
-        MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
+        MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, (int)((float)width*scaleRatio), (int)((float)height*scaleRatio));
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
         format.setInteger(MediaFormat.KEY_BIT_RATE, usedBitrate);
         format.setInteger(MediaFormat.KEY_FRAME_RATE, screenFramerate);

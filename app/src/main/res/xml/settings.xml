@@ -48,6 +48,13 @@
             android:inputType="number"
             android:defaultValue="1" />
 
+        <com.yakovlevegor.DroidRec.ResolutionList
+            android:key="resolutionvalue"
+            android:summary="@string/resolution_option_description"
+            android:title="@string/resolution_option"
+            android:dialogTitle="@string/resolution_option"
+            android:defaultValue="@string/resolution_option_auto_value" />
+
         <com.yakovlevegor.DroidRec.CodecList
             android:key="codecvalue"
             android:summary="@string/codec_option_description"

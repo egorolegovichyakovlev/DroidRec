@@ -26,4 +26,5 @@
         <item name="audio_channels_preferences_option_stereo_value">Stereo</item>
     </array>
     <string name="audio_channels_preferences_option_default_value">Stereo</string>
+    <string name="resolution_option_auto_value">Native</string>
 </resources>
