@@ -65,7 +65,7 @@ class VideoEncoder implements Encoder {
         screenFramerate = inFramerate;
         codecName = inCodec;
         codecProfileLevel = inProfileLevel;
-        usedBitrate = (int)(BPP*screenFramerate*width*height*inQuality);
+        usedBitrate = (int)(BPP*screenFramerate*(int)((float)width*scaleRatio)*(int)((float)height*scaleRatio)*inQuality);
         if (customBitrate == true) {
             usedBitrate = inBitrate;
         }
