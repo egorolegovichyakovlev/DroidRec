@@ -1,3 +1,6 @@
+# This repository is archived
+## That means I am not planning on releasing any updates any longer. Fork it if you like.
+
 <img src="icons_vector/app_icon.svg" alt="DroidRec Icon" width="200"/>
 
 English | [עברית](README.he.md)
