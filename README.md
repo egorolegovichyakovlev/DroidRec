@@ -1,16 +1,13 @@
-# This repository is archived
-## That means I am not planning on releasing any updates any longer. Fork it if you like.
+English | [עברית](README.he.md)
 
 <img src="icons_vector/app_icon.svg" alt="DroidRec Icon" width="200"/>
 
-English | [עברית](README.he.md)
+# DroidRec
+### An open-source Android screen recorder.
 
-## About
-DroidRec is an open-source Android screen recorder.
+*Audio Playback recording requires Android 10 or later. No Root needed.*
 
-Audio Playback recording requires Android 10 or later. No Root needed.
-
-(**WARNING**: Some device vendors may not allow recording some Audio Playback sources, or even recording it at all)
+*(**WARNING**: Some device vendors may not allow recording some Audio Playback sources, or even recording it at all)*
 
 <img src="metadata/en-US/images/phoneScreenshots/1.jpg" alt="DroidRec Screenshot" width="400"/>
 

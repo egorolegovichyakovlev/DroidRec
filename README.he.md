@@ -1,13 +1,13 @@
-<img src="icons_vector/app_icon.svg" alt="DroidRec תמונה" width="200"/>
-
 [English](README.md) | עברית
 
-## סביב
-רשם אנדרואיד מסך.
+<img src="icons_vector/app_icon.svg" alt="DroidRec תמונה" width="200"/>
 
-לרשם משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.
+# DroidRec
+## רשם אנדרואיד מסך.
 
-(**זחירות**: לא כליהון מכשירים יכלים לרשם כליהון מקרים משמע או כלל)
+*לרשם משמע אתה/אתך צריך/צריכה אנדרואיד 10 או יותר מאוחר. לא רוט הכרחי.*
+
+*(**זחירות**: לא כליהון מכשירים יכלים לרשם כליהון מקרים משמע או כלל)*
 
 <img src="metadata/iw/images/phoneScreenshots/1.jpg" alt="DroidRec צילם" width="400"/>
 
