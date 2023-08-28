@@ -5,7 +5,17 @@
     <string name="record_stop">עמד לרשם</string>
     <string name="record_pause">שבת לרשם</string>
     <string name="record_resume">משך לרשם</string>
+    <string name="record_open">פתח הסרטון</string>
+    <string name="record_share">פתח הסרטון</string>
+    <string name="record_delete">מחק הסרטון</string>
     <string name="settings_title">הגדרות</string>
+    <string name="option_activated">פעיל</string>
+    <string name="option_deactivated">סביל</string>
+    <string name="info_title">על DroidRec</string>
+    <string name="info_version">עדכון</string>
+    <string name="info_sources">קוד מקור</string>
+    <string name="info_license">קרא התעודה</string>
+    <string name="info_contributors">עוזרים/עוזרת</string>
     <string name="capture_settings">הגדרות מרשם</string>
     <string name="quality_indicator_custom">שונה איכות מוידאו</string>
     <string name="quality_indicator_custom_description">התעלם תקנות הגדרות מוידאו</string>
@@ -26,6 +36,9 @@
     <string name="audio_source_media">תקשורת מקור משמע</string>
     <string name="audio_source_game">מסחק מקור משמע</string>
     <string name="audio_source_unknown">אנונימי מקור משמע</string>
+    <string name="resolution_option">שונה גודל ממסך</string>
+    <string name="resolution_option_description">הגדיר שונה גודל ממסך מסרטון</string>
+    <string name="resolution_option_auto">תקן</string>
     <string name="codec_option">שונה אנקודר מוידאו</string>
     <string name="codec_option_description">הגדיר שונה וידאו אנקודר</string>
     <string name="codec_option_auto">תקן</string>
@@ -83,7 +96,6 @@
         <item name="on_shake_option_pause">שבת</item>
         <item name="on_shake_option_stop">עמד</item>
     </array>
-
     <string name="overlay_notice_title">הציג למעלה יישובים</string>
     <string name="overlay_notice_description">להציג עליון ממשק הגדיר הציג למעלה אחרים יישובים בהגדרות</string>
     <string name="overlay_notice_button">פתח הגדרות</string>
@@ -116,7 +128,9 @@
     <string name="error_recorder_failed">טעות: שגיאה מלרשם</string>
     <string name="error_recorder_codec_error">טעות: שגאיאה מאנקודר</string>
     <string name="error_playback_not_allowed">טעות: כתיבה משמע אסור</string>
-    <string name="setting_video_recordings_folder">שקע נתיב</string>
+    <string name="setting_video_recordings_folder">שקע נתיב מוידאו</string>
+    <string name="setting_audio_recordings_folder">שקע נתיב משמע</string>
+    <string name="setting_record_screen">כתב מהסרטון</string>
     <string name="setting_record_type_video">וידאו</string>
     <string name="setting_record_type_audio">שמע יחיד</string>
     <string name="setting_audio_record_microphone_sound">רשם ממיקרופון</string>
