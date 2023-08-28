@@ -96,6 +96,7 @@ public class QuickTile extends TileService {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onClick() {
         super.onClick();
 
