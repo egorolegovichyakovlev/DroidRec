@@ -10,6 +10,11 @@
         <item>EdieN</item>
         <item>SpacingBat3</item>
         <item>carlosm2</item>
+        <item>drogga</item>
+        <item>Muhammadhussein Ammari</item>
+        <item>Daniel Pielmeier</item>
+        <item>Xaiver Charles Wilhoyt</item>
+        <item>camerondphillips</item>
     </array>
     <array name="contributors_profiles">
         <item>https://github.com/yakovlevegor</item>
@@ -21,9 +26,14 @@
         <item>https://github.com/EdieN</item>
         <item>https://github.com/SpacingBat3</item>
         <item>https://github.com/carlosm2</item>
+        <item>https://github.com/drogga</item>
+        <item>https://github.com/xmha97</item>
+        <item>https://github.com/billie80</item>
+        <item>https://github.com/Roshi617</item>
+        <item>https://github.com/camerondphillips</item>
     </array>
     <array name="contributors_roles">
-        <item>Initial creator, maintainer, designer</item>
+        <item>Initial creator, maintainer, designer\n\nHebrew translations</item>
         <item>Google Play version maintainer\n\nSpanish, Norwegian, German translations</item>
         <item>Chinese translations</item>
         <item>Ukrainian translations\n\nProposal of the app to F-Droid\n\nInitial F-Droid metadata</item>
@@ -32,5 +42,10 @@
         <item>Portuguese translations</item>
         <item>Polish translations</item>
         <item>Spanish translations</item>
+        <item>Issue testing</item>
+        <item>Design testing</item>
+        <item>Issue testing</item>
+        <item>Issue testing</item>
+        <item>Issue testing</item>
     </array>
 </resources>
