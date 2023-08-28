@@ -7,15 +7,20 @@
    viewBox="0 0 135.46667 135.46667"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    sodipodi:docname="app_icon_monochrome.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">DroidRec app monochrome icon</title>
   <sodipodi:namedview
      id="namedview7"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageshadow="2"
@@ -26,35 +31,57 @@
      units="px"
      width="2048px"
      inkscape:zoom="1.0819965"
-     inkscape:cx="125.23146"
-     inkscape:cy="184.84348"
+     inkscape:cx="184.84348"
+     inkscape:cy="219.50163"
      inkscape:window-width="1920"
      inkscape:window-height="1007"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g1"
      inkscape:showpageshadow="2"
      inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2" />
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <g
-       id="g5001"
-       style="fill:#ffffff;fill-opacity:1">
-      <path
-         id="path155"
-         style="fill:#ffffff;fill-opacity:1;stroke-width:0.187893"
-         d="M 67.499756 22.499919 A 45 45 0 0 0 22.499919 67.499756 A 45 45 0 0 0 67.499756 112.50011 A 45 45 0 0 0 112.50011 67.499756 A 45 45 0 0 0 67.499756 22.499919 z M 67.499756 44.999837 A 22.5 22.5 0 0 1 90.000191 67.499756 A 22.5 22.5 0 0 1 88.112451 76.513159 L 68.749809 65.333997 L 49.3913 54.157935 A 22.5 22.5 0 0 1 67.499756 44.999837 z M 46.891195 58.48842 L 66.25022 69.666032 L 85.613379 80.844161 A 22.5 22.5 0 0 1 67.499756 90.000191 A 22.5 22.5 0 0 1 44.999837 67.499756 A 22.5 22.5 0 0 1 46.891195 58.48842 z " />
-      <circle
-         id="path155-6-5"
-         cx="77.18766"
-         cy="57.81234"
-         style="fill:#ffffff;fill-opacity:1;stroke-width:0.0240538"
-         r="5.7608562" />
-    </g>
+     id="g1"
+     inkscape:label="icon">
+    <path
+       id="path155"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.187893"
+       d="M 67.499756 22.499919 A 45 45 0 0 0 22.499919 67.499756 A 45 45 0 0 0 67.499756 112.50011 A 45 45 0 0 0 112.50011 67.499756 A 45 45 0 0 0 67.499756 22.499919 z M 67.499756 44.999837 A 22.5 22.5 0 0 1 90.000191 67.499756 A 22.5 22.5 0 0 1 88.112451 76.513159 L 68.749809 65.333997 L 49.3913 54.157935 A 22.5 22.5 0 0 1 67.499756 44.999837 z M 46.891195 58.48842 L 66.25022 69.666032 L 85.613379 80.844161 A 22.5 22.5 0 0 1 67.499756 90.000191 A 22.5 22.5 0 0 1 44.999837 67.499756 A 22.5 22.5 0 0 1 46.891195 58.48842 z "
+       inkscape:label="icon_1" />
+    <circle
+       id="path155-6-5"
+       cx="77.18766"
+       cy="57.81234"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.0240538"
+       r="5.7608562"
+       inkscape:label="icon_2" />
   </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>DroidRec app monochrome icon</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Egor Olegovich Yakovlev</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
 </svg>

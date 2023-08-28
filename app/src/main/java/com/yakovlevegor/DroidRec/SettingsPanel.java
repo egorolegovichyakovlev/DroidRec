@@ -42,11 +42,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import java.io.File;
 
 import com.yakovlevegor.DroidRec.shake.event.OnShakePreferenceChangeEvent;
 
@@ -56,7 +63,13 @@ public class SettingsPanel extends AppCompatActivity implements PreferenceFragme
 
     private SharedPreferences appSettings;
 
+    private SharedPreferences.Editor appSettingsEditor;
+
     private SettingsFragment settingsPanel;
+
+    private Preference videoFolderPreference;
+
+    private Preference audioFolderPreference;
 
     private AlertDialog dialog;
 
@@ -78,6 +91,8 @@ public class SettingsPanel extends AppCompatActivity implements PreferenceFragme
         super.onCreate(savedInstanceState);
 
         appSettings = getSharedPreferences(ScreenRecorder.prefsident, 0);
+
+        appSettingsEditor = appSettings.edit();
 
         String darkTheme = appSettings.getString("darkthemeapplied", getResources().getString(R.string.dark_theme_option_auto));
 
@@ -105,6 +120,38 @@ public class SettingsPanel extends AppCompatActivity implements PreferenceFragme
         super.onStart();
 
         addEventListenerOnShakeEvent();
+
+        videoFolderPreference = settingsPanel.findPreference("folderpathpref");
+
+        audioFolderPreference = settingsPanel.findPreference("folderaudiopathpref");
+
+        videoFolderPreference.setSummary(getRealPath(appSettings.getString("folderpath", "None")));
+
+        audioFolderPreference.setSummary(getRealPath(appSettings.getString("folderaudiopath", "None")));
+
+        Preference.OnPreferenceClickListener listenerVideoFolder = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                chooseDir(false);
+
+                return true;
+            }
+        };
+
+        videoFolderPreference.setOnPreferenceClickListener(listenerVideoFolder);
+
+        Preference.OnPreferenceClickListener listenerAudioFolder = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                chooseDir(true);
+
+                return true;
+            }
+        };
+
+        audioFolderPreference.setOnPreferenceClickListener(listenerAudioFolder);
 
         Preference overlayPreference = settingsPanel.findPreference("floatingcontrols");
 
@@ -212,6 +259,111 @@ public class SettingsPanel extends AppCompatActivity implements PreferenceFragme
         };
 
         themePreference.setOnPreferenceChangeListener(listenerThemeChange);
+
+    }
+
+    private String getRealPath(String fullPath) {
+
+        String filetreepattern = "^content://com\\.android\\.externalstorage\\.documents/tree/.*";
+
+        String providertree = "^content://[^/]*/tree/";
+
+        String documentspath = fullPath.replaceFirst(providertree, "");
+
+        String outPath = fullPath;
+
+        if (fullPath.matches(filetreepattern)) {
+
+            if (documentspath.startsWith("primary%3A")) {
+                outPath = "/storage/emulated/0/" + Uri.decode(documentspath.replaceFirst("primary%3A", "")) + "/";
+            } else {
+                outPath = "/storage/" + Uri.decode(documentspath.replaceFirst("%3A", "/")) + "/";
+
+                Uri filefulluri = Uri.parse(outPath);
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    File dirTest = new File(filefulluri.toString());
+                    if (dirTest.isDirectory() == false) {
+                        outPath = "/storage/sdcard" + Uri.decode(documentspath.replaceFirst(".*\\%3A", "/")) + "/";
+                    }
+                }
+            }
+
+        }
+
+        return outPath;
+    }
+
+    void chooseDir(boolean isAudio) {
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
+        if (isAudio == true) {
+            requestAudioFolderPermission.launch(intent);
+        } else {
+            requestFolderPermission.launch(intent);
+        }
+
+    }
+
+    private final ActivityResultLauncher<Intent> requestFolderPermission = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result != null) {
+
+                requestFolder(result.getResultCode(), result.getData().getData(), false);
+
+            }
+        }
+    });
+
+    private final ActivityResultLauncher<Intent> requestAudioFolderPermission = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result != null) {
+
+                requestFolder(result.getResultCode(), result.getData().getData(), true);
+
+            }
+        }
+    });
+
+    private void requestFolder(int resultCode, Uri extrauri, boolean isAudio) {
+        if (resultCode == RESULT_OK) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+
+                getContentResolver().takePersistableUriPermission(extrauri, takeFlags);
+            }
+
+            if (isAudio == true) {
+                appSettingsEditor.putString("folderaudiopath", extrauri.toString());
+            } else {
+                appSettingsEditor.putString("folderpath", extrauri.toString());
+            }
+
+            appSettingsEditor.commit();
+
+            if (isAudio == true) {
+                audioFolderPreference.setSummary(getRealPath(appSettings.getString("folderaudiopath", "None")));
+            } else {
+                videoFolderPreference.setSummary(getRealPath(appSettings.getString("folderpath", "None")));
+            }
+
+        } else {
+
+            if (isAudio == true) {
+                if (appSettings.getString("folderaudiopath", "NULL") == "NULL") {
+                    Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (appSettings.getString("folderpath", "NULL") == "NULL") {
+                    Toast.makeText(this, R.string.error_storage_select_folder, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
 
     }
 

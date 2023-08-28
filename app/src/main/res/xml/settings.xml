@@ -5,6 +5,14 @@
         android:title="@string/capture_settings"
         android:key="capturesettings">
 
+        <Preference
+            android:key="folderpathpref"
+            android:title="@string/setting_video_recordings_folder" />
+
+        <Preference
+            android:key="folderaudiopathpref"
+            android:title="@string/setting_audio_recordings_folder" />
+
         <SwitchPreferenceCompat
             android:key="customquality"
             android:summary="@string/quality_indicator_custom_description"

@@ -9,13 +9,14 @@ English | [עברית](README.he.md)
 
 *(**WARNING**: Some device vendors may not allow recording some Audio Playback sources, or even recording it at all)*
 
-<img src="metadata/en-US/images/phoneScreenshots/1.jpg" alt="DroidRec Screenshot" width="400"/>
+<img src="metadata/en-US/images/phoneScreenshots/1.jpg" alt="DroidRec Screenshot 1" width="300"/> <img src="metadata/en-US/images/phoneScreenshots/2.jpg" alt="DroidRec Screenshot 2" width="300"/>
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.yakovlevegor.DroidRec/)
-
-[Unofficial release on Play Store](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
 
 Or download the apk from [the release section](https://github.com/yakovlevegor/DroidRec/releases).
 

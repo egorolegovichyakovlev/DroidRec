@@ -39,6 +39,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.yakovlevegor.DroidRec.MainActivity" />
         </activity>
+        <activity android:name="com.yakovlevegor.DroidRec.AppInfo"
+            android:exported="true"
+            android:label="@string/info_title"
+            android:parentActivityName="com.yakovlevegor.DroidRec.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.yakovlevegor.DroidRec.MainActivity" />
+        </activity>
+        <activity android:name="com.yakovlevegor.DroidRec.LicenseScreen"
+            android:exported="true"
+            android:label="@string/info_title"
+            android:parentActivityName="com.yakovlevegor.DroidRec.AppInfo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.yakovlevegor.DroidRec.AppInfo" />
+        </activity>
         <activity android:name="com.yakovlevegor.DroidRec.PanelPositionScreen"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"

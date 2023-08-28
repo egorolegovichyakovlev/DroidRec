@@ -9,13 +9,14 @@
 
 *(**זחירות**: לא כליהון מכשירים יכלים לרשם כליהון מקרים משמע או כלל)*
 
-<img src="metadata/iw/images/phoneScreenshots/1.jpg" alt="DroidRec צילם" width="400"/>
+<img src="metadata/en-US/images/phoneScreenshots/1.jpg" alt="DroidRec צילם 1" width="300"/> <img src="metadata/en-US/images/phoneScreenshots/2.jpg" alt="DroidRec צילם 2" width="300"/>
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.yakovlevegor.DroidRec/)
-
-[לא מקורי בPlay Store](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
 
 [רכש היישום](https://github.com/yakovlevegor/DroidRec/releases)
 

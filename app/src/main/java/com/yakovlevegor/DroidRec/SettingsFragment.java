@@ -87,8 +87,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-/* Not yet implemented */
+    @SuppressWarnings("deprecation") /* Not yet implemented in the SDK */
     public void onDisplayPreferenceDialog(Preference preference) {
         if (preference.getKey().contentEquals("qualityscale")) {
             QualityDialogFragment f = QualityDialogFragment.newInstance(preference.getKey());

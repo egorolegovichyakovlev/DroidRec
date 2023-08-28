@@ -5,7 +5,17 @@
     <string name="record_stop">Stop recording</string>
     <string name="record_pause">Pause recording</string>
     <string name="record_resume">Continue recording</string>
+    <string name="record_open">Open recording</string>
+    <string name="record_share">Share recording</string>
+    <string name="record_delete">Delete recording</string>
     <string name="settings_title">Settings</string>
+    <string name="option_activated">Activated</string>
+    <string name="option_deactivated">Deactivated</string>
+    <string name="info_title">About DroidRec</string>
+    <string name="info_version">Version</string>
+    <string name="info_sources">Source code</string>
+    <string name="info_license">Read license</string>
+    <string name="info_contributors">Contributors</string>
     <string name="capture_settings">Capture settings</string>
     <string name="quality_indicator_custom">Custom recording quality</string>
     <string name="quality_indicator_custom_description">Ignore automatic quality settings</string>
@@ -120,6 +130,7 @@
     <string name="error_playback_not_allowed">Error: Audio Playback recording not allowed</string>
     <string name="setting_video_recordings_folder">Video recordings folder</string>
     <string name="setting_audio_recordings_folder">Audio recordings folder</string>
+    <string name="setting_record_screen">Record screen</string>
     <string name="setting_record_type_video">Video</string>
     <string name="setting_record_type_audio">Audio only</string>
     <string name="setting_audio_record_microphone_sound">Record microphone</string>

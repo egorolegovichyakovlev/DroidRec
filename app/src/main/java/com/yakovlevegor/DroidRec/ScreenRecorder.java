@@ -122,6 +122,7 @@ public class ScreenRecorder extends Service {
     private boolean recordMicrophone = false;
     private boolean recordPlayback = false;
     private boolean isPaused = false;
+    private boolean isStopped = false;
 
     private ParcelFileDescriptor recordingOpenFileDescriptor;
     private FileDescriptor recordingFileDescriptor;
@@ -225,6 +226,22 @@ public class ScreenRecorder extends Service {
 
         void recordingResume() {
             ScreenRecorder.this.screenRecordingResume();
+        }
+
+        void recordingShare() {
+            ScreenRecorder.this.screenRecordingShare();
+        }
+
+        void recordingDelete() {
+            ScreenRecorder.this.screenRecordingDelete();
+        }
+
+        void recordingOpen() {
+            ScreenRecorder.this.screenRecordingOpen();
+        }
+
+        void recordingReset() {
+            ScreenRecorder.this.screenRecordingReset();
         }
 
         long getTimeStart() {
@@ -362,20 +379,7 @@ public class ScreenRecorder extends Service {
             } else if (intent.getAction() == ACTION_CONTINUE) {
                 screenRecordingResume();
             } else if (intent.getAction() == ACTION_ACTIVITY_DELETE_FINISHED_FILE) {
-
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    try {
-                        finishedFile.delete();
-                    } catch (Exception e) {}
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    try {
-                        DocumentsContract.deleteDocument(getContentResolver(), finishedFileDocument);
-                    } catch (Exception e) {}
-                }
-
-                if (recordingNotificationManager != null) {
-                    recordingNotificationManager.cancel(NOTIFICATION_RECORDING_FINISHED_ID);
-                }
+                screenRecordingDelete();
             }
         }
 
@@ -496,6 +500,10 @@ public class ScreenRecorder extends Service {
                     activityBinder.recordingPause(timeRecorded);
                 }
             }
+        } else if (isStopped == true) {
+            if (activityBinder != null) {
+                activityBinder.recordingStop();
+            }
         }
     }
 
@@ -581,6 +589,8 @@ public class ScreenRecorder extends Service {
 
     @SuppressWarnings("deprecation")
     private void screenRecordingStart() {
+
+        isStopped = false;
 
         if (minimizeOnStart == true) {
             Intent minimizeIntent = new Intent(Intent.ACTION_MAIN);
@@ -950,6 +960,8 @@ public class ScreenRecorder extends Service {
         timeRecorded = 0;
         isPaused = false;
 
+        isStopped = true;
+
         if (isRestarting == false) {
             runningService = false;
 
@@ -1112,7 +1124,6 @@ public class ScreenRecorder extends Service {
 
         if (isRestarting == false) {
             stopForeground(true);
-            stopSelf();
         }
     }
 
@@ -1246,4 +1257,40 @@ public class ScreenRecorder extends Service {
         recordingNotificationManager.notify(NOTIFICATION_RECORDING_ID, notification.build());
     }
 
+    private void screenRecordingShare() {
+        startActivity(shareFinishedFileIntent);
+    }
+
+    private void screenRecordingDelete() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            try {
+                finishedFile.delete();
+            } catch (Exception e) {}
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                DocumentsContract.deleteDocument(getContentResolver(), finishedFileDocument);
+            } catch (Exception e) {}
+        }
+
+        if (recordingNotificationManager != null) {
+            recordingNotificationManager.cancel(NOTIFICATION_RECORDING_FINISHED_ID);
+        }
+
+        screenRecordingReset();
+
+    }
+
+    private void screenRecordingOpen() {
+        startActivity(finishedFileIntent);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void screenRecordingReset() {
+        isStopped = false;
+        if (activityBinder != null) {
+            activityBinder.recordingReset();
+        }
+        stopSelf();
+    }
 }

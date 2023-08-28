@@ -1,0 +1,17 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator
+        android:duration="100"
+        android:propertyName="fillColor"
+        android:valueFrom="#555555"
+        android:valueTo="#af4e4e"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:repeatCount="0" />
+    <objectAnimator
+        android:duration="100"
+        android:propertyName="pathData"
+        android:valueFrom="M67.73,67.73m-48.99,0a48.99,48.99 0,1 1,97.99 0a48.99,48.99 0,1 1,-97.99 0"
+        android:valueTo="M67.73,67.73m-54.86,0a54.86,54.86 0,1 1,109.73 0a54.86,54.86 0,1 1,-109.73 0"
+        android:valueType="pathType"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:repeatCount="0" />
+</set>

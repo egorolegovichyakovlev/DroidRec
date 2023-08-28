@@ -1,0 +1,15 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/icon_recording_stopped_dark" >
+    <target
+        android:name="icon_part_1"
+        android:animation="@animator/icon_recording_start_transform_1_dark" />
+    <target
+        android:name="icon_part_2"
+        android:animation="@animator/icon_recording_start_transform_2_dark" />
+    <target
+        android:name="icon_part_3"
+        android:animation="@animator/icon_recording_start_transform_3_dark" />
+    <target
+        android:name="icon_part_4"
+        android:animation="@animator/icon_recording_start_transform_4_dark" />
+</animated-vector>
