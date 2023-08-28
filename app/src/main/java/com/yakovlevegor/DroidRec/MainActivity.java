@@ -2292,7 +2292,6 @@ public class MainActivity extends AppCompatActivity {
                         recordingBinder.recordingResume();
                     } else if (recordingState == MainButtonActionState.RECORDING_ENDED) {
                         recordingBinder.recordingReset();
-                        transitionToButtonState(MainButtonState.TRANSITION_TO_RESTART);
                     }
                 }
 
@@ -2519,11 +2518,6 @@ public class MainActivity extends AppCompatActivity {
 
                 recordingBinder.recordingDelete();
 
-                finishedPanel.setVisibility(View.GONE);
-                optionsPanel.setVisibility(View.VISIBLE);
-                modesPanel.setVisibility(View.VISIBLE);
-
-                transitionToButtonState(MainButtonState.TRANSITION_TO_RESTART);
             }
         });
 
