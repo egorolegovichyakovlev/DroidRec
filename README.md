@@ -1,3 +1,16 @@
+# ! Urgent !
+I don't currently accept any donations for DroidRec, but I'm asking you to:
+### [Help a disabled queer person from becoming homeless in Wisconsin](https://plush.city/@mynameistillian/110984654277419627)
+They require **immediate help** to find stable housing.
+
+<br>
+
+**Thank you**,
+
+Egor Yakovlev.
+
+<hr>
+
 English | [עברית](README.he.md)
 
 <img src="icons_vector/app_icon.svg" alt="DroidRec Icon" width="200"/>
