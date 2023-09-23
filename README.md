@@ -3,6 +3,10 @@ I don't currently accept any donations for DroidRec, but I'm asking you to:
 ### [Help a disabled queer person from becoming homeless in Wisconsin](https://plush.city/@mynameistillian/110984654277419627)
 They require **immediate help** to find stable housing.
 
+<br>
+
+<br>
+
 And it would be **great** if you could also:
 ### [Help a dying online activism Mastodon instance "activism.openworlds.info"](https://opencollective.com/open-media-network/projects/openwebmastodon)
 They are required to [pay $250+](https://activism.openworlds.info/@witchescauldron/111006678984786648) until **8th of October this year** or shut down **permanently**. You can read their admin's [**payment history here**](https://activism.openworlds.info/@witchescauldron/111062492364706862).
