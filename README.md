@@ -1,22 +1,3 @@
-# ! Urgent !
-I don't currently accept any donations for DroidRec, but I'm asking you to:
-### [Help a disabled queer person from becoming homeless in Wisconsin](https://plush.city/@mynameistillian/110984654277419627)
-They require **immediate help** to find stable housing.
-
-<br>
-
-And it would be **great** if you could also:
-### [Help a dying online activism Mastodon instance "activism.openworlds.info"](https://opencollective.com/open-media-network/projects/openwebmastodon)
-They are required to [pay $250+](https://activism.openworlds.info/@witchescauldron/111006678984786648) until **8th of October this year** or shut down **permanently**. You can read their admin's [**payment history here**](https://activism.openworlds.info/@witchescauldron/111062492364706862).
-
-<br>
-
-**Thank you**,
-
-Egor Yakovlev.
-
-<hr>
-
 English | [עברית](README.he.md)
 
 <img src="icons_vector/app_icon.svg" alt="DroidRec Icon" width="200"/>
@@ -49,6 +30,13 @@ To sign the build, first generate your keystore with `keytool -genkeypair -keyst
 Then you can run **quicksign.bash** with path to your Android SDK "build-tools/*version*" as an *optional* argument(if build tools aren't in your $PATH).
 
 Example: `./quicksign.bash $ANDROID_HOME/build-tools/33.0.0`
+
+
+## ! Urgent !
+
+I don't currently accept any donations for DroidRec, but I'm asking you to:
+### [Help a disabled queer person from becoming homeless in Wisconsin](https://plush.city/@mynameistillian/110984654277419627)
+They require **immediate help** to find stable housing.
 
 ## License
 
