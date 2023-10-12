@@ -18,7 +18,7 @@ English | [עברית](README.he.md)
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
 
-Or download the apk from [the release section](https://gitlab.com/yakovlevegor/DroidRec/-/releases).
+Or download the apk from [the release section](https://github.com/egorolegovichyakovlev/DroidRec/releases).
 
 ## Building
 

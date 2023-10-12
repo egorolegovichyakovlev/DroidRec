@@ -27,5 +27,5 @@
     </array>
     <string name="audio_channels_preferences_option_default_value">Stereo</string>
     <string name="resolution_option_auto_value">Native</string>
-    <string name="repo_link">https://gitlab.com/yakovlevegor/DroidRec</string>
+    <string name="repo_link">https://github.com/egorolegovichyakovlev/DroidRec</string>
 </resources>

@@ -18,7 +18,7 @@
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.yakovlevegor.DroidRec)
 
-[רכש היישום](https://gitlab.com/yakovlevegor/DroidRec/-/releases)
+[רכש היישום](https://github.com/egorolegovichyakovlev/DroidRec/releases)
 
 ## בנוה
 בנוה היישום פתח **gradle assembleRelease**
