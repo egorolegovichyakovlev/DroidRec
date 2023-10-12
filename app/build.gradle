@@ -17,9 +17,9 @@ android {
 
         targetSdk 34
 
-        versionCode 26
+        versionCode 27
 
-        versionName "3.5"
+        versionName "3.6"
     }
 
 }
